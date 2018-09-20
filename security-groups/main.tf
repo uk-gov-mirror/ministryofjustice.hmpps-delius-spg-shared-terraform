@@ -48,7 +48,7 @@ locals {
 # Security Groups - Application Specific
 ####################################################
 module "security_groups" {
-  source                 = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=issue-62//projects//spg//security-groups"
+  source                 = "../modules/security-groups"
   spg_app_name           = "${local.spg_app_name}"
   allowed_cidr_block     = ["${local.allowed_cidr_block}"]
   common_name            = "${local.common_name}"

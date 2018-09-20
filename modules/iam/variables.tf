@@ -22,3 +22,5 @@ variable depends_on {
   default = []
   type    = "list"
 }
+
+variable "artefact-bucket" {}

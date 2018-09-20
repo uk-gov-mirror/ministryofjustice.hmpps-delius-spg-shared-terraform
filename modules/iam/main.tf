@@ -9,6 +9,7 @@ locals {
   common_name      = "${var.environment_identifier}-${var.spg_app_name}"
   tags             = "${var.tags}"
   s3-config-bucket = "${var.s3-config-bucket}"
+  artefact-bucket  = "${var.artefact-bucket}"
 }
 
 ############################################
@@ -46,8 +47,9 @@ data "template_file" "iam_policy_app_ext" {
   template = "${file("../policies/ec2_external_policy.json")}"
 
   vars {
-    s3-config-bucket = "${local.s3-config-bucket}"
-    app_role_arn     = "${module.create-iam-app-role-ext.iamrole_arn}"
+    s3-config-bucket   = "${local.s3-config-bucket}"
+    s3-artefact-bucket = "${local.artefact-bucket}"
+    app_role_arn       = "${module.create-iam-app-role-ext.iamrole_arn}"
   }
 }
 
@@ -100,8 +102,9 @@ data "template_file" "iam_policy_app_int" {
   template = "${var.ec2_internal_policy_file}"
 
   vars {
-    s3-config-bucket = "${local.s3-config-bucket}"
-    app_role_arn     = "${module.create-iam-app-role-int.iamrole_arn}"
+    s3-config-bucket   = "${local.s3-config-bucket}"
+    s3-artefact-bucket = "${local.artefact-bucket}"
+    app_role_arn       = "${module.create-iam-app-role-int.iamrole_arn}"
   }
 }
 
