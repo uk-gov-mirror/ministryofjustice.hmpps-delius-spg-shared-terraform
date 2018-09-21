@@ -14,6 +14,8 @@ eng-remote_state_bucket_name = "tf-eu-west-2-hmpps-eng-dev-remote-state"
 # ENVIRONMENT ROLE ARNS
 eng_role_arn = "arn:aws:iam::895523100917:role/terraform"
 
+eng_root_arn = "arn:aws:iam::895523100917:root"
+
 # ALLOWED CIDRS
 allowed_cidr_block = [
   "51.148.142.120/32",  #Brett Home
