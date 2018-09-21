@@ -10,7 +10,10 @@
                 "ecs:Poll",
                 "ecs:RegisterContainerInstance",
                 "ecs:Submit*",
-                "ecs:StartTelemetrySession"
+                "ecs:StartTelemetrySession",
+                "ecr:GetAuthorizationToken",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer"
             ],
             "Resource": [
                 "*"

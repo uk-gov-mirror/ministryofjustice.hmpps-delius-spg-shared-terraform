@@ -73,6 +73,19 @@ data "terraform_remote_state" "s3buckets" {
 }
 
 #-------------------------------------------------------------
+### Getting the ecr
+#-------------------------------------------------------------
+data "terraform_remote_state" "ecr" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.remote_state_bucket_name}"
+    key    = "spg/ecr/terraform.tfstate"
+    region = "${var.region}"
+  }
+}
+
+#-------------------------------------------------------------
 ### Getting the latest amazon ami
 #-------------------------------------------------------------
 data "aws_ami" "amazon_ami" {
@@ -127,8 +140,8 @@ locals {
   monitoring_server_internal_url = "${data.terraform_remote_state.common.monitoring_server_internal_url}"
   app_hostnames                  = "${data.terraform_remote_state.common.app_hostnames}"
   certificate_arn                = ["${data.aws_acm_certificate.cert.arn}"]
-  image_url                      = "895523100917.dkr.ecr.eu-west-2.amazonaws.com"
-  image_version                  = "spg:latest"
+  image_url                      = "${data.terraform_remote_state.ecr.ecr_repository_url}"
+  image_version                  = "latest"
   public_subnet_ids              = ["${data.terraform_remote_state.common.public_subnet_ids}"]
   public_cidr_block              = ["${data.terraform_remote_state.common.db_cidr_block}"]
   config-bucket                  = "${data.terraform_remote_state.common.common_s3-config-bucket}"
@@ -171,7 +184,7 @@ module "ecs-spg" {
   alb_http_port                  = "80"
   alb_https_port                 = "443"
   deregistration_delay           = "90"
-  backend_app_port               = "80"
+  backend_app_port               = "8181"
   backend_app_protocol           = "HTTP"
   backend_app_template_file      = "template.json"
   backend_check_app_path         = "/"

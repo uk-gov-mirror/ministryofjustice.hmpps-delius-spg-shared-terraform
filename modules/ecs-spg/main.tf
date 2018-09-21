@@ -164,7 +164,7 @@ module "app_service" {
   ecs_service_role                = "${var.ecs_service_role}"
   target_group_arn                = "${module.create_app_alb_targetgrp.target_group_arn}"
   containername                   = "${var.app_name}"
-  containerport                   = "80"
+  containerport                   = "${var.backend_app_port}"
   task_definition_family          = "${module.app_task_definition.task_definition_family}"
   task_definition_revision        = "${module.app_task_definition.task_definition_revision}"
   current_task_definition_version = "${data.aws_ecs_task_definition.app_task_definition.revision}"
