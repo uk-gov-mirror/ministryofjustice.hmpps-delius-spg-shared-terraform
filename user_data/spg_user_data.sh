@@ -126,23 +126,4 @@ echo "/dev/mapper/data-keys ${keys_dir} xfs defaults 0 0" >> /etc/fstab
 
 mount -a
 
-# GET SECRETS FROM PARAMETER STORE
-${ssm_get_command} "${self_signed_ca_cert}" \
-    | jq -r '.Parameters[0].Value' > ${keys_dir}/ca.crt
-
-${ssm_get_command} "${self_signed_key}" \
-    --with-decryption | jq -r '.Parameters[0].Value' > ${keys_dir}/server.key
-
-${ssm_get_command} "${self_signed_cert}" \
-    --with-decryption | jq -r '.Parameters[0].Value' > ${keys_dir}/server.crt
-
-cat ${keys_dir}/ca.crt >> ${keys_dir}/server.crt
-
-chmod 600 ${keys_dir}
-
-chmod 400 ${keys_dir}/server.key
-
-chmod 600 ${keys_dir}/*crt
-
-
 end script

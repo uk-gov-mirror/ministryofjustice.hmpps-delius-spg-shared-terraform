@@ -1,0 +1,22 @@
+{
+    "Version": "2008-10-17",
+    "Statement": [
+        {
+            "Sid": "PullOnly",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "${role_arn}"
+            },
+            "Action": [
+                "ecr:GetAuthorizationToken",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:GetRepositoryPolicy",
+                "ecr:DescribeRepositories",
+                "ecr:ListImages",
+                "ecr:DescribeImages",
+                "ecr:BatchGetImage"
+            ]
+        }
+    ]
+}

@@ -19,7 +19,7 @@ data "terraform_remote_state" "common" {
 
   config {
     bucket = "${var.remote_state_bucket_name}"
-    key    = "alfresco/common/terraform.tfstate"
+    key    = "spg/common/terraform.tfstate"
     region = "${var.region}"
   }
 }
@@ -30,7 +30,7 @@ data "terraform_remote_state" "common" {
 
 locals {
   region                 = "${var.region}"
-  alfresco_app_name      = "${data.terraform_remote_state.common.alfresco_app_name}"
+  spg_app_name           = "${data.terraform_remote_state.common.spg_app_name}"
   environment_identifier = "${data.terraform_remote_state.common.environment_identifier}"
   tags                   = "${data.terraform_remote_state.common.common_tags}"
 }
@@ -39,9 +39,8 @@ locals {
 # S3 bucket - Application Specific
 ####################################################
 module "s3bucket" {
-  source                   = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=issue-62//projects//alfresco//s3bucket"
-  alfresco_app_name        = "${local.alfresco_app_name}"
-  environment_identifier   = "${local.environment_identifier}"
-  tags                     = "${local.tags}"
-  s3cloudtrail_policy_file = "${file("../policies/s3bucket/s3_cloudtrail_policy.json")}"
+  source                 = "../modules/s3bucket"
+  spg_app_name           = "${local.spg_app_name}"
+  environment_identifier = "${local.environment_identifier}"
+  tags                   = "${local.tags}"
 }

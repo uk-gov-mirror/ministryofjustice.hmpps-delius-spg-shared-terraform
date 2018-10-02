@@ -25,14 +25,14 @@ data "terraform_remote_state" "common" {
 }
 
 #-------------------------------------------------------------
-### Getting the s3bucket
+### Getting the IAM details
 #-------------------------------------------------------------
-data "terraform_remote_state" "s3buckets" {
+data "terraform_remote_state" "iam" {
   backend = "s3"
 
   config {
     bucket = "${var.remote_state_bucket_name}"
-    key    = "spg/s3buckets/terraform.tfstate"
+    key    = "spg/iam/terraform.tfstate"
     region = "${var.region}"
   }
 }
@@ -45,24 +45,19 @@ locals {
   region                 = "${var.region}"
   spg_app_name           = "${data.terraform_remote_state.common.spg_app_name}"
   environment_identifier = "${data.terraform_remote_state.common.environment_identifier}"
-  tags                   = "${data.terraform_remote_state.common.common_tags}"
-  s3-config-bucket       = "${data.terraform_remote_state.common.common_s3-config-bucket}"
-  artefact-bucket        = "${data.terraform_remote_state.s3buckets.s3bucket}"
+  eng_root_arn           = "${data.terraform_remote_state.common.eng_root_arn}"
+  ecr_policy             = "../policies/ecr_policy.json"
+  role_arn               = "${data.terraform_remote_state.iam.iam_policy_ext_app_role_arn}"
 }
 
 ####################################################
-# IAM - Application Specific
+# ECR - Application Specific
 ####################################################
-module "iam" {
-  source                   = "../modules/iam"
-  spg_app_name             = "${local.spg_app_name}"
-  environment_identifier   = "${local.environment_identifier}"
-  tags                     = "${local.tags}"
-  ec2_role_policy_file     = "${file("../policies/ec2_role_policy.json")}"
-  ecs_role_policy_file     = "${file("../policies/ecs_role_policy.json")}"
-  ec2_policy_file          = "ec2_policy.json"
-  ecs_policy_file          = "ecs_policy.json"
-  ec2_internal_policy_file = "${file("../policies/ec2_internal_policy.json")}"
-  s3-config-bucket         = "${local.s3-config-bucket}"
-  artefact-bucket          = "${local.artefact-bucket}"
+module "ecr" {
+  source                 = "../modules/ecr"
+  app_name               = "${local.spg_app_name}"
+  environment_identifier = "${local.environment_identifier}"
+  ecr_policy             = "${local.ecr_policy}"
+  role_arn               = "${local.role_arn}"
+  eng_root_arn           = "${local.eng_root_arn}"
 }

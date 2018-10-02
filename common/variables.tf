@@ -34,3 +34,5 @@ variable "route53_hosted_zone_id" {}
 variable "spg_app_name" {}
 
 variable "cloudwatch_log_retention" {}
+
+variable "eng_root_arn" {}

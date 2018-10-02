@@ -82,6 +82,7 @@ locals {
   monitoring_server_internal_url = "${data.terraform_remote_state.monitor.monitoring_server_internal_url}"
   monitoring_server_client_sg_id = "${data.terraform_remote_state.monitor.monitoring_server_client_sg_id}"
   ssh_deployer_key               = "${data.terraform_remote_state.vpc.ssh_deployer_key}"
+  eng_root_arn                   = "${var.eng_root_arn}"
 
   app_hostnames = {
     internal = "${var.spg_app_name}-int"
