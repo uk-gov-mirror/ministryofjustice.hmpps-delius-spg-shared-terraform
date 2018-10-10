@@ -13,6 +13,7 @@ exit_on_error() {
 }
 
 # creds temp file
+echo "--> Using creds file ~/.slave_creds_run"
 creds_file=~/.slave_creds_run
 
 source_image="hmpps/spg"
