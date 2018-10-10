@@ -16,6 +16,7 @@ pipeline {
                 sh '''
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
+                    echo "WORKSPACE = ${WORKSPACE}"
                 '''
             }
         }
@@ -23,7 +24,7 @@ pipeline {
         stage ('push-spg-docker') {
             steps {
                 sh 'ls -laR'
-                sh 'scripts/image_push.sh'
+                sh 'sh scripts/image_push.sh'
             }
         }
     }
