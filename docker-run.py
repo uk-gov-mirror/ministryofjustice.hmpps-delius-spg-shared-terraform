@@ -17,10 +17,17 @@ image_id = 'hmpps/terraform-builder:latest'
 # command prfix
 cmd = 'sh run.sh'
 
-# docker run command
+# docker run command (local console)
 docker_cmd = "docker run -it --rm -v {}:/home/tools/data {}".format(
     work_dir,
     '-v ${HOME}/.aws:/home/tools/.aws -e RUNNING_IN_CONTAINER=True')
+
+
+# docker run command (jenkins)
+docker_cmd = "docker run --rm -v {}:/home/tools/data {}".format(
+    work_dir,
+    '-v ${HOME}/.aws:/home/tools/.aws -e RUNNING_IN_CONTAINER=True')
+
 
 if args.token:
     aws_token = args.token
