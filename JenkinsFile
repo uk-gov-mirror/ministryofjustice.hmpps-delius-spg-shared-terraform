@@ -78,7 +78,11 @@ pipeline {
             }
         }
 
-
+        stage ('prune-docker-fs') {
+            steps {
+                sh 'sh scripts/prune_docker_fs.sh'
+            }
+        }
 
     }
 }

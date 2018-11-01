@@ -65,6 +65,7 @@ docker push ${dest_ecr_repo}
 exit_on_error $? !!
 echo "--> Image push success"
 
-docker system prune -a -f
-exit_on_error $? !!
-echo "-> Image cleanup success"
+# dont prune til end of jenkins pipeline
+#docker system prune -a -f
+#exit_on_error $? !!
+#echo "-> Image cleanup success"
