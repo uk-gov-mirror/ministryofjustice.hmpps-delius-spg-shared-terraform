@@ -9,7 +9,6 @@ pipeline {
             jdk 'jdk8'
     }
 
-
     stages {
         stage ('Initialize') {
             steps {
@@ -17,6 +16,9 @@ pipeline {
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
                     echo "WORKSPACE = ${WORKSPACE}"
+                    echo "Pulling latest terraform builder"
+                    docker pull mojdigitalstudio/hmpps-terraform-builder:latest
+
                 '''
             }
         }
