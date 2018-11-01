@@ -33,8 +33,8 @@ if os.environ.get('JENKINS_HOME') is None:
 else:
 
     # image
-    image_id = 'mojdigitalstudio/terraform-builder:latest'
-
+    #image_id = 'mojdigitalstudio/terraform-builder:latest'
+    image_id = 'hmpps/terraform-builder:latest'
 
     # docker run command (jenkins)
     docker_cmd = "docker run --rm -v {}:/home/tools/data {}".format(

@@ -18,6 +18,8 @@ pipeline {
                     echo "WORKSPACE = ${WORKSPACE}"
                     echo "Pulling latest terraform builder"
                     docker pull mojdigitalstudio/hmpps-terraform-builder:latest
+                    echo "Pulling latest hmpps terraform builder via script and dokcer login"
+                    sh scripts/pull_latest_terraform_builder.sh
                 '''
             }
         }
