@@ -77,7 +77,8 @@ case ${ACTION_TYPE} in
     exit_on_error $? !!
     ;;
   docker-destroy)
-    echo "Running docker destroy action"
+    echo "Running docker destroy action"terraform.tfvars: no such file or directory
+
     terragrunt destroy -force
     exit_on_error $? !!
     ;;
