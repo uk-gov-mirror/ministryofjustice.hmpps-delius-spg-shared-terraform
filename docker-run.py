@@ -28,7 +28,7 @@ cmd = 'sh run.sh'
 
 
 # docker run command (jenkins)
-docker_cmd = "docker run --rm -v {}:/home/tools/data {}".format(
+docker_cmd = "docker run --rm -v {}:/home/tools/data {}".format(mojdigitalstudio
     work_dir,
     '-v ${HOME}/.aws:/home/tools/.aws -e RUNNING_IN_CONTAINER=True')
 
