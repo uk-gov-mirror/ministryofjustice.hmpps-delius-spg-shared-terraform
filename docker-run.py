@@ -11,26 +11,35 @@ component_target = args.component
 # working directory
 work_dir = os.getcwd()
 
-# image
-#image_id = 'hmpps/terraform-builder:latest'
-# image
-image_id = 'mojdigitalstudio/terraform-builder:latest'
 
 
 
 # command prfix
 cmd = 'sh run.sh'
 
-# docker run command (local console)
-#docker_cmd = "docker run -it --rm -v {}:/home/tools/data {}".format(
-#    work_dir,
-#    '-v ${HOME}/.aws:/home/tools/.aws -e RUNNING_IN_CONTAINER=True')
 
 
-# docker run command (jenkins)
-docker_cmd = "docker run --rm -v {}:/home/tools/data {}".format(mojdigitalstudio
-    work_dir,
-    '-v ${HOME}/.aws:/home/tools/.aws -e RUNNING_IN_CONTAINER=True')
+
+
+if os.environ.get('JENKINS_HOME') is None:
+
+    # image
+    image_id = 'hmpps/terraform-builder:latest'
+
+    # docker run command (local console)
+    docker_cmd = "docker run -it --rm -v {}:/home/tools/data {}".format(
+        work_dir,
+        '-v ${HOME}/.aws:/home/tools/.aws -e RUNNING_IN_CONTAINER=True')
+else:
+
+    # image
+    image_id = 'mojdigitalstudio/terraform-builder:latest'
+
+
+    # docker run command (jenkins)
+    docker_cmd = "docker run --rm -v {}:/home/tools/data {}".format(
+        work_dir,
+        '-v ${HOME}/.aws:/home/tools/.aws -e RUNNING_IN_CONTAINER=True')
 
 
 if args.token:
