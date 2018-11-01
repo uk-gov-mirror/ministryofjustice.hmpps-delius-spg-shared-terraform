@@ -24,11 +24,6 @@ pipeline {
             }
         }
 
-        stage ('push-spg-docker') {
-            steps {
-                sh 'sh scripts/image_push.sh'
-            }
-        }
 
 
         stage ('tf-common') {
@@ -77,6 +72,13 @@ pipeline {
                 sh "python docker-run.py --env ${environment_type} --action apply --component ecs-spg"
             }
         }
+
+        stage ('push-spg-docker') {
+            steps {
+                sh 'sh scripts/image_push.sh'
+            }
+        }
+
 
         stage ('prune-docker-fs') {
             steps {
