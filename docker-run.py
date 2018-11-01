@@ -12,7 +12,11 @@ component_target = args.component
 work_dir = os.getcwd()
 
 # image
-image_id = 'hmpps/terraform-builder:latest'
+#image_id = 'hmpps/terraform-builder:latest'
+# image
+image_id = 'mojdigitalstudio/terraform-builder:latest'
+
+
 
 # command prfix
 cmd = 'sh run.sh'
