@@ -18,7 +18,7 @@ pipeline {
                     echo "WORKSPACE = ${WORKSPACE}"
                     echo "Pulling latest terraform builder"
                     docker pull mojdigitalstudio/hmpps-terraform-builder:latest
-                    echo "Pulling latest hmpps terraform builder via script and dokcer login"
+                    echo "Pulling latest hmpps terraform builder via script and docker login"
                     sh scripts/pull_latest_terraform_builder.sh
                 '''
             }
@@ -33,7 +33,6 @@ pipeline {
 
         stage ('tf-common') {
             steps {
-                docker pull mojdigitalstudio/hmpps-terraform-builder:latest
                 sh "python docker-run.py --env ${environment_type} --action plan --component common"
                 sh "python docker-run.py --env ${environment_type} --action apply --component common"
             }
@@ -42,7 +41,6 @@ pipeline {
 
         stage ('tf-s3buckets') {
             steps {
-                docker pull mojdigitalstudio/hmpps-terraform-builder:latest
                 sh "python docker-run.py --env ${environment_type} --action plan --component s3buckets"
                 sh "python docker-run.py --env ${environment_type} --action apply --component s3buckets"
             }
@@ -51,7 +49,6 @@ pipeline {
 
         stage ('tf-iam') {
             steps {
-                docker pull mojdigitalstudio/hmpps-terraform-builder:latest
                 sh "python docker-run.py --env ${environment_type} --action plan --component iam"
                 sh "python docker-run.py --env ${environment_type} --action apply --component iam"
             }
@@ -60,7 +57,6 @@ pipeline {
 
         stage ('tf-ecr') {
             steps {
-                docker pull mojdigitalstudio/hmpps-terraform-builder:latest
                 sh "python docker-run.py --env ${environment_type} --action plan --component ecr"
                 sh "python docker-run.py --env ${environment_type} --action apply --component ecr"
             }
@@ -69,7 +65,6 @@ pipeline {
 
         stage ('tf-security-groups') {
             steps {
-                docker pull mojdigitalstudio/hmpps-terraform-builder:latest
                 sh "python docker-run.py --env ${environment_type} --action plan --component security-groups"
                 sh "python docker-run.py --env ${environment_type} --action apply --component security-groups"
             }
@@ -78,7 +73,6 @@ pipeline {
 
         stage ('tf-ecs-spg') {
             steps {
-                docker pull mojdigitalstudio/hmpps-terraform-builder:latest
                 sh "python docker-run.py --env ${environment_type} --action plan --component ecs-spg"
                 sh "python docker-run.py --env ${environment_type} --action apply --component ecs-spg"
             }
