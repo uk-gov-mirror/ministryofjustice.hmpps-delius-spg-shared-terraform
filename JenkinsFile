@@ -23,10 +23,58 @@ pipeline {
 
         stage ('push-spg-docker') {
             steps {
-                sh 'ls -laR'
                 sh 'sh scripts/image_push.sh'
             }
         }
+
+
+        stage ('tf-common') {
+            steps {
+                sh "python docker-run.py --env ${environment_type} --action plan --component common"
+                sh "python docker-run.py --env ${environment_type} --action apply --component common"
+            }
+        }
+
+
+        stage ('tf-s3buckets') {
+            steps {
+                sh "python docker-run.py --env ${environment_type} --action plan --component s3buckets"
+                sh "python docker-run.py --env ${environment_type} --action apply --component s3buckets"
+            }
+        }
+
+
+        stage ('tf-iam') {
+            steps {
+                sh "python docker-run.py --env ${environment_type} --action plan --component iam"
+                sh "python docker-run.py --env ${environment_type} --action apply --component iam"
+            }
+        }
+
+
+        stage ('tf-ecr') {
+            steps {
+                sh "python docker-run.py --env ${environment_type} --action plan --component ecr"
+                sh "python docker-run.py --env ${environment_type} --action apply --component ecr"
+            }
+        }
+
+
+        stage ('tf-security-groups') {
+            steps {
+                sh "python docker-run.py --env ${environment_type} --action plan --component security-groups"
+                sh "python docker-run.py --env ${environment_type} --action apply --component security-groups"
+            }
+        }
+
+
+        stage ('tf-ecs-spg') {
+            steps {
+                sh "python docker-run.py --env ${environment_type} --action plan --component ecs-spg"
+                sh "python docker-run.py --env ${environment_type} --action apply --component ecs-spg"
+            }
+        }
+
 
 
     }

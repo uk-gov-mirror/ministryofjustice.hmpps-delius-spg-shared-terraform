@@ -62,7 +62,7 @@ service_desired_count = "2"
 
 user_data = "user_data/user_data.sh"
 
-volume_size = "20"
+volume_size = "30"
 
 ebs_device_name = "/dev/xvdb"
 

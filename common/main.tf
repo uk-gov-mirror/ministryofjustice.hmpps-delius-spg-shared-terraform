@@ -78,9 +78,9 @@ locals {
   s3_lb_policy_file              = "../policies/s3_alb_policy.json"
   environment                    = "${var.environment}"
   tags                           = "${merge(data.terraform_remote_state.vpc.tags, map("sub-project", "${var.spg_app_name}"))}"
-  monitoring_server_external_url = "${data.terraform_remote_state.monitor.monitoring_server_external_url}"
-  monitoring_server_internal_url = "${data.terraform_remote_state.monitor.monitoring_server_internal_url}"
-  monitoring_server_client_sg_id = "${data.terraform_remote_state.monitor.monitoring_server_client_sg_id}"
+#  monitoring_server_external_url = "${data.terraform_remote_state.monitor.monitoring_server_external_url}"
+#  monitoring_server_internal_url = "${data.terraform_remote_state.monitor.monitoring_server_internal_url}"
+#  monitoring_server_client_sg_id = "${data.terraform_remote_state.monitor.monitoring_server_client_sg_id}"
   ssh_deployer_key               = "${data.terraform_remote_state.vpc.ssh_deployer_key}"
   eng_root_arn                   = "${var.eng_root_arn}"
 

@@ -94,7 +94,7 @@ output "environment" {
   value = "${var.environment}"
 }
 
-
+/*
 output "monitoring_server_external_url" {
   value = "${data.terraform_remote_state.monitor.monitoring_server_external_url}"
 }
@@ -106,6 +106,7 @@ output "monitoring_server_internal_url" {
 output "monitoring_server_client_sg_id" {
   value = "${data.terraform_remote_state.monitor.monitoring_server_client_sg_id}"
 }
+*/
 
 
 output "private_subnet_map" {
