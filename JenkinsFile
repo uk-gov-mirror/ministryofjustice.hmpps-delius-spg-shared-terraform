@@ -29,7 +29,6 @@ pipeline {
         stage ('tf-common') {
             steps {
                 sh "docker pull mojdigitalstudio/hmpps-terraform-builder:latest"
-                sh "docker pull hmpps/hmpps-terraform-builder:latest"
                 sh "docker images ls"
                 sh "python docker-run.py --env ${environment_type} --action plan --component common"
                 sh "python docker-run.py --env ${environment_type} --action apply --component common"
