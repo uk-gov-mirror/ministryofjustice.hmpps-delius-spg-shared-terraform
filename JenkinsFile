@@ -1,3 +1,13 @@
+/*
+
+
+This is currently not working as jenkins is unable to pull the image as part of the python script
+
+Please use delius-manual-deployments/Jenkinsfile.create_shared_spg_environment
+
+
+*/
+
 pipeline {
     agent { label "!master && !windows_slave" }
     options {
