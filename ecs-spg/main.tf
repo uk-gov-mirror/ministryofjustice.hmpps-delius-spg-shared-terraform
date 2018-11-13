@@ -145,6 +145,11 @@ locals {
   image_version                  = "latest"
   public_subnet_ids              = ["${data.terraform_remote_state.common.public_subnet_ids}"]
   private_subnet_ids              = ["${data.terraform_remote_state.common.private_subnet_ids}"]
+  #private_subnet_ids              =    [
+  #    "${data.terraform_remote_state.vpc.vpc_private-subnet-az1}",
+  #    "${data.terraform_remote_state.vpc.vpc_private-subnet-az2}",
+  #    "${data.terraform_remote_state.vpc.vpc_private-subnet-az3}",
+  #  ]
   public_cidr_block              = ["${data.terraform_remote_state.common.db_cidr_block}"]
   config-bucket                  = "${data.terraform_remote_state.common.common_s3-config-bucket}"
   artefact-bucket                = "${data.terraform_remote_state.s3buckets.s3bucket}"
