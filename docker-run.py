@@ -47,7 +47,7 @@ else:
 if args.token:
     aws_token = args.token
     token_args = "-e AWS_PROFILE={}".format(aws_token)
-    run_cmd = "{docker_cmd} {token_args} {image_id} {cmd} {environment} {action} {component} {git_repo}".format(
+    run_cmd = "{docker_cmd} {token_args}  {image_id} {cmd} {environment} {action} {component} {git_repo}".format(
         docker_cmd=docker_cmd,
         image_id=image_id,
         token_args=token_args,

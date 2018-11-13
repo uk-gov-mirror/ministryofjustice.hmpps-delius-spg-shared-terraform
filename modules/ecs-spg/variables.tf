@@ -24,11 +24,20 @@ variable "public_subnet_ids" {
   type = "list"
 }
 
+variable "private_subnet_ids" {
+  type = "list"
+}
+
+
 variable "instance_security_groups" {
   type = "list"
 }
 
-variable "lb_security_groups" {
+variable "ext_lb_security_groups" {
+  type = "list"
+}
+
+variable "int_lb_security_groups" {
   type = "list"
 }
 
@@ -39,6 +48,7 @@ variable "vpc_id" {}
 variable "access_logs_bucket" {}
 
 variable "external_domain" {}
+variable "internal_domain" {}
 
 variable "public_zone_id" {}
 

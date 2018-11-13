@@ -93,25 +93,25 @@ fi
 
 case ${ACTION_TYPE} in
   docker-plan)
-    echo "Running docker plan action"
+    echo "Running ${ACTION_TYPE} action"
     terragrunt init
     exit_on_error $? !!
     terragrunt plan -detailed-exitcode --out ${TG_ENVIRONMENT_TYPE}.plan
     exit_on_error $? !!
     ;;
   docker-apply)
-    echo "Running docker apply action"
+    echo "Running ${ACTION_TYPE} action"
     ls -la *.plan
     terragrunt apply ${TG_ENVIRONMENT_TYPE}.plan
     exit_on_error $? !!
     ;;
   docker-destroy)
-    echo "Running docker destroy action"
+    echo "Running ${ACTION_TYPE} action"
     terragrunt destroy -force
     exit_on_error $? !!
     ;;
   docker-test)
-    echo "Running docker test action"
+    echo "Running ${ACTION_TYPE} action"
     for cmp in ${components_list}
     do
       output_file="${inspec_profile_files_path}/output-${cmp}.json"
@@ -134,8 +134,18 @@ case ${ACTION_TYPE} in
     rm -rf ${inspec_creds_file} ${inspec_profile_files_path}/output*.json
     ;;
   docker-output)
-    echo "Running docker output action"
+    echo "Running ${ACTION_TYPE} action"
     terragrunt output
+    exit_on_error $? !!
+    ;;
+  docker-show)
+    echo "Running ${ACTION_TYPE} action"
+    terragrunt show
+    exit_on_error $? !!
+    ;;
+  docker-refresh)
+    echo "Running ${ACTION_TYPE} action"
+        terragrunt refresh
     exit_on_error $? !!
     ;;
   *)

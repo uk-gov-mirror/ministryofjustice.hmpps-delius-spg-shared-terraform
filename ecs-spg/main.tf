@@ -134,7 +134,8 @@ locals {
   environment                    = "${data.terraform_remote_state.common.environment}"
   tags                           = "${data.terraform_remote_state.common.common_tags}"
   private_subnet_map             = "${data.terraform_remote_state.common.private_subnet_map}"
-  lb_security_groups             = ["${data.terraform_remote_state.security-groups.security_groups_sg_external_lb_id}"]
+  ext_lb_security_groups             = ["${data.terraform_remote_state.security-groups.security_groups_sg_external_lb_id}"]
+  int_lb_security_groups             = ["${data.terraform_remote_state.security-groups.security_groups_sg_internal_lb_id}"]
   access_logs_bucket             = "${data.terraform_remote_state.common.common_s3_lb_logs_bucket}"
   ssh_deployer_key               = "${data.terraform_remote_state.common.common_ssh_deployer_key}"
   monitoring_server_internal_url = "tmpdoesnotexist" # "${data.terraform_remote_state.common.monitoring_server_internal_url}"
@@ -143,6 +144,7 @@ locals {
   image_url                      = "${data.terraform_remote_state.ecr.ecr_repository_url}"
   image_version                  = "latest"
   public_subnet_ids              = ["${data.terraform_remote_state.common.public_subnet_ids}"]
+  private_subnet_ids              = ["${data.terraform_remote_state.common.private_subnet_ids}"]
   public_cidr_block              = ["${data.terraform_remote_state.common.db_cidr_block}"]
   config-bucket                  = "${data.terraform_remote_state.common.common_s3-config-bucket}"
   artefact-bucket                = "${data.terraform_remote_state.s3buckets.s3bucket}"
@@ -154,6 +156,7 @@ locals {
 
   instance_security_groups = [
     "${data.terraform_remote_state.security-groups.security_groups_sg_external_instance_id}",
+    "${data.terraform_remote_state.common.sg_map_ids.bastion_in_sg_id  }",
     "${data.terraform_remote_state.common.common_sg_outbound_id}",
    # "${data.terraform_remote_state.common.monitoring_server_client_sg_id}",
   ]
@@ -172,14 +175,17 @@ module "ecs-spg" {
   environment_identifier         = "${local.environment_identifier}"
   environment                    = "${local.environment}"
   public_subnet_ids              = ["${local.public_subnet_ids}"]
+  private_subnet_ids              = ["${local.private_subnet_ids}"]
   tags                           = "${local.tags}"
   instance_security_groups       = ["${local.instance_security_groups}"]
-  lb_security_groups             = ["${local.lb_security_groups}"]
+  ext_lb_security_groups             = ["${local.ext_lb_security_groups}"]
+  int_lb_security_groups             = ["${local.int_lb_security_groups}"]
   vpc_id                         = "${local.vpc_id}"
   config_bucket                  = "${local.config-bucket}"
   access_logs_bucket             = "${local.access_logs_bucket}"
   public_zone_id                 = "${local.public_zone_id}"
   external_domain                = "${local.external_domain}"
+  internal_domain                = "${local.internal_domain}"
   alb_backend_port               = "443"
   alb_http_port                  = "80"
   alb_https_port                 = "443"
@@ -209,7 +215,7 @@ module "ecs-spg" {
   ecs_service_role               = "${local.ecs_service_role}"
   service_desired_count          = "${local.service_desired_count}"
   user_data                      = "../user_data/spg_user_data.sh"
-  volume_size                    = "5   0"
+  volume_size                    = "50"
   ebs_device_name                = "/dev/xvdb"
   ebs_volume_type                = "standard"
   ebs_volume_size                = "50"
