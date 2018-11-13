@@ -8,7 +8,7 @@ terragrunt = {
   }
 }
 
-app_name = "nginx"
+app_name = "spg_nginx"
 
 alb_http_port = "80"
 

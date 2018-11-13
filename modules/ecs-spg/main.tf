@@ -7,7 +7,7 @@ locals {
   vpc_id                       = "${var.vpc_id}"
   config_bucket                = "${var.config_bucket}"
   public_subnet_ids            = ["${var.public_subnet_ids}"]
-  private_subnet_ids            = ["${var.private_subnet_ids}"]
+  private_subnet_ids           = ["${var.private_subnet_ids}"]
   ext_lb_security_groups           = ["${var.ext_lb_security_groups}"]
   int_lb_security_groups           = ["${var.int_lb_security_groups}"]
   certificate_arn              = ["${var.certificate_arn}"]
@@ -41,7 +41,7 @@ module "create_app_alb_int" {
 
 resource "aws_route53_record" "dns_int_entry" {
   zone_id = "${local.public_zone_id}"
-  name    = "${local.application_endpoint}.${local.internal_domain}"
+  name    = "${local.application_endpoint}-int.${local.external_domain}"
   type    = "A"
 
   alias {
