@@ -26,13 +26,14 @@ locals {
 # CREATE INTERNAL LB FOR spg
 ############################################
 module "create_app_alb_int" {
-  source          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_lb"
-  lb_name         = "${local.short_environment_identifier}-int"
-  subnet_ids      = ["${local.private_subnet_ids}"]
-  s3_bucket_name  = "${local.access_logs_bucket}"
-  security_groups = ["${local.int_lb_security_groups}"]
-  tags            = "${var.tags}"
-  internal = true
+  source              = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_lb"
+  lb_name             = "${local.short_environment_identifier}-int"
+  subnet_ids          = ["${local.private_subnet_ids}"]
+  s3_bucket_name      = "${local.access_logs_bucket}"
+  security_groups     = ["${local.int_lb_security_groups}"]
+  tags                = "${var.tags}"
+  internal            = true
+  load_balancer_type  = "network"
 }
 
 ###############################################
@@ -105,8 +106,8 @@ module "create_app_alb_int_listener_with_https" {
 
 module "create_app_alb_int_listener" {
   source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_listener"
-  lb_port          = "${var.alb_http_port}"
-  lb_protocol      = "HTTP"
+  lb_port          = "61616"
+  lb_protocol      = "TCP"
   lb_arn           = "${module.create_app_alb_int.lb_arn}"
   target_group_arn = "${module.create_app_alb_int_targetgrp.target_group_arn}"
 }
