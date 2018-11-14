@@ -1,6 +1,6 @@
 #!/bin/sh
 
-git clone -b master git@github.com:ministryofjustice/hmpps-spg-ansible.git $(pwd)/data/env_configs
+git clone -b master git@github.com:ministryofjustice/hmpps-spg-ansible.git $(pwd)/  env_configs
 
 source $(pwd)/env_configs/delius-core-dev/delius-core-dev.properties
 
