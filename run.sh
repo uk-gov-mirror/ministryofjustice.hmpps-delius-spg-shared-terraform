@@ -31,6 +31,7 @@ then
     echo "environment_type argument not supplied, please provide an argument!"
     exit 1 
 fi
+
 echo "Output -> environment_type set to: ${TG_ENVIRONMENT_TYPE}"
 
 if [ -z "${ACTION_TYPE}" ]
@@ -39,8 +40,8 @@ then
     echo "--> Defaulting to plan ACTION_TYPE"
     ACTION_TYPE="plan"
 fi
-echo "Output -> ACTION_TYPE set to: ${ACTION_TYPE}"
 
+echo "Output -> ACTION_TYPE set to: ${ACTION_TYPE}"
 
 if [ -z "${COMPONENT}" ]
 then
@@ -48,31 +49,6 @@ then
     echo "--> Defaulting to common component"
     COMPONENT="common"
 fi
-echo "Output -> COMPONENT set to: ${COMPONENT}"
-
-
-if [ -z "${REPO}" ]
-then
-    echo "REPO argument not supplied."
-    echo "--> Defaulting to default REPO"
-    REPO="https://github.com/ministryofjustice/hmpps-env-configs.git"
-fi
-echo "Output -> REPO set to: ${REPO}"
-
-
-
-
-if [ -z "${RUNNING_IN_CONTAINER}" ]
-then
-    echo "RUNNING_IN_CONTAINER argument not supplied."
-#    echo "--> Defaulting to default REPO"
-#    REPO="https://github.com/ministryofjustice/hmpps-env-configs.git"
-fi
-echo "Output -> RUNNING_IN_CONTAINER set to: ${RUNNING_IN_CONTAINER}"
-
-
-
-
 
 #check env vars for RUNNING_IN_CONTAINER switch
 if [[ ${RUNNING_IN_CONTAINER} == True ]]
@@ -80,7 +56,8 @@ then
     workDirContainer=${3}
     echo "Output -> clone configs stage"
     rm -rf ${env_config_dir}
-    git clone -b master ${REPO} ${env_config_dir}
+    echo "Output ---> Cloning branch: ${GIT_BRANCH}"
+    git clone -b ${GIT_BRANCH} ${REPO} ${env_config_dir}
     echo "Output -> environment stage"
     source ${env_config_dir}/${TG_ENVIRONMENT_TYPE}/${TG_ENVIRONMENT_TYPE}.properties
     exit_on_error $? !!
@@ -93,25 +70,24 @@ fi
 
 case ${ACTION_TYPE} in
   docker-plan)
-    echo "Running ${ACTION_TYPE} action"
+    echo "Running docker plan action"
     terragrunt init
     exit_on_error $? !!
     terragrunt plan -detailed-exitcode --out ${TG_ENVIRONMENT_TYPE}.plan
     exit_on_error $? !!
     ;;
   docker-apply)
-    echo "Running ${ACTION_TYPE} action"
-    ls -la *.plan
+    echo "Running docker apply action"
     terragrunt apply ${TG_ENVIRONMENT_TYPE}.plan
     exit_on_error $? !!
     ;;
   docker-destroy)
-    echo "Running ${ACTION_TYPE} action"
+    echo "Running docker destroy action"
     terragrunt destroy -force
     exit_on_error $? !!
     ;;
   docker-test)
-    echo "Running ${ACTION_TYPE} action"
+    echo "Running docker test action"
     for cmp in ${components_list}
     do
       output_file="${inspec_profile_files_path}/output-${cmp}.json"
@@ -134,18 +110,8 @@ case ${ACTION_TYPE} in
     rm -rf ${inspec_creds_file} ${inspec_profile_files_path}/output*.json
     ;;
   docker-output)
-    echo "Running ${ACTION_TYPE} action"
+    echo "Running docker apply action"
     terragrunt output
-    exit_on_error $? !!
-    ;;
-  docker-show)
-    echo "Running ${ACTION_TYPE} action"
-    terragrunt show
-    exit_on_error $? !!
-    ;;
-  docker-refresh)
-    echo "Running ${ACTION_TYPE} action"
-        terragrunt refresh
     exit_on_error $? !!
     ;;
   *)

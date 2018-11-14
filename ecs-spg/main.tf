@@ -134,17 +134,17 @@ locals {
   environment                    = "${data.terraform_remote_state.common.environment}"
   tags                           = "${data.terraform_remote_state.common.common_tags}"
   private_subnet_map             = "${data.terraform_remote_state.common.private_subnet_map}"
-  ext_lb_security_groups             = ["${data.terraform_remote_state.security-groups.security_groups_sg_external_lb_id}"]
-  int_lb_security_groups             = ["${data.terraform_remote_state.security-groups.security_groups_sg_internal_lb_id}"]
+  ext_lb_security_groups         = ["${data.terraform_remote_state.security-groups.security_groups_sg_external_lb_id}"]
+  int_lb_security_groups         = ["${data.terraform_remote_state.security-groups.security_groups_sg_internal_lb_id}"]
   access_logs_bucket             = "${data.terraform_remote_state.common.common_s3_lb_logs_bucket}"
   ssh_deployer_key               = "${data.terraform_remote_state.common.common_ssh_deployer_key}"
-  monitoring_server_internal_url = "tmpdoesnotexist" # "${data.terraform_remote_state.common.monitoring_server_internal_url}"
+  monitoring_server_internal_url = "tmpdoesnotexist"                                                                    # "${data.terraform_remote_state.common.monitoring_server_internal_url}"
   app_hostnames                  = "${data.terraform_remote_state.common.app_hostnames}"
   certificate_arn                = ["${data.aws_acm_certificate.cert.arn}"]
   image_url                      = "${data.terraform_remote_state.ecr.ecr_repository_url}"
   image_version                  = "latest"
   public_subnet_ids              = ["${data.terraform_remote_state.common.public_subnet_ids}"]
-  private_subnet_ids              = ["${data.terraform_remote_state.common.private_subnet_ids}"]
+  private_subnet_ids             = ["${data.terraform_remote_state.common.private_subnet_ids}"]
   public_cidr_block              = ["${data.terraform_remote_state.common.db_cidr_block}"]
   config-bucket                  = "${data.terraform_remote_state.common.common_s3-config-bucket}"
   artefact-bucket                = "${data.terraform_remote_state.s3buckets.s3bucket}"
@@ -158,8 +158,9 @@ locals {
     "${data.terraform_remote_state.security-groups.security_groups_sg_external_instance_id}",
     "${data.terraform_remote_state.common.sg_map_ids.bastion_in_sg_id  }",
     "${data.terraform_remote_state.common.common_sg_outbound_id}",
-   # "${data.terraform_remote_state.common.monitoring_server_client_sg_id}",
   ]
+
+  # "${data.terraform_remote_state.common.monitoring_server_client_sg_id}",
 }
 
 ####################################################
@@ -175,11 +176,11 @@ module "ecs-spg" {
   environment_identifier         = "${local.environment_identifier}"
   environment                    = "${local.environment}"
   public_subnet_ids              = ["${local.public_subnet_ids}"]
-  private_subnet_ids              = ["${local.private_subnet_ids}"]
+  private_subnet_ids             = ["${local.private_subnet_ids}"]
   tags                           = "${local.tags}"
   instance_security_groups       = ["${local.instance_security_groups}"]
-  ext_lb_security_groups             = ["${local.ext_lb_security_groups}"]
-  int_lb_security_groups             = ["${local.int_lb_security_groups}"]
+  ext_lb_security_groups         = ["${local.ext_lb_security_groups}"]
+  int_lb_security_groups         = ["${local.int_lb_security_groups}"]
   vpc_id                         = "${local.vpc_id}"
   config_bucket                  = "${local.config-bucket}"
   access_logs_bucket             = "${local.access_logs_bucket}"
