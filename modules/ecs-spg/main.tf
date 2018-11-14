@@ -33,7 +33,6 @@ module "create_app_alb_int" {
   security_groups     = ["${local.int_lb_security_groups}"]
   tags                = "${var.tags}"
   internal            = true
-  load_balancer_type  = "network"
 }
 
 ###############################################
@@ -94,23 +93,25 @@ resource "aws_route53_record" "dns_ext_entry" {
 ### Create app listeners int
 #-------------------------------------------------------------
 
-module "create_app_alb_int_listener_with_https" {
-  source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_listener_with_https"
-  lb_port          = "${var.alb_backend_port}"
-  lb_protocol      = "${var.alb_listener_protocol}"
-  lb_arn           = "${module.create_app_alb_int.lb_arn}"
-  target_group_arn = "${module.create_app_alb_int_targetgrp.target_group_arn}"
-  ssl_policy       = "${var.public_ssl_policy}"
-  certificate_arn  = ["${local.certificate_arn}"]
-}
+#module "create_app_alb_int_listener_with_https" {
+#  source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_listener_with_https"
+#  lb_port          = "${var.alb_backend_port}"
+#  lb_protocol      = "${var.alb_listener_protocol}"
+#  lb_arn           = "${module.create_app_alb_int.lb_arn}"
+#  target_group_arn = "${module.create_app_alb_int_targetgrp.target_group_arn}"
+#  ssl_policy       = "${var.public_ssl_policy}"
+#  certificate_arn  = ["${local.certificate_arn}"]
+#}
 
 module "create_app_alb_int_listener" {
   source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_listener"
-  lb_port          = "61616"
-  lb_protocol      = "TCP"
+  lb_port          = "${var.alb_http_port}"
+  lb_protocol      = "HTTP"
   lb_arn           = "${module.create_app_alb_int.lb_arn}"
   target_group_arn = "${module.create_app_alb_int_targetgrp.target_group_arn}"
 }
+
+
 
 #-------------------------------------------------------------
 ### Create app listeners ext
