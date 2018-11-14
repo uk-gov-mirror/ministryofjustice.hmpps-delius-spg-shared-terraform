@@ -16,9 +16,17 @@
         ],
         "environment": [
             {
-                "name": "S3_CONFIG_BUCKET",
-                "value": "${s3_bucket_config}"
+                "name": "SPG_BUILD_S3_REPO",
+                "value": "tf-eu-west-2-hmpps-delius-core-dev-gw-s3bucket"
             },
+
+            {
+            "name": "SPG_BUILD_INV_DIR",
+            "value": "/tmp/ansible/inventories/hmpps/non-prod/dev-mvp2-docker"
+            },
+
+
+
             {
                 "name": "KIBANA_HOST",
                 "value": "${kibana_host}"
@@ -29,6 +37,11 @@
                 "hostPort": 8181,
                 "protocol": "tcp",
                 "containerPort": 8181
+            },
+            {
+            "hostPort": 61616,
+            "protocol": "tcp",
+            "containerPort": 61616
             }
         ],
         "logConfiguration": {
