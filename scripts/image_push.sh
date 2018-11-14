@@ -1,5 +1,5 @@
 #!/bin/sh
-echo 'cloning spg ansible'
+echo 'cloning env configs'
 git clone -b workaround-jenkins-pc git@github.com:ministryofjustice/hmpps-env-configs.git $(pwd)/env_configs
 ls -laR
 source $(pwd)/env_configs/delius-core-dev/delius-core-dev.properties
@@ -39,7 +39,7 @@ exit_on_error $? !!
 echo "--> Image pull success"
 
 # PUSH
-dest_ecr_repo_name="${TG_ENVIRONMENT_IDENTIFIER}-spg-ecr-repo"
+dest_ecr_repo_name="${TG_ENVIRONMENT_IDENTIFIER}-gw-ecr-repo"
 
 temp_role=$(aws sts assume-role --role-arn ${TERRAGRUNT_IAM_ROLE} --role-session-name testing --duration-seconds 900)
 
