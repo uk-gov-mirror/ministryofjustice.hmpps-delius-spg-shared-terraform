@@ -1,7 +1,7 @@
 #!/bin/sh
 
 git clone -b master git@github.com:ministryofjustice/hmpps-spg-ansible.git $(pwd)/env_configs
-
+ls -laR
 source $(pwd)/env_configs/delius-core-dev/delius-core-dev.properties
 
 # Error handler function
