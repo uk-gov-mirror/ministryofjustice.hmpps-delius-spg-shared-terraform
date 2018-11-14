@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source $(pwd)/env_configs/dev.properties
+source $(pwd)/env_configs/delius-core-dev/delius-core-dev.properties
 
 # Error handler function
 exit_on_error() {
