@@ -42,6 +42,11 @@
             "hostPort": 61616,
             "protocol": "tcp",
             "containerPort": 61616
+            },
+            {
+            "hostPort": 2222,
+            "protocol": "tcp",
+            "containerPort": 22
             }
         ],
         "logConfiguration": {

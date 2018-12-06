@@ -42,3 +42,14 @@ variable depends_on {
 variable "sg_map_ids" {
   type = "map"
 }
+
+variable "weblogic_domain_ports" {
+  type        = "map"
+  description = "Map of the ports that the weblogic domains use"
+}
+
+variable "spg_partnergateway_domain_ports" {
+  type        = "map"
+  description = "Map of the ports that the spg partner gateway servicemix domains use"
+}
+

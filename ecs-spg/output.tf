@@ -19,27 +19,27 @@ output "ecs_spg_lb_int_dns_alias" {
   value = "${module.ecs-spg.lb_int_dns_alias}"
 }
 
-# # LB ext
-output "ecs_spg_lb_ext_id" {
-  value = "${module.ecs-spg.lb_ext_id}"
-}
-
-output "ecs_spg_lb_ext_arn" {
-  value = "${module.ecs-spg.lb_ext_arn}"
-}
-
-output "ecs_spg_lb_ext_arn_suffix" {
-  value = "${module.ecs-spg.lb_ext_arn_suffix}"
-}
-
-output "ecs_spg_lb_ext_dns_name" {
-  value = "${module.ecs-spg.lb_ext_dns_name}"
-}
-
-output "ecs_spg_lb_ext_dns_alias" {
-  value = "${module.ecs-spg.lb_ext_dns_alias}"
-}
-
+//# # LB ext
+//output "ecs_spg_lb_ext_id" {
+//  value = "${module.ecs-spg.lb_ext_id}"
+//}
+//
+//output "ecs_spg_lb_ext_arn" {
+//  value = "${module.ecs-spg.lb_ext_arn}"
+//}
+//
+//output "ecs_spg_lb_ext_arn_suffix" {
+//  value = "${module.ecs-spg.lb_ext_arn_suffix}"
+//}
+//
+//output "ecs_spg_lb_ext_dns_name" {
+//  value = "${module.ecs-spg.lb_ext_dns_name}"
+//}
+//
+//output "ecs_spg_lb_ext_dns_alias" {
+//  value = "${module.ecs-spg.lb_ext_dns_alias}"
+//}
+//
 
 # TARGET GROUPS int
 output "ecs_spg_int_target_group_id" {
@@ -58,22 +58,22 @@ output "ecs_spg_int_target_group_name" {
   value = "${module.ecs-spg.int_target_group_name}"
 }
 
-# TARGET GROUPS ext
-output "ecs_spg_ext_target_group_id" {
-  value = "${module.ecs-spg.ext_target_group_id}"
-}
-
-output "ecs_spg_ext_target_group_arn" {
-  value = "${module.ecs-spg.ext_target_group_arn}"
-}
-
-output "ecs_spg_ext_target_group_arn_suffix" {
-  value = "${module.ecs-spg.ext_target_group_arn_suffix}"
-}
-
-output "ecs_spg_ext_target_group_name" {
-  value = "${module.ecs-spg.ext_target_group_name}"
-}
+//# TARGET GROUPS ext
+//output "ecs_spg_ext_target_group_id" {
+//  value = "${module.ecs-spg.ext_target_group_id}"
+//}
+//
+//output "ecs_spg_ext_target_group_arn" {
+//  value = "${module.ecs-spg.ext_target_group_arn}"
+//}
+//
+//output "ecs_spg_ext_target_group_arn_suffix" {
+//  value = "${module.ecs-spg.ext_target_group_arn_suffix}"
+//}
+//
+//output "ecs_spg_ext_target_group_name" {
+//  value = "${module.ecs-spg.ext_target_group_name}"
+//}
 
 
 

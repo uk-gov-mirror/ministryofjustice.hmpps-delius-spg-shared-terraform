@@ -28,27 +28,27 @@ output "private_subnet_ids" {
   value = "${local.private_subnet_ids}"
 }
 
-
-# LB ext
-output "lb_ext_id" {
-  value = "${module.create_app_alb_ext.lb_id}"
-}
-
-output "lb_ext_arn" {
-  value = "${module.create_app_alb_ext.lb_arn}"
-}
-
-output "lb_ext_arn_suffix" {
-  value = "${module.create_app_alb_ext.lb_arn_suffix}"
-}
-
-output "lb_ext_dns_name" {
-  value = "${module.create_app_alb_ext.lb_dns_name}"
-}
-
-output "lb_ext_dns_alias" {
-  value = "${aws_route53_record.dns_ext_entry.fqdn}"
-}
+//
+//# LB ext
+//output "lb_ext_id" {
+//  value = "${module.create_app_alb_ext.lb_id}"
+//}
+//
+//output "lb_ext_arn" {
+//  value = "${module.create_app_alb_ext.lb_arn}"
+//}
+//
+//output "lb_ext_arn_suffix" {
+//  value = "${module.create_app_alb_ext.lb_arn_suffix}"
+//}
+//
+//output "lb_ext_dns_name" {
+//  value = "${module.create_app_alb_ext.lb_dns_name}"
+//}
+//
+//output "lb_ext_dns_alias" {
+//  value = "${aws_route53_record.dns_ext_entry.fqdn}"
+//}
 
 
 
@@ -69,22 +69,22 @@ output "http_lb_int_listener_arn" {
   value = "${element(module.create_app_alb_int_listener.listener_arn,0)}"
 }
 
-# LISTENER ext
-output "https_lb_ext_listener_id" {
-  value = "${element(module.create_app_alb_ext_listener.listener_id,0)}"
-}
-
-output "https_lb_ext_listener_arn" {
-  value = "${element(module.create_app_alb_ext_listener.listener_arn,0)}"
-}
-
-output "http_lb_ext_listener_id" {
-  value = "${element(module.create_app_alb_ext_listener.listener_id,0)}"
-}
-
-output "http_lb_ext_listener_arn" {
-  value = "${element(module.create_app_alb_ext_listener.listener_arn,0)}"
-}
+//# LISTENER ext
+//output "https_lb_ext_listener_id" {
+//  value = "${element(module.create_app_alb_ext_listener.listener_id,0)}"
+//}
+//
+//output "https_lb_ext_listener_arn" {
+//  value = "${element(module.create_app_alb_ext_listener.listener_arn,0)}"
+//}
+//
+//output "http_lb_ext_listener_id" {
+//  value = "${element(module.create_app_alb_ext_listener.listener_id,0)}"
+//}
+//
+//output "http_lb_ext_listener_arn" {
+//  value = "${element(module.create_app_alb_ext_listener.listener_arn,0)}"
+//}
 
 
 
@@ -106,22 +106,22 @@ output "int_target_group_name" {
   value = "${module.create_app_alb_int_targetgrp.target_group_name}"
 }
 
-# TARGET GROUPS ext
-output "ext_target_group_id" {
-  value = "${module.create_app_alb_ext_targetgrp.target_group_id}"
-}
-
-output "ext_target_group_arn" {
-  value = "${module.create_app_alb_ext_targetgrp.target_group_arn}"
-}
-
-output "ext_target_group_arn_suffix" {
-  value = "${module.create_app_alb_ext_targetgrp.target_group_arn_suffix}"
-}
-
-output "ext_target_group_name" {
-  value = "${module.create_app_alb_ext_targetgrp.target_group_name}"
-}
+//# TARGET GROUPS ext
+//output "ext_target_group_id" {
+//  value = "${module.create_app_alb_ext_targetgrp.target_group_id}"
+//}
+//
+//output "ext_target_group_arn" {
+//  value = "${module.create_app_alb_ext_targetgrp.target_group_arn}"
+//}
+//
+//output "ext_target_group_arn_suffix" {
+//  value = "${module.create_app_alb_ext_targetgrp.target_group_arn_suffix}"
+//}
+//
+//output "ext_target_group_name" {
+//  value = "${module.create_app_alb_ext_targetgrp.target_group_name}"
+//}
 
 # ECS CLUSTER
 output "ecs_cluster_arn" {

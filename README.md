@@ -162,3 +162,10 @@ export AWS_PROFILE=hmpps-token
 source env_configs/dev.properties
 rm -rf env_configs/inspec-creds.properties
 ```
+
+## Adding a new security group
+```
+Add new security group ids to the sg_map
+  hmpps-delius-spg-shared-terraform/common/main.tf:sg_map_ids
+
+```

@@ -90,12 +90,13 @@ locals {
   }
 
   sg_map_ids = {
+    external_inst_sg_id = "${data.terraform_remote_state.security-groups.sg_spg_nginx_in}"
     internal_inst_sg_id = "${data.terraform_remote_state.security-groups.sg_spg_api_in}"
-    db_sg_id            = "${data.terraform_remote_state.security-groups.sg_spg_db_in}"
     external_lb_sg_id   = "${data.terraform_remote_state.security-groups.sg_spg_external_lb_in}"
     internal_lb_sg_id   = "${data.terraform_remote_state.security-groups.sg_spg_internal_lb_in}"
-    external_inst_sg_id = "${data.terraform_remote_state.security-groups.sg_spg_nginx_in}"
     bastion_in_sg_id    = "${data.terraform_remote_state.security-groups.sg_ssh_bastion_in_id}"
+//    jms_in_sg_id        = "${data.terraform_remote_state.security-groups.sg_spg_jms_in_sg_id}"
+    #db_sg_id            = "${data.terraform_remote_state.security-groups.sg_spg_db_in}"
   }
 
   private_subnet_map = {

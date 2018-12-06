@@ -153,11 +153,13 @@ locals {
   cloudwatch_log_retention       = "${var.cloudwatch_log_retention}"
 
   instance_profile = "${data.terraform_remote_state.iam.iam_policy_ext_app_instance_profile_name}"
-
+  sg_map_ids             = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
     "${data.terraform_remote_state.security-groups.security_groups_sg_external_instance_id}",
     "${data.terraform_remote_state.common.sg_map_ids.bastion_in_sg_id  }",
     "${data.terraform_remote_state.common.common_sg_outbound_id}",
+//    "${data.terraform_remote_state.security-groups.sg_spg_api_in_id}",
+    "${local.sg_map_ids["internal_inst_sg_id"]}"
   ]
 
   # "${data.terraform_remote_state.common.monitoring_server_client_sg_id}",
@@ -187,14 +189,14 @@ module "ecs-spg" {
   public_zone_id                 = "${local.public_zone_id}"
   external_domain                = "${local.external_domain}"
   internal_domain                = "${local.internal_domain}"
-  alb_backend_port               = "443"
+  alb_backend_port               = "9001"
   alb_http_port                  = "80"
   alb_https_port                 = "443"
   deregistration_delay           = "90"
   backend_app_port               = "8181"
   backend_app_protocol           = "HTTP"
   backend_app_template_file      = "template.json"
-  backend_check_app_path         = "/"
+  backend_check_app_path         = "/cxf/"
   backend_check_interval         = "120"
   backend_ecs_cpu_units          = "256"
   backend_ecs_desired_count      = "1"

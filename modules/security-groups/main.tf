@@ -2,6 +2,15 @@
 # DATA SOURCE MODULES FROM OTHER TERRAFORM BACKENDS
 ####################################################
 
+/*
+[terragrunt] 2018/11/15 12:20:24 Running command: terraform output
+security_groups_sg_external_instance_id = sg-0ea5a84693db8eced
+security_groups_sg_external_lb_id = sg-04e995dc29aa06ebb
+security_groups_sg_internal_instance_id = sg-0c35c0650c6b032c3
+security_groups_sg_internal_lb_id = sg-09b7df827fb97a8ad
+security_groups_sg_rds_id = sg-01fe67e7807eb0fc4
+*/
+
 ####################################################
 # Locals
 ####################################################
@@ -18,9 +27,12 @@ locals {
   db_cidr_block       = ["${var.db_cidr_block}"]
   internal_lb_sg_id   = "${var.sg_map_ids["internal_lb_sg_id"]}"
   internal_inst_sg_id = "${var.sg_map_ids["internal_inst_sg_id"]}"
-  db_sg_id            = "${var.sg_map_ids["db_sg_id"]}"
+  #  db_sg_id            = "${var.sg_map_ids["db_sg_id"]}"
   external_lb_sg_id   = "${var.sg_map_ids["external_lb_sg_id"]}"
   external_inst_sg_id = "${var.sg_map_ids["external_inst_sg_id"]}"
+
+  weblogic_domain_ports  = "${var.weblogic_domain_ports}"
+  spg_partnergateway_domain_ports  = "${var.spg_partnergateway_domain_ports}"
 }
 
 #######################################
@@ -192,3 +204,42 @@ resource "aws_security_group_rule" "internal_inst_sg_ingress_alb_http_port" {
   source_security_group_id = "${local.internal_lb_sg_id}"
   description              = "${local.common_name}-instance-internal-sg"
 }
+
+
+
+## Allow JMS access from SPG GW to ANY server in private cidr block with the port range specified by delius domain
+resource "aws_security_group_rule" "spg_gw_egress_jms_private" {
+  security_group_id        = "${local.internal_inst_sg_id}"
+  type                     = "egress"
+  protocol                 = "tcp"
+  from_port                = "${local.weblogic_domain_ports["spg_jms_broker"]}"
+  to_port                  = "${local.weblogic_domain_ports["spg_jms_broker_ssl"]}"
+  cidr_blocks              = ["${local.private_cidr_block}"]
+  description              = "GW to ND JMS"
+}
+
+
+
+## Allow JMS access to SPG GW to from any server in private CIDR block with the port range specified by SPG domain
+resource "aws_security_group_rule" "spg_gw_ingress_jms_private" {
+  security_group_id        = "${local.internal_inst_sg_id}"
+  type                     = "ingress"
+  protocol                 = "tcp"
+  from_port                = "${var.spg_partnergateway_domain_ports["jms_broker"]}"
+  to_port                  = "${var.spg_partnergateway_domain_ports["jms_broker_ssl"]}"
+  cidr_blocks              = ["${local.private_cidr_block}"]
+  description              = "in"
+}
+
+## WOULD IT LOOK LIKE THIS EVENTUALLY Allow JMS access from SPG GW to specific sg
+#resource "aws_security_group_rule" "spg_gw_ingress_jms_sg" {
+#  security_group_id        = "${local.SPG_BROKER_SG_GROUP}"
+#  type                     = "ingress"
+#  protocol                 = "tcp"
+#  from_port                = "${var.spg_partnergateway_domain_ports["jms_broker"]}"
+#  to_port                  = "${var.spg_partnergateway_domain_ports["jms_broker_ssl"]}"
+#  source_security_group_id= ["${var.DELIUS_JMS_CONSUMER_SG_GROUP}"]
+#  description              = "in"
+#}
+
+
