@@ -114,6 +114,16 @@ case ${ACTION_TYPE} in
     terragrunt output
     exit_on_error $? !!
     ;;
+  docker-show)
+    echo "Running ${ACTION_TYPE} action"
+    terragrunt show
+    exit_on_error $? !!
+    ;;
+  docker-refresh)
+    echo "Running ${ACTION_TYPE} action"
+        terragrunt refresh
+    exit_on_error $? !!
+    ;;
   *)
     echo "${ACTION_TYPE} is not a valid argument. init - apply - test - output - destroy"
   ;;
