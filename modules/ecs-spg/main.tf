@@ -1,4 +1,4 @@
-# LOCALS 
+# LOCALS
 
 locals {
   common_name                  = "${var.environment_identifier}-${var.app_hostnames["external"]}"
@@ -232,7 +232,7 @@ data "template_file" "app_task_definition" {
   template = "${file("task_definitions/${var.backend_app_template_file}")}"
 
   vars {
-    environment           = "${var.environment}"
+    #environment           = "${var.environment}"
     image_url             = "${var.image_url}"
     container_name        = "${var.app_name}"
     s3_bucket_config      = "${local.config_bucket}"
@@ -345,4 +345,3 @@ module "auto_scale" {
 #   source = "./templates/nginx.conf"
 #   etag   = "${md5(file("./templates/nginx.conf"))}"
 # }
-

@@ -4,7 +4,7 @@ variable "environment_identifier" {}
 
 variable "short_environment_identifier" {}
 
-variable "environment" {}
+#variable "environment" {}
 
 variable "tags" {
   type = "map"

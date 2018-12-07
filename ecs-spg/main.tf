@@ -131,7 +131,7 @@ locals {
   short_environment_identifier   = "${data.terraform_remote_state.common.short_environment_identifier}"
   region                         = "${var.region}"
   spg_app_name                   = "${data.terraform_remote_state.common.spg_app_name}"
-  environment                    = "${data.terraform_remote_state.common.environment}"
+  #environment                    = "${data.terraform_remote_state.common.environment}"
   tags                           = "${data.terraform_remote_state.common.common_tags}"
   private_subnet_map             = "${data.terraform_remote_state.common.private_subnet_map}"
   ext_lb_security_groups         = ["${data.terraform_remote_state.security-groups.security_groups_sg_external_lb_id}"]
@@ -176,7 +176,7 @@ module "ecs-spg" {
   image_version                  = "${local.image_version}"
   short_environment_identifier   = "${local.short_environment_identifier}"
   environment_identifier         = "${local.environment_identifier}"
-  environment                    = "${local.environment}"
+  #environment                    = "${local.environment}"
   public_subnet_ids              = ["${local.public_subnet_ids}"]
   private_subnet_ids             = ["${local.private_subnet_ids}"]
   tags                           = "${local.tags}"
