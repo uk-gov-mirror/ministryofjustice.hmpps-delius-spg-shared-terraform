@@ -137,7 +137,7 @@ module "common" {
   source                       = "../modules/common"
   spg_app_name                 = "${local.spg_app_name}"
   cidr_block                   = "${local.cidr_block}"
-  common_name                  = "${local.common_name}"
+  # common_name                  = "${local.common_name}"
   environment                  = "${local.environment}"
   environment_identifier       = "${local.environment_identifier}"
   internal_domain              = "${local.internal_domain}"

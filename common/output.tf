@@ -90,9 +90,9 @@ output "s3_lb_policy_file" {
   value = "policies/s3_alb_policy.json"
 }
 
-output "environment" {
-  value = "${var.environment}"
-}
+# output "environment" {
+#   value = "${var.environment}"
+# }
 
 /*
 output "monitoring_server_external_url" {
