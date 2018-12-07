@@ -36,3 +36,7 @@ variable "spg_app_name" {}
 variable "cloudwatch_log_retention" {}
 
 variable "eng_root_arn" {}
+
+variable "tags" {
+  type = "map"
+}

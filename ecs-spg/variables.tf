@@ -6,3 +6,7 @@ variable "remote_state_bucket_name" {
 }
 
 variable "cloudwatch_log_retention" {}
+
+variable "tags" {
+  type = "map"
+}

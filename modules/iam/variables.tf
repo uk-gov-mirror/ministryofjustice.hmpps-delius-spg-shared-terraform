@@ -23,4 +23,4 @@ variable depends_on {
   type    = "list"
 }
 
-variable "artefact-bucket" {}
+# variable "artefact-bucket" {}

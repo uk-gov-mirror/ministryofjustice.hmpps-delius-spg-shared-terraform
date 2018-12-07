@@ -77,7 +77,7 @@ locals {
   remote_state_bucket_name       = "${var.remote_state_bucket_name}"
   s3_lb_policy_file              = "../policies/s3_alb_policy.json"
   #environment                    = "${var.environment}"
-  tags                           = "${merge(data.terraform_remote_state.vpc.tags, map("sub-project", "${var.spg_app_name}"))}"
+  # tags                           = "${merge(var.tags, map("sub-project", "${var.spg_app_name}"))}"
 #  monitoring_server_external_url = "${data.terraform_remote_state.monitor.monitoring_server_external_url}"
 #  monitoring_server_internal_url = "${data.terraform_remote_state.monitor.monitoring_server_internal_url}"
 #  monitoring_server_client_sg_id = "${data.terraform_remote_state.monitor.monitoring_server_client_sg_id}"
@@ -145,7 +145,7 @@ module "common" {
   private_zone_id              = "${local.private_zone_id}"
   s3_lb_policy_file            = "${local.s3_lb_policy_file}"
   short_environment_identifier = "${local.short_environment_identifier}"
-  tags                         = "${local.tags}"
+  tags                         = "${merge(var.tags, map("sub-project", "${var.spg_app_name}"))}"
   vpc_id                       = "${local.vpc_id}"
   region                       = "${local.region}"
 }

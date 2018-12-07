@@ -37,3 +37,6 @@ variable "spg_partnergateway_domain_ports" {
   description = "Map of the ports that the spg partner gateway servicemix domains use"
 }
 
+variable "tags" {
+  type = "map"
+}
