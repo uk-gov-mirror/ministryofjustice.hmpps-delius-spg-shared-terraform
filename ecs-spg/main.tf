@@ -147,7 +147,7 @@ locals {
   private_subnet_ids             = ["${data.terraform_remote_state.common.private_subnet_ids}"]
   public_cidr_block              = ["${data.terraform_remote_state.common.db_cidr_block}"]
   config-bucket                  = "${data.terraform_remote_state.common.common_s3-config-bucket}"
-  artefact-bucket                = "${data.terraform_remote_state.s3buckets.s3bucket}"
+  #artefact-bucket                = "${data.terraform_remote_state.s3buckets.s3bucket}"
   ecs_service_role               = "${data.terraform_remote_state.iam.iam_role_ext_ecs_role_arn}"
   service_desired_count          = "1"
   cloudwatch_log_retention       = "${var.cloudwatch_log_retention}"
@@ -231,5 +231,5 @@ module "ecs-spg" {
   ami_id                         = "${local.ami_id}"
   instance_profile               = "${local.instance_profile}"
   ssh_deployer_key               = "${local.ssh_deployer_key}"
-  artefact-bucket                = "${local.artefact-bucket}"
+  #artefact-bucket                = "${local.artefact-bucket}"
 }

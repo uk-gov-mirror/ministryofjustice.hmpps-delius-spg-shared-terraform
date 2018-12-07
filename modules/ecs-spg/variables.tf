@@ -148,4 +148,4 @@ variable "instance_profile" {}
 
 variable "ssh_deployer_key" {}
 
-variable "artefact-bucket" {}
+#variable "artefact-bucket" {}
