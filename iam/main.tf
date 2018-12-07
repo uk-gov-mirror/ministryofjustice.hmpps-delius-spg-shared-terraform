@@ -45,9 +45,7 @@ locals {
   region                 = "${var.region}"
   spg_app_name           = "${data.terraform_remote_state.common.spg_app_name}"
   environment_identifier = "${data.terraform_remote_state.common.environment_identifier}"
-  # tags                   = "${data.terraform_remote_state.common.common_tags}"
   s3-config-bucket       = "${data.terraform_remote_state.common.common_s3-config-bucket}"
-  #artefact-bucket        = "${data.terraform_remote_state.s3buckets.s3bucket}"
 }
 
 ####################################################
@@ -64,5 +62,4 @@ module "iam" {
   ecs_policy_file          = "ecs_policy.json"
   ec2_internal_policy_file = "${file("../policies/ec2_internal_policy.json")}"
   s3-config-bucket         = "${local.s3-config-bucket}"
-  #artefact-bucket          = "${local.artefact-bucket}"
 }

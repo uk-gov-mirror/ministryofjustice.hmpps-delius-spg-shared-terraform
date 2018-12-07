@@ -16,8 +16,6 @@ locals {
   external_domain              = "${var.external_domain}"
   internal_domain              = "${var.internal_domain}"
   instance_security_groups     = ["${var.instance_security_groups}"]
-  #artefact-bucket              = "${var.artefact-bucket}"
-
 }
 
 
@@ -232,11 +230,9 @@ data "template_file" "app_task_definition" {
   template = "${file("task_definitions/${var.backend_app_template_file}")}"
 
   vars {
-    #environment           = "${var.environment}"
     image_url             = "${var.image_url}"
     container_name        = "${var.app_name}"
     s3_bucket_config      = "${local.config_bucket}"
-    #artefact-bucket       = "${local.artefact-bucket}"
     version               = "${var.image_version}"
     log_group_name        = "${module.create_loggroup.loggroup_name}"
     log_group_region      = "${var.region}"

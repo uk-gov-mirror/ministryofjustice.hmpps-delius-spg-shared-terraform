@@ -18,9 +18,7 @@ variable "tags" {
 
 variable "s3-config-bucket" {}
 
-variable depends_on {
+variable "depends_on" {
   default = []
   type    = "list"
 }
-
-# variable "artefact-bucket" {}
