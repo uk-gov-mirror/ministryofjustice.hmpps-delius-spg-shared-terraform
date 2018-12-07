@@ -33,7 +33,7 @@ variable "db_cidr_block" {
   type = "list"
 }
 
-variable depends_on {
+variable "depends_on" {
   default = []
   type    = "list"
 }
@@ -52,4 +52,3 @@ variable "spg_partnergateway_domain_ports" {
   type        = "map"
   description = "Map of the ports that the spg partner gateway servicemix domains use"
 }
-

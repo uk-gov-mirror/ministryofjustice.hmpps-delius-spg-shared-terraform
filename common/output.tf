@@ -28,10 +28,6 @@ output "common_ssh_deployer_key" {
 }
 
 # ENVIRONMENTS SETTINGS
-# tags
-output "common_tags" {
-  value = "${local.tags}"
-}
 
 # LOCAL OUTPUTS
 output "vpc_id" {
@@ -89,10 +85,6 @@ output "remote_state_bucket_name" {
 output "s3_lb_policy_file" {
   value = "policies/s3_alb_policy.json"
 }
-
-# output "environment" {
-#   value = "${var.environment}"
-# }
 
 /*
 output "monitoring_server_external_url" {

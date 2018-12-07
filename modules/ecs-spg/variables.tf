@@ -4,8 +4,6 @@ variable "environment_identifier" {}
 
 variable "short_environment_identifier" {}
 
-#variable "environment" {}
-
 variable "tags" {
   type = "map"
 }
@@ -147,5 +145,3 @@ variable "ami_id" {}
 variable "instance_profile" {}
 
 variable "ssh_deployer_key" {}
-
-variable "artefact-bucket" {}

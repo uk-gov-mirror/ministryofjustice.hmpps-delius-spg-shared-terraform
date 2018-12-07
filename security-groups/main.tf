@@ -36,8 +36,6 @@ locals {
   region                 = "${data.terraform_remote_state.common.region}"
   spg_app_name           = "${data.terraform_remote_state.common.spg_app_name}"
   environment_identifier = "${data.terraform_remote_state.common.environment_identifier}"
-  #environment            = "${data.terraform_remote_state.common.environment}"
-  tags                   = "${data.terraform_remote_state.common.common_tags}"
   public_cidr_block      = ["${data.terraform_remote_state.common.db_cidr_block}"]
   private_cidr_block     = ["${data.terraform_remote_state.common.private_cidr_block}"]
   db_cidr_block          = ["${data.terraform_remote_state.common.db_cidr_block}"]
@@ -57,7 +55,7 @@ module "security_groups" {
   common_name            = "${local.common_name}"
   environment_identifier = "${local.environment_identifier}"
   region                 = "${local.region}"
-  tags                   = "${local.tags}"
+  tags                   = "${var.tags}"
   vpc_id                 = "${local.vpc_id}"
   public_cidr_block      = ["${local.public_cidr_block}"]
   private_cidr_block     = ["${local.private_cidr_block}"]

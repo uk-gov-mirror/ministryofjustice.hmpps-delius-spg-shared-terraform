@@ -131,8 +131,6 @@ locals {
   short_environment_identifier   = "${data.terraform_remote_state.common.short_environment_identifier}"
   region                         = "${var.region}"
   spg_app_name                   = "${data.terraform_remote_state.common.spg_app_name}"
-  #environment                    = "${data.terraform_remote_state.common.environment}"
-  tags                           = "${data.terraform_remote_state.common.common_tags}"
   private_subnet_map             = "${data.terraform_remote_state.common.private_subnet_map}"
   ext_lb_security_groups         = ["${data.terraform_remote_state.security-groups.security_groups_sg_external_lb_id}"]
   int_lb_security_groups         = ["${data.terraform_remote_state.security-groups.security_groups_sg_internal_lb_id}"]
@@ -147,7 +145,6 @@ locals {
   private_subnet_ids             = ["${data.terraform_remote_state.common.private_subnet_ids}"]
   public_cidr_block              = ["${data.terraform_remote_state.common.db_cidr_block}"]
   config-bucket                  = "${data.terraform_remote_state.common.common_s3-config-bucket}"
-  artefact-bucket                = "${data.terraform_remote_state.s3buckets.s3bucket}"
   ecs_service_role               = "${data.terraform_remote_state.iam.iam_role_ext_ecs_role_arn}"
   service_desired_count          = "1"
   cloudwatch_log_retention       = "${var.cloudwatch_log_retention}"
@@ -176,10 +173,9 @@ module "ecs-spg" {
   image_version                  = "${local.image_version}"
   short_environment_identifier   = "${local.short_environment_identifier}"
   environment_identifier         = "${local.environment_identifier}"
-  #environment                    = "${local.environment}"
   public_subnet_ids              = ["${local.public_subnet_ids}"]
   private_subnet_ids             = ["${local.private_subnet_ids}"]
-  tags                           = "${local.tags}"
+  tags                           = "${var.tags}"
   instance_security_groups       = ["${local.instance_security_groups}"]
   ext_lb_security_groups         = ["${local.ext_lb_security_groups}"]
   int_lb_security_groups         = ["${local.int_lb_security_groups}"]
@@ -231,5 +227,4 @@ module "ecs-spg" {
   ami_id                         = "${local.ami_id}"
   instance_profile               = "${local.instance_profile}"
   ssh_deployer_key               = "${local.ssh_deployer_key}"
-  artefact-bucket                = "${local.artefact-bucket}"
 }
