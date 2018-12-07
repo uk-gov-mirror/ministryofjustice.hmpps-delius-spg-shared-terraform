@@ -28,10 +28,6 @@ output "common_ssh_deployer_key" {
 }
 
 # ENVIRONMENTS SETTINGS
-# tags
-output "common_tags" {
-  value = "${local.tags}"
-}
 
 # LOCAL OUTPUTS
 output "vpc_id" {
