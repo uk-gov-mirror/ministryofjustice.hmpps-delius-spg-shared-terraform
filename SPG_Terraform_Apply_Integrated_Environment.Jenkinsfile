@@ -154,14 +154,6 @@ pipeline {
           }
         }
 
-        // stage('Delius | SPG | S3 Buckets') {
-        //   steps {
-        //     script {
-        //       do_terraform(project.config, environment_name, project.spg, 's3buckets')
-        //     }
-        //   }
-        // }
-
         stage('Delius | SPG | IAM') {
           steps {
             script {
