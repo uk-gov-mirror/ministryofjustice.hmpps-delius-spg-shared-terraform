@@ -158,7 +158,7 @@ pipeline {
 
         stage('Delius | SPG | push-spg-docker') {
             steps {
-                sh "ls -laR;sh ./${project.spg}/scripts/image_push.sh ${project.config_branch} ${environment_name}"
+                sh "NON_CONTAINER_WORKING_DIR=${project.spg};sh ./${project.spg}/scripts/image_push.sh ${project.config_branch} ${environment_name}"
             }
         }
 
