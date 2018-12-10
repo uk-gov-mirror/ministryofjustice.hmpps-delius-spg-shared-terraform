@@ -8,7 +8,7 @@ project.dcore     = 'hmpps-delius-core-terraform'
 project.alfresco  = 'hmpps-delius-alfresco-shared-terraform'
 project.spg       = 'hmpps-delius-spg-shared-terraform'
 //project.ndmis     = 'hmpps-ndmis-terraform' //
-                }
+
 
 
 def environments = [

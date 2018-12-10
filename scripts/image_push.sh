@@ -1,8 +1,19 @@
 #!/bin/sh
+set -e
+if [ $# -ne 2 ]; then
+	echo "requires 2 arguments 1=CONFIG_BRANCH, 2=ENVIRONMENT_NAME"
+	exit 1
+fi
+
+CONFIG_BRANCH=$1
+ENVIRONMENT_NAME=$2
+
+echo "CONFIG_BRANCH = $CONFIG_BRANCH"
+
 echo 'cloning env configs'
-git clone -b workaround-jenkins-pc git@github.com:ministryofjustice/hmpps-env-configs.git $(pwd)/env_configs
+git clone -b ${CONFIG_BRANCH} git@github.com:ministryofjustice/hmpps-env-configs.git $(pwd)/env_configs
 ls -laR
-source $(pwd)/env_configs/delius-core-dev/delius-core-dev.properties
+source $(pwd)/env_configs/${ENVIRONMENT_NAME}/${ENVIRONMENT_NAME}.properties
 
 # Error handler function
 exit_on_error() {
