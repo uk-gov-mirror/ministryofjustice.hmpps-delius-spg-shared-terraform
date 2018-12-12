@@ -228,4 +228,7 @@ module "ecs-spg" {
   ami_id                         = "${local.ami_id}"
   instance_profile               = "${local.instance_profile}"
   ssh_deployer_key               = "${local.ssh_deployer_key}"
+  s3_bucket_config = "${var.s3_bucket_config}"
+  spg_build_inv_dir = "${var.spg_build_inv_dir}"
+
 }
