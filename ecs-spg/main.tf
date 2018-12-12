@@ -148,7 +148,8 @@ locals {
   ecs_service_role               = "${data.terraform_remote_state.iam.iam_role_ext_ecs_role_arn}"
   service_desired_count          = "1"
   cloudwatch_log_retention       = "${var.cloudwatch_log_retention}"
-
+  s3_bucket_config = "${var.s3_bucket_config}"
+  spg_build_inv_dir = "${var.spg_build_inv_dir}"
   instance_profile = "${data.terraform_remote_state.iam.iam_policy_ext_app_instance_profile_name}"
   sg_map_ids             = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [

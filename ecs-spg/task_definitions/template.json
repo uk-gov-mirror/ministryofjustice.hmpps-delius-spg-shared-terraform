@@ -17,12 +17,12 @@
         "environment": [
             {
                 "name": "SPG_BUILD_S3_REPO",
-                "value": "tf-eu-west-2-hmpps-delius-core-dev-gw-s3bucket"
+                "value": "${s3_bucket_config}"
             },
 
             {
             "name": "SPG_BUILD_INV_DIR",
-            "value": "/tmp/ansible/inventories/hmpps/non-prod/dev-mvp2-docker"
+            "value": "${spg_build_inv_dir}"
             },
 
 
