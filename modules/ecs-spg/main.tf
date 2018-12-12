@@ -16,6 +16,10 @@ locals {
   external_domain              = "${var.external_domain}"
   internal_domain              = "${var.internal_domain}"
   instance_security_groups     = ["${var.instance_security_groups}"]
+
+  s3_bucket_config = "${var.s3_bucket_config}"
+  spg_build_inv_dir = "${var.spg_build_inv_dir}"
+
 }
 
 
@@ -253,6 +257,13 @@ module "app_task_definition" {
 
   data_volume_name      = "key_dir"
   data_volume_host_path = "${var.keys_dir}"
+
+  data_volume_host_path = "${var.keys_dir}"
+  data_volume_host_path = "${var.keys_dir}"
+
+  s3_bucket_config = "${var.s3_bucket_config}"
+  spg_build_inv_dir = "${var.spg_build_inv_dir}"
+
 }
 
 ############################################

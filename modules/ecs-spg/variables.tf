@@ -145,3 +145,6 @@ variable "ami_id" {}
 variable "instance_profile" {}
 
 variable "ssh_deployer_key" {}
+
+variable "s3_bucket_config" {}
+variable "spg_build_inv_dir" {}
