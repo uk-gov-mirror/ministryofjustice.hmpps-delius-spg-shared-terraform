@@ -245,6 +245,8 @@ data "template_file" "app_task_definition" {
     data_volume_name      = "key_dir"
     data_volume_host_path = "${var.keys_dir}"
     kibana_host           = "${var.kibana_host}"
+    s3_bucket_config = "${var.s3_bucket_config}"
+    spg_build_inv_dir = "${var.spg_build_inv_dir}"
   }
 }
 
