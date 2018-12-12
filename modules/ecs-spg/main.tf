@@ -260,10 +260,6 @@ module "app_task_definition" {
 
   data_volume_host_path = "${var.keys_dir}"
   data_volume_host_path = "${var.keys_dir}"
-
-  s3_bucket_config = "${var.s3_bucket_config}"
-  spg_build_inv_dir = "${var.spg_build_inv_dir}"
-
 }
 
 ############################################
