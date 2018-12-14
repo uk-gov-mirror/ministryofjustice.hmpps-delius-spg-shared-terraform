@@ -1,4 +1,4 @@
-# LOCALS 
+# LOCALS
 
 locals {
   common_name                  = "${var.environment_identifier}-${var.app_hostnames["external"]}"
@@ -7,74 +7,157 @@ locals {
   vpc_id                       = "${var.vpc_id}"
   config_bucket                = "${var.config_bucket}"
   public_subnet_ids            = ["${var.public_subnet_ids}"]
-  lb_security_groups           = ["${var.lb_security_groups}"]
+  private_subnet_ids           = ["${var.private_subnet_ids}"]
+  ext_lb_security_groups       = ["${var.ext_lb_security_groups}"]
+  int_lb_security_groups       = ["${var.int_lb_security_groups}"]
   certificate_arn              = ["${var.certificate_arn}"]
   access_logs_bucket           = "${var.access_logs_bucket}"
   public_zone_id               = "${var.public_zone_id}"
   external_domain              = "${var.external_domain}"
+  internal_domain              = "${var.internal_domain}"
   instance_security_groups     = ["${var.instance_security_groups}"]
-  artefact-bucket              = "${var.artefact-bucket}"
+
+  s3_bucket_config = "${var.s3_bucket_config}"
+  spg_build_inv_dir = "${var.spg_build_inv_dir}"
+
 }
 
-############################################
-# CREATE LB FOR spg
-############################################
-module "create_app_alb" {
-  source          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_lb"
-  lb_name         = "${local.short_environment_identifier}-ext"
-  subnet_ids      = ["${local.public_subnet_ids}"]
-  s3_bucket_name  = "${local.access_logs_bucket}"
-  security_groups = ["${local.lb_security_groups}"]
-  tags            = "${var.tags}"
 
-  internal = false
+
+
+############################################
+# CREATE INTERNAL LB FOR spg
+############################################
+module "create_app_alb_int" {
+  source              = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_lb"
+  lb_name             = "${local.short_environment_identifier}-int"
+  subnet_ids          = ["${local.private_subnet_ids}"]
+  s3_bucket_name      = "${local.access_logs_bucket}"
+  security_groups     = ["${local.int_lb_security_groups}"]
+  tags                = "${var.tags}"
+  internal            = true
 }
 
 ###############################################
-# Create route53 entry for spg lb
+# Create INTERNAL route53 entry for spg lb
 ###############################################
 
-resource "aws_route53_record" "dns_entry" {
+resource "aws_route53_record" "dns_int_entry" {
   zone_id = "${local.public_zone_id}"
-  name    = "${local.application_endpoint}.${local.external_domain}"
+  name    = "${local.application_endpoint}-int.${local.external_domain}"
   type    = "A"
 
   alias {
-    name                   = "${module.create_app_alb.lb_dns_name}"
-    zone_id                = "${module.create_app_alb.lb_zone_id}"
+    name                   = "${module.create_app_alb_int.lb_dns_name}"
+    zone_id                = "${module.create_app_alb_int.lb_zone_id}"
     evaluate_target_health = false
   }
 }
 
+
+//need a dns record for the crc server, which shouldn't have need a load balancer as it
+//resource "aws_route53_record" "dns_int_direct_entry" {
+//  zone_id = "${local.public_zone_id}"
+//  name    = "${local.application_endpoint}-int-direct.${local.external_domain}"
+//  type    = "A"
+//
+//  alias {
+//    name                   = "${module.create_app_alb_int.lb_dns_name}"
+//    zone_id                = "${module.create_app_alb_int.lb_zone_id}"
+//    evaluate_target_health = false
+//  }
+//}
+
+
+
+############################################
+# CREATE EXTERNAL LB FOR spg
+############################################
+//module "create_app_alb_ext" {
+//  source          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_lb"
+//  lb_name         = "${local.short_environment_identifier}-ext"
+//  subnet_ids      = ["${local.public_subnet_ids}"]
+//  s3_bucket_name  = "${local.access_logs_bucket}"
+//  security_groups = ["${local.ext_lb_security_groups}"]
+//  tags            = "${var.tags}"
+//  internal = false
+//}
+
+###############################################
+# Create EXTERNAL route53 entry for spg lb
+###############################################
+
+//resource "aws_route53_record" "dns_ext_entry" {
+//  zone_id = "${local.public_zone_id}"
+//  name    = "${local.application_endpoint}.${local.external_domain}"
+//  type    = "A"
+//
+//  alias {
+//    name                   = "${module.create_app_alb_ext.lb_dns_name}"
+//    zone_id                = "${module.create_app_alb_ext.lb_zone_id}"
+//    evaluate_target_health = false
+//  }
+//}
+
+
+
+
+
+
+
 #-------------------------------------------------------------
-### Create app listeners
+### Create app listeners int
 #-------------------------------------------------------------
 
-module "create_app_alb_listener_with_https" {
-  source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_listener_with_https"
-  lb_port          = "${var.alb_backend_port}"
-  lb_protocol      = "${var.alb_listener_protocol}"
-  lb_arn           = "${module.create_app_alb.lb_arn}"
-  target_group_arn = "${module.create_app_alb_targetgrp.target_group_arn}"
-  ssl_policy       = "${var.public_ssl_policy}"
-  certificate_arn  = ["${local.certificate_arn}"]
-}
+#module "create_app_alb_int_listener_with_https" {
+#  source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_listener_with_https"
+#  lb_port          = "${var.alb_backend_port}"
+#  lb_protocol      = "${var.alb_listener_protocol}"
+#  lb_arn           = "${module.create_app_alb_int.lb_arn}"
+#  target_group_arn = "${module.create_app_alb_int_targetgrp.target_group_arn}"
+#  ssl_policy       = "${var.public_ssl_policy}"
+#  certificate_arn  = ["${local.certificate_arn}"]
+#}
 
-module "create_app_alb_listener" {
+module "create_app_alb_int_listener" {
   source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_listener"
   lb_port          = "${var.alb_http_port}"
   lb_protocol      = "HTTP"
-  lb_arn           = "${module.create_app_alb.lb_arn}"
-  target_group_arn = "${module.create_app_alb_targetgrp.target_group_arn}"
+  lb_arn           = "${module.create_app_alb_int.lb_arn}"
+  target_group_arn = "${module.create_app_alb_int_targetgrp.target_group_arn}"
 }
 
+
+
+#-------------------------------------------------------------
+### Create app listeners ext
+#-------------------------------------------------------------
+
+//module "create_app_alb_ext_listener_with_https" {
+//  source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_listener_with_https"
+//  lb_port          = "${var.alb_backend_port}"
+//  lb_protocol      = "${var.alb_listener_protocol}"
+//  lb_arn           = "${module.create_app_alb_ext.lb_arn}"
+//  target_group_arn = "${module.create_app_alb_ext_targetgrp.target_group_arn}"
+//  ssl_policy       = "${var.public_ssl_policy}"
+//  certificate_arn  = ["${local.certificate_arn}"]
+//}
+
+//module "create_app_alb_ext_listener" {
+//  source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_listener"
+//  lb_port          = "${var.alb_http_port}"
+//  lb_protocol      = "HTTP"
+//  lb_arn           = "${module.create_app_alb_ext.lb_arn}"
+//  target_group_arn = "${module.create_app_alb_ext_targetgrp.target_group_arn}"
+//}
+
 ############################################
-# CREATE TARGET GROUPS FOR APP PORTS
+# CREATE INT TARGET GROUPS FOR APP PORTS
 ############################################
 
-module "create_app_alb_targetgrp" {
+module "create_app_alb_int_targetgrp" {
   source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//targetgroup"
-  appname              = "${local.short_environment_identifier}-ext"
+  appname              = "${local.short_environment_identifier}-int"
   target_port          = "${var.backend_app_port}"
   target_protocol      = "${var.backend_app_protocol}"
   vpc_id               = "${var.vpc_id}"
@@ -90,6 +173,31 @@ module "create_app_alb_targetgrp" {
   target_type          = "${var.target_type}"
   tags                 = "${var.tags}"
 }
+
+
+
+############################################
+# CREATE EXT TARGET GROUPS FOR APP PORTS
+############################################
+
+//module "create_app_alb_ext_targetgrp" {
+//  source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//targetgroup"
+//  appname              = "${local.short_environment_identifier}-ext"
+//  target_port          = "${var.backend_app_port}"
+//  target_protocol      = "${var.backend_app_protocol}"
+//  vpc_id               = "${var.vpc_id}"
+//  check_interval       = "${var.backend_check_interval}"
+//  check_path           = "${var.backend_check_app_path}"
+//  check_port           = "${var.backend_app_port}"
+//  check_protocol       = "${var.backend_app_protocol}"
+//  timeout              = "${var.backend_timeout}"
+//  healthy_threshold    = "${var.backend_healthy_threshold}"
+//  unhealthy_threshold  = "${var.backend_unhealthy_threshold}"
+//  return_code          = "${var.backend_return_code}"
+//  deregistration_delay = "${var.deregistration_delay}"
+//  target_type          = "${var.target_type}"
+//  tags                 = "${var.tags}"
+//}
 
 ############################################
 # CREATE ECS CLUSTER FOR spg
@@ -126,11 +234,9 @@ data "template_file" "app_task_definition" {
   template = "${file("task_definitions/${var.backend_app_template_file}")}"
 
   vars {
-    environment           = "${var.environment}"
     image_url             = "${var.image_url}"
     container_name        = "${var.app_name}"
     s3_bucket_config      = "${local.config_bucket}"
-    artefact-bucket       = "${local.artefact-bucket}"
     version               = "${var.image_version}"
     log_group_name        = "${module.create_loggroup.loggroup_name}"
     log_group_region      = "${var.region}"
@@ -139,6 +245,8 @@ data "template_file" "app_task_definition" {
     data_volume_name      = "key_dir"
     data_volume_host_path = "${var.keys_dir}"
     kibana_host           = "${var.kibana_host}"
+    s3_bucket_config = "${var.s3_bucket_config}"
+    spg_build_inv_dir = "${var.spg_build_inv_dir}"
   }
 }
 
@@ -151,6 +259,9 @@ module "app_task_definition" {
 
   data_volume_name      = "key_dir"
   data_volume_host_path = "${var.keys_dir}"
+
+  data_volume_host_path = "${var.keys_dir}"
+  data_volume_host_path = "${var.keys_dir}"
 }
 
 ############################################
@@ -162,7 +273,7 @@ module "app_service" {
   servicename                     = "${local.common_name}"
   clustername                     = "${module.ecs_cluster.ecs_cluster_id}"
   ecs_service_role                = "${var.ecs_service_role}"
-  target_group_arn                = "${module.create_app_alb_targetgrp.target_group_arn}"
+  target_group_arn                = "${module.create_app_alb_int_targetgrp.target_group_arn}"
   containername                   = "${var.app_name}"
   containerport                   = "${var.backend_app_port}"
   task_definition_family          = "${module.app_task_definition.task_definition_family}"
@@ -210,6 +321,7 @@ module "launch_cfg" {
   associate_public_ip_address = "${var.associate_public_ip_address}"
   security_groups             = ["${local.instance_security_groups}"]
   user_data                   = "${data.template_file.user_data.rendered}"
+
 }
 
 ############################################
@@ -219,7 +331,7 @@ module "launch_cfg" {
 module "auto_scale" {
   source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//autoscaling//group//default"
   asg_name             = "${local.common_name}"
-  subnet_ids           = ["${local.public_subnet_ids}"]
+  subnet_ids           = ["${local.private_subnet_ids}"]
   asg_min              = "${var.asg_min}"
   asg_max              = "${var.asg_max}"
   asg_desired          = "${var.asg_desired}"
@@ -238,4 +350,3 @@ module "auto_scale" {
 #   source = "./templates/nginx.conf"
 #   etag   = "${md5(file("./templates/nginx.conf"))}"
 # }
-

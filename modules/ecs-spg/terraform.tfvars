@@ -8,7 +8,7 @@ terragrunt = {
   }
 }
 
-app_name = "nginx"
+app_name = "spg_nginx"
 
 alb_http_port = "80"
 
@@ -62,13 +62,13 @@ service_desired_count = "2"
 
 user_data = "user_data/user_data.sh"
 
-volume_size = "20"
+volume_size = "50"
 
 ebs_device_name = "/dev/xvdb"
 
 ebs_volume_type = "standard"
 
-ebs_volume_size = "10"
+ebs_volume_size = "50"
 
 ebs_encrypted = "true"
 

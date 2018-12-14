@@ -10,10 +10,6 @@ variable "region" {
   description = "The AWS region."
 }
 
-variable "environment" {
-  description = "environment"
-}
-
 variable "s3_lb_policy_file" {}
 
 variable "lb_account_id" {}

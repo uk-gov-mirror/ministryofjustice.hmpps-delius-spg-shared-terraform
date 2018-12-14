@@ -36,12 +36,13 @@ locals {
   region                 = "${data.terraform_remote_state.common.region}"
   spg_app_name           = "${data.terraform_remote_state.common.spg_app_name}"
   environment_identifier = "${data.terraform_remote_state.common.environment_identifier}"
-  environment            = "${data.terraform_remote_state.common.environment}"
-  tags                   = "${data.terraform_remote_state.common.common_tags}"
   public_cidr_block      = ["${data.terraform_remote_state.common.db_cidr_block}"]
   private_cidr_block     = ["${data.terraform_remote_state.common.private_cidr_block}"]
   db_cidr_block          = ["${data.terraform_remote_state.common.db_cidr_block}"]
   sg_map_ids             = "${data.terraform_remote_state.common.sg_map_ids}"
+  weblogic_domain_ports  = "${var.weblogic_domain_ports}"
+  spg_partnergateway_domain_ports  = "${var.spg_partnergateway_domain_ports}"
+
 }
 
 ####################################################
@@ -54,13 +55,15 @@ module "security_groups" {
   common_name            = "${local.common_name}"
   environment_identifier = "${local.environment_identifier}"
   region                 = "${local.region}"
-  tags                   = "${local.tags}"
+  tags                   = "${var.tags}"
   vpc_id                 = "${local.vpc_id}"
   public_cidr_block      = ["${local.public_cidr_block}"]
   private_cidr_block     = ["${local.private_cidr_block}"]
   db_cidr_block          = ["${local.db_cidr_block}"]
   sg_map_ids             = "${local.sg_map_ids}"
   alb_http_port          = "80"
-  alb_https_port         = "443"
-  alb_backend_port       = "8080"
+  alb_https_port         = "9001"
+  alb_backend_port       = "8181"
+  weblogic_domain_ports  = "${local.weblogic_domain_ports}"
+  spg_partnergateway_domain_ports  = "${local.spg_partnergateway_domain_ports}"
 }

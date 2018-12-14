@@ -76,11 +76,9 @@ locals {
   short_environment_identifier   = "${var.short_environment_identifier}"
   remote_state_bucket_name       = "${var.remote_state_bucket_name}"
   s3_lb_policy_file              = "../policies/s3_alb_policy.json"
-  environment                    = "${var.environment}"
-  tags                           = "${merge(data.terraform_remote_state.vpc.tags, map("sub-project", "${var.spg_app_name}"))}"
-  monitoring_server_external_url = "${data.terraform_remote_state.monitor.monitoring_server_external_url}"
-  monitoring_server_internal_url = "${data.terraform_remote_state.monitor.monitoring_server_internal_url}"
-  monitoring_server_client_sg_id = "${data.terraform_remote_state.monitor.monitoring_server_client_sg_id}"
+#  monitoring_server_external_url = "${data.terraform_remote_state.monitor.monitoring_server_external_url}"
+#  monitoring_server_internal_url = "${data.terraform_remote_state.monitor.monitoring_server_internal_url}"
+#  monitoring_server_client_sg_id = "${data.terraform_remote_state.monitor.monitoring_server_client_sg_id}"
   ssh_deployer_key               = "${data.terraform_remote_state.vpc.ssh_deployer_key}"
   eng_root_arn                   = "${var.eng_root_arn}"
 
@@ -90,12 +88,13 @@ locals {
   }
 
   sg_map_ids = {
+    external_inst_sg_id = "${data.terraform_remote_state.security-groups.sg_spg_nginx_in}"
     internal_inst_sg_id = "${data.terraform_remote_state.security-groups.sg_spg_api_in}"
-    db_sg_id            = "${data.terraform_remote_state.security-groups.sg_spg_db_in}"
     external_lb_sg_id   = "${data.terraform_remote_state.security-groups.sg_spg_external_lb_in}"
     internal_lb_sg_id   = "${data.terraform_remote_state.security-groups.sg_spg_internal_lb_in}"
-    external_inst_sg_id = "${data.terraform_remote_state.security-groups.sg_spg_nginx_in}"
     bastion_in_sg_id    = "${data.terraform_remote_state.security-groups.sg_ssh_bastion_in_id}"
+//    jms_in_sg_id        = "${data.terraform_remote_state.security-groups.sg_spg_jms_in_sg_id}"
+    #db_sg_id            = "${data.terraform_remote_state.security-groups.sg_spg_db_in}"
   }
 
   private_subnet_map = {
@@ -137,14 +136,13 @@ module "common" {
   spg_app_name                 = "${local.spg_app_name}"
   cidr_block                   = "${local.cidr_block}"
   common_name                  = "${local.common_name}"
-  environment                  = "${local.environment}"
   environment_identifier       = "${local.environment_identifier}"
   internal_domain              = "${local.internal_domain}"
   lb_account_id                = "${local.lb_account_id}"
   private_zone_id              = "${local.private_zone_id}"
   s3_lb_policy_file            = "${local.s3_lb_policy_file}"
   short_environment_identifier = "${local.short_environment_identifier}"
-  tags                         = "${local.tags}"
+  tags                         = "${merge(var.tags, map("sub-project", "${var.spg_app_name}"))}"
   vpc_id                       = "${local.vpc_id}"
   region                       = "${local.region}"
 }

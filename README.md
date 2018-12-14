@@ -23,6 +23,14 @@ REMOTE STATE
 
 Bucket name: [tf-eu-west-2-hmpps-delius-core-dev-remote-state](https://s3.console.aws.amazon.com/s3/object/tf-eu-west-2-hmpps-delius-core-dev-remote-state/vpc/terraform.tfstate?region=eu-west-2&tab=overview)
 
+DEPLOYER KEY
+============
+
+The deployer key is stored in AWS [Parameter store](https://eu-west-2.console.aws.amazon.com/systems-manager/parameters/tf-eu-west-2-hmpps-delius-core-dev-alfresco-ssh-private-key/description?region=eu-west-2)
+```
+terragrunt output ssh_private_key_pem
+```
+
 
 TERRAGRUNT
 ===========
@@ -48,9 +56,9 @@ arn:aws:iam::563502482979:role/terraform
 Ensure hmpps-engineering-platform-terraform is cloned into the current directory
 
 ```
-ls
+running ls in pwd will show at the very least:
 hmpps-delius-spg-shared-terraform
-
+hmpps-engineering-platform-terraform
 ```
 
 #### START UP
@@ -66,7 +74,7 @@ AWS_PROFILE
 cd to the directory above this repo, replace 'hmpps-token' in the command below with one of your own, and run
 ```
 docker run -it --rm \
-	-v $(pwd)/hmpps-delius-SPG-shared-terraform:/home/tools/data \
+	-v $(pwd)/hmpps-delius-spg-shared-terraform:/home/tools/data \
 	-v ~/.aws:/home/tools/.aws \
 	-e AWS_PROFILE=hmpps-token \
 	hmpps/terraform-builder:latest bash
@@ -112,13 +120,15 @@ optional arguments:
 When running locally provide the token argument:
 
 ```
-python docker-run.py --env dev --action test --token hmpps-token
+python docker-run.py --env delius-core-dev --action output --component common --token hmpps-token
+python docker-run.py --env delius-test --action output --component s3buckets --token hmpps-token
 ```
 
 When running in CI environment:
 
 ```
-python docker-run.py --env dev --action test
+python docker-run.py --env delius-core-dev --action test
+
 ```
 
 
@@ -151,4 +161,11 @@ unset AWS_SESSION_TOKEN
 export AWS_PROFILE=hmpps-token
 source env_configs/dev.properties
 rm -rf env_configs/inspec-creds.properties
+```
+
+## Adding a new security group
+```
+Add new security group ids to the sg_map
+  hmpps-delius-spg-shared-terraform/common/main.tf:sg_map_ids
+
 ```

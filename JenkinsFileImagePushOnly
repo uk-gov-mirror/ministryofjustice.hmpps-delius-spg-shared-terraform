@@ -1,0 +1,51 @@
+/*
+
+
+This is currently not working as jenkins is unable to pull the image as part of the python script
+
+Please use delius-manual-deployments/Jenkinsfile.create_shared_spg_environment
+
+
+*/
+
+pipeline {
+    agent { label "!master && !windows_slave" }
+    options {
+        disableConcurrentBuilds()
+    }
+
+    tools {
+            maven 'Maven 3.3.9'
+            jdk 'jdk8'
+    }
+
+    stages {
+        stage ('Initialize') {
+            steps {
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M2_HOME = ${M2_HOME}"
+                    echo "WORKSPACE = ${WORKSPACE}"
+                    echo "Pulling latest terraform builder"
+                    docker pull mojdigitalstudio/hmpps-terraform-builder:latest
+                    echo "Pulling latest hmpps terraform builder via script and docker login"
+                    sh scripts/pull_latest_terraform_builder.sh
+                '''
+            }
+        }
+
+
+
+
+        stage ('push-spg-docker') {
+            steps {
+                sh 'sh scripts/image_push.sh'
+            }
+        }
+
+
+        }
+
+    }
+}
+

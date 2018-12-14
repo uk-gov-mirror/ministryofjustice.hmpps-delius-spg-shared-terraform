@@ -1,6 +1,20 @@
 #!/bin/sh
+set -e
+if [ $# -ne 2 ]; then
+	echo "requires 2 arguments 1=CONFIG_BRANCH, 2=ENVIRONMENT_NAME"
+	exit 1
+fi
 
-source $(pwd)/env_configs/dev.properties
+CONFIG_BRANCH=$1
+ENVIRONMENT_NAME=$2
+
+echo "CONFIG_BRANCH = $CONFIG_BRANCH"
+
+echo 'cloning env configs'
+git clone -b ${CONFIG_BRANCH} git@github.com:ministryofjustice/hmpps-env-configs.git $(pwd)/env_configs
+ls -laR
+CUSTOM_COMMON_PROPERTIES_DIR=$(pwd)/env_configs/common
+source $(pwd)/env_configs/${ENVIRONMENT_NAME}/${ENVIRONMENT_NAME}.properties
 
 # Error handler function
 exit_on_error() {
@@ -37,7 +51,7 @@ exit_on_error $? !!
 echo "--> Image pull success"
 
 # PUSH
-dest_ecr_repo_name="${TG_ENVIRONMENT_IDENTIFIER}-spg-ecr-repo"
+dest_ecr_repo_name="${TG_ENVIRONMENT_IDENTIFIER}-gw-ecr-repo"
 
 temp_role=$(aws sts assume-role --role-arn ${TERRAGRUNT_IAM_ROLE} --role-session-name testing --duration-seconds 900)
 
@@ -65,6 +79,7 @@ docker push ${dest_ecr_repo}
 exit_on_error $? !!
 echo "--> Image push success"
 
-docker system prune -a -f
-exit_on_error $? !!
-echo "-> Image cleanup success"
+# dont prune til end of jenkins pipeline
+#docker system prune -a -f
+#exit_on_error $? !!
+#echo "-> Image cleanup success"

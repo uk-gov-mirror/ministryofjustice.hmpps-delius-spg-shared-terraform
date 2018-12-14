@@ -1,57 +1,127 @@
-# LB
-output "lb_id" {
-  value = "${module.create_app_alb.lb_id}"
+# LB int
+output "lb_int_id" {
+  value = "${module.create_app_alb_int.lb_id}"
 }
 
-output "lb_arn" {
-  value = "${module.create_app_alb.lb_arn}"
+output "lb_int_arn" {
+  value = "${module.create_app_alb_int.lb_arn}"
 }
 
-output "lb_arn_suffix" {
-  value = "${module.create_app_alb.lb_arn_suffix}"
+output "lb_int_arn_suffix" {
+  value = "${module.create_app_alb_int.lb_arn_suffix}"
 }
 
-output "lb_dns_name" {
-  value = "${module.create_app_alb.lb_dns_name}"
+output "lb_int_dns_name" {
+  value = "${module.create_app_alb_int.lb_dns_name}"
 }
 
-output "lb_dns_alias" {
-  value = "${aws_route53_record.dns_entry.fqdn}"
+output "lb_int_dns_alias" {
+  value = "${aws_route53_record.dns_int_entry.fqdn}"
 }
 
-# LISTENER
-output "https_lb_listener_id" {
-  value = "${element(module.create_app_alb_listener.listener_id,0)}"
+output "public_subnet_ids" {
+  value = "${local.public_subnet_ids}"
 }
 
-output "https_lb_listener_arn" {
-  value = "${element(module.create_app_alb_listener.listener_arn,0)}"
+
+output "private_subnet_ids" {
+  value = "${local.private_subnet_ids}"
 }
 
-output "http_lb_listener_id" {
-  value = "${element(module.create_app_alb_listener.listener_id,0)}"
+//
+//# LB ext
+//output "lb_ext_id" {
+//  value = "${module.create_app_alb_ext.lb_id}"
+//}
+//
+//output "lb_ext_arn" {
+//  value = "${module.create_app_alb_ext.lb_arn}"
+//}
+//
+//output "lb_ext_arn_suffix" {
+//  value = "${module.create_app_alb_ext.lb_arn_suffix}"
+//}
+//
+//output "lb_ext_dns_name" {
+//  value = "${module.create_app_alb_ext.lb_dns_name}"
+//}
+//
+//output "lb_ext_dns_alias" {
+//  value = "${aws_route53_record.dns_ext_entry.fqdn}"
+//}
+
+
+
+# LISTENER int
+output "https_lb_int_listener_id" {
+  value = "${element(module.create_app_alb_int_listener.listener_id,0)}"
 }
 
-output "http_lb_listener_arn" {
-  value = "${element(module.create_app_alb_listener.listener_arn,0)}"
+output "https_lb_int_listener_arn" {
+  value = "${element(module.create_app_alb_int_listener.listener_arn,0)}"
 }
 
-# TARGET GROUPS
-output "target_group_id" {
-  value = "${module.create_app_alb_targetgrp.target_group_id}"
+output "http_lb_int_listener_id" {
+  value = "${element(module.create_app_alb_int_listener.listener_id,0)}"
 }
 
-output "target_group_arn" {
-  value = "${module.create_app_alb_targetgrp.target_group_arn}"
+output "http_lb_int_listener_arn" {
+  value = "${element(module.create_app_alb_int_listener.listener_arn,0)}"
 }
 
-output "target_group_arn_suffix" {
-  value = "${module.create_app_alb_targetgrp.target_group_arn_suffix}"
+//# LISTENER ext
+//output "https_lb_ext_listener_id" {
+//  value = "${element(module.create_app_alb_ext_listener.listener_id,0)}"
+//}
+//
+//output "https_lb_ext_listener_arn" {
+//  value = "${element(module.create_app_alb_ext_listener.listener_arn,0)}"
+//}
+//
+//output "http_lb_ext_listener_id" {
+//  value = "${element(module.create_app_alb_ext_listener.listener_id,0)}"
+//}
+//
+//output "http_lb_ext_listener_arn" {
+//  value = "${element(module.create_app_alb_ext_listener.listener_arn,0)}"
+//}
+
+
+
+
+# TARGET GROUPS int
+output "int_target_group_id" {
+  value = "${module.create_app_alb_int_targetgrp.target_group_id}"
 }
 
-output "target_group_name" {
-  value = "${module.create_app_alb_targetgrp.target_group_name}"
+output "int_target_group_arn" {
+  value = "${module.create_app_alb_int_targetgrp.target_group_arn}"
 }
+
+output "int_target_group_arn_suffix" {
+  value = "${module.create_app_alb_int_targetgrp.target_group_arn_suffix}"
+}
+
+output "int_target_group_name" {
+  value = "${module.create_app_alb_int_targetgrp.target_group_name}"
+}
+
+//# TARGET GROUPS ext
+//output "ext_target_group_id" {
+//  value = "${module.create_app_alb_ext_targetgrp.target_group_id}"
+//}
+//
+//output "ext_target_group_arn" {
+//  value = "${module.create_app_alb_ext_targetgrp.target_group_arn}"
+//}
+//
+//output "ext_target_group_arn_suffix" {
+//  value = "${module.create_app_alb_ext_targetgrp.target_group_arn_suffix}"
+//}
+//
+//output "ext_target_group_name" {
+//  value = "${module.create_app_alb_ext_targetgrp.target_group_name}"
+//}
 
 # ECS CLUSTER
 output "ecs_cluster_arn" {

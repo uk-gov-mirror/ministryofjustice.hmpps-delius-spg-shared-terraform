@@ -14,9 +14,3 @@ output "common_s3-config-bucket" {
 output "common_s3_lb_logs_bucket" {
   value = "${module.s3_lb_logs_bucket.s3_bucket_name}"
 }
-
-# ENVIRONMENTS SETTINGS
-# tags
-output "common_tags" {
-  value = "${local.tags}"
-}
