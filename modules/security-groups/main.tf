@@ -144,6 +144,18 @@ resource "aws_security_group_rule" "internal_lb_ingress_http" {
   description              = "${local.common_name}-lb-ingress-http"
 }
 
+resource "aws_security_group_rule" "internal_lb_ingress_http_8181" {
+  security_group_id        = "${local.internal_lb_sg_id}"
+  type                     = "ingress"
+  from_port                = 8181
+  to_port                  = 8181
+  protocol                 = "tcp"
+  source_security_group_id = "${local.external_inst_sg_id}"
+  description              = "${local.common_name}-lb-ingress-http"
+}
+
+
+
 resource "aws_security_group_rule" "internal_lb_ingress_https" {
   security_group_id        = "${local.internal_lb_sg_id}"
   type                     = "ingress"
