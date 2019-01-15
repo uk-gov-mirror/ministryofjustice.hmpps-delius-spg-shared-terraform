@@ -17,10 +17,6 @@ variable "region" {
   description = "The AWS region."
 }
 
-variable "environment" {
-  description = "environment"
-}
-
 variable "remote_state_bucket_name" {
   description = "Terraform remote state bucket name"
 }
@@ -34,3 +30,9 @@ variable "route53_hosted_zone_id" {}
 variable "spg_app_name" {}
 
 variable "cloudwatch_log_retention" {}
+
+variable "eng_root_arn" {}
+
+variable "tags" {
+  type = "map"
+}

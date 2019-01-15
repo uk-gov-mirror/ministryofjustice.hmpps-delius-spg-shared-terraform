@@ -9,7 +9,7 @@ terragrunt = {
       "../iam",
       "../asg",
       "../certs",
-      "../securty-groups",
+      "../security-groups",
     ]
   }
 }

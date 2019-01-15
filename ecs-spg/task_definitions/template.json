@@ -16,44 +16,37 @@
         ],
         "environment": [
             {
-                "name": "S3_CONFIG_BUCKET",
+                "name": "SPG_BUILD_S3_REPO",
                 "value": "${s3_bucket_config}"
             },
+
             {
-                "name": "ALFRESCO_HOST",
-                "value": "${alfresco_host}"
+            "name": "SPG_BUILD_INV_DIR",
+            "value": "${spg_build_inv_dir}"
             },
-            {
-                "name": "CONFIG_FILE_PATH",
-                "value": "${config_file_path}"
-            },
-            {
-                "name": "RUNTIME_CONFIG_OVERRIDE",
-                "value": "${runtime_config_override}"
-            },
-            {
-                "name": "TOMCAT_HOST",
-                "value": "${tomcat_host}"
-            },
+
+
+
             {
                 "name": "KIBANA_HOST",
                 "value": "${kibana_host}"
-            },
-            {
-                "name": "NGINX_CONFIG_FILE",
-                "value": "${nginx_config_file}"
             }
         ],
         "portMappings": [
             {
-                "hostPort": 80,
+                "hostPort": 8181,
                 "protocol": "tcp",
-                "containerPort": 80
+                "containerPort": 8181
             },
             {
-                "hostPort": 443,
-                "protocol": "tcp",
-                "containerPort": 443
+            "hostPort": 61616,
+            "protocol": "tcp",
+            "containerPort": 61616
+            },
+            {
+            "hostPort": 2222,
+            "protocol": "tcp",
+            "containerPort": 22
             }
         ],
         "logConfiguration": {

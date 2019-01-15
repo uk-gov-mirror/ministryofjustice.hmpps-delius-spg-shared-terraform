@@ -26,3 +26,17 @@ variable "alfresco_apache_jserv" {}
 variable "allowed_cidr_block" {
   type = "list"
 }
+
+variable "weblogic_domain_ports" {
+  type        = "map"
+  description = "Map of the ports that the weblogic domains use"
+}
+
+variable "spg_partnergateway_domain_ports" {
+  type        = "map"
+  description = "Map of the ports that the spg partner gateway servicemix domains use"
+}
+
+variable "tags" {
+  type = "map"
+}

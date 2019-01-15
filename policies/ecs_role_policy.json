@@ -5,7 +5,8 @@
             "Sid": "ec2Perms",
             "Effect": "Allow",
             "Action": [
-                "ec2:Describe*"
+                "ec2:Describe*",
+                "ecr:GetAuthorizationToken"
             ],
             "Resource": [
                 "*"

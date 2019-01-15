@@ -43,6 +43,16 @@ resource "aws_security_group_rule" "http" {
   description       = "${local.common_name}-http"
 }
 
+resource "aws_security_group_rule" "all" {
+  security_group_id = "${aws_security_group.vpc-sg-outbound.id}"
+  type              = "egress"
+  from_port         = "0"
+  to_port           = "65535"
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  description       = "${local.common_name}-all"
+}
+
 # #-------------------------------------------
 # ### S3 bucket for config
 # #--------------------------------------------

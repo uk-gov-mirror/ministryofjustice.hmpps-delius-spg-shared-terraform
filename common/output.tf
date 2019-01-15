@@ -28,10 +28,6 @@ output "common_ssh_deployer_key" {
 }
 
 # ENVIRONMENTS SETTINGS
-# tags
-output "common_tags" {
-  value = "${local.tags}"
-}
 
 # LOCAL OUTPUTS
 output "vpc_id" {
@@ -90,10 +86,7 @@ output "s3_lb_policy_file" {
   value = "policies/s3_alb_policy.json"
 }
 
-output "environment" {
-  value = "${var.environment}"
-}
-
+/*
 output "monitoring_server_external_url" {
   value = "${data.terraform_remote_state.monitor.monitoring_server_external_url}"
 }
@@ -105,6 +98,8 @@ output "monitoring_server_internal_url" {
 output "monitoring_server_client_sg_id" {
   value = "${data.terraform_remote_state.monitor.monitoring_server_client_sg_id}"
 }
+*/
+
 
 output "private_subnet_map" {
   value = {
@@ -154,6 +149,14 @@ output "public_subnet_ids" {
   ]
 }
 
+output "private_subnet_ids" {
+  value = [
+    "${data.terraform_remote_state.vpc.vpc_private-subnet-az1}",
+    "${data.terraform_remote_state.vpc.vpc_private-subnet-az2}",
+    "${data.terraform_remote_state.vpc.vpc_private-subnet-az3}",
+  ]
+}
+
 # Security groups
 output "sg_map_ids" {
   value = "${local.sg_map_ids}"
@@ -162,4 +165,9 @@ output "sg_map_ids" {
 # spg hosts
 output "app_hostnames" {
   value = "${local.app_hostnames}"
+}
+
+# enginnering root account arn
+output "eng_root_arn" {
+  value = "${local.eng_root_arn}"
 }

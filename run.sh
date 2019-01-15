@@ -23,6 +23,7 @@ env_config_dir="${HOME}/data/env_configs"
 TG_ENVIRONMENT_TYPE=$1
 ACTION_TYPE=$2
 COMPONENT=${3}
+REPO=${4}
 
 
 if [ -z "${TG_ENVIRONMENT_TYPE}" ]
@@ -53,8 +54,12 @@ fi
 if [[ ${RUNNING_IN_CONTAINER} == True ]]
 then
     workDirContainer=${3}
+    echo "Output -> clone configs stage"
+    rm -rf ${env_config_dir}
+    echo "Output ---> Cloning branch: ${GIT_BRANCH}"
+    git clone -b ${GIT_BRANCH} ${REPO} ${env_config_dir}
     echo "Output -> environment stage"
-    source ${env_config_dir}/${TG_ENVIRONMENT_TYPE}.properties
+    source ${env_config_dir}/${TG_ENVIRONMENT_TYPE}/${TG_ENVIRONMENT_TYPE}.properties
     exit_on_error $? !!
     echo "Output ---> set environment stage complete"
     # set runCmd
@@ -107,6 +112,16 @@ case ${ACTION_TYPE} in
   docker-output)
     echo "Running docker apply action"
     terragrunt output
+    exit_on_error $? !!
+    ;;
+  docker-show)
+    echo "Running ${ACTION_TYPE} action"
+    terragrunt show
+    exit_on_error $? !!
+    ;;
+  docker-refresh)
+    echo "Running ${ACTION_TYPE} action"
+        terragrunt refresh
     exit_on_error $? !!
     ;;
   *)
