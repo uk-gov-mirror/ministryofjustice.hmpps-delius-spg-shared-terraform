@@ -2,8 +2,6 @@ variable "region" {}
 
 variable "environment_identifier" {}
 
-
-
 variable "short_environment_name" {}
 
 variable "tags" {

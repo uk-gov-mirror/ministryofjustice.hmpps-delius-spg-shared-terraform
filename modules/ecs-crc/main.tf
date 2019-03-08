@@ -3,7 +3,7 @@
 locals {
   common_name                  = "${var.short_environment_name}-${var.app_hostnames["external"]}-${var.app_submodule}"
   application_endpoint         = "${var.app_hostnames["external"]}"
-  short_environment_name       = "${var.short_environment_name}"
+  short_environment_name = "${var.short_environment_name}"
   vpc_id                       = "${var.vpc_id}"
   config_bucket                = "${var.config_bucket}"
   public_subnet_ids            = ["${var.public_subnet_ids}"]
@@ -28,15 +28,27 @@ locals {
 ############################################
 # CREATE INTERNAL LB FOR spg
 ############################################
-module "create_app_alb_int" {
-  source              = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_lb"
-  lb_name             = "${local.short_environment_name}-${var.app_name}-${var.app_submodule}-int"
+//module "create_app_alb_int" {
+//  source              = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_lb"
+//  lb_name             = "${local.short_environment_identifier}-int"
+//  subnet_ids          = ["${local.private_subnet_ids}"]
+//  s3_bucket_name      = "${local.access_logs_bucket}"
+//  security_groups     = ["${local.int_lb_security_groups}"]
+//  tags                = "${var.tags}"
+//  internal            = true
+//}
+
+
+module "create_app_elb_int" {
+  source              = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//elb//create_lb"
+  lb_name             = "${local.short_environment_name}-int"
   subnet_ids          = ["${local.private_subnet_ids}"]
   s3_bucket_name      = "${local.access_logs_bucket}"
   security_groups     = ["${local.int_lb_security_groups}"]
   tags                = "${var.tags}"
   internal            = true
 }
+
 
 ###############################################
 # Create INTERNAL route53 entry for spg lb
@@ -157,7 +169,7 @@ module "create_app_alb_int_listener" {
 
 module "create_app_alb_int_targetgrp" {
   source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//targetgroup"
-  appname              = "${local.short_environment_name}-${var.app_name}-${var.app_submodule}-int"
+  appname              = "${local.short_environment_name}-${var.app_submodule}-int"
   target_port          = "${var.backend_app_port}"
   target_protocol      = "${var.backend_app_protocol}"
   vpc_id               = "${var.vpc_id}"
@@ -173,6 +185,35 @@ module "create_app_alb_int_targetgrp" {
   target_type          = "${var.target_type}"
   tags                 = "${var.tags}"
 }
+
+#for elb
+
+# elb
+module "create_app_elb" {
+  source          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//elb//create_elb_with_https"
+  name            = "${local.lb_name}-ext"
+  subnets         = ["${local.public_subnet_ids}"]
+  security_groups = ["${aws_security_group.external_lb_sg.id}"]
+  internal        = "${var.internal}"
+
+  cross_zone_load_balancing   = "${var.cross_zone_load_balancing}"
+  idle_timeout                = "${var.idle_timeout}"
+  connection_draining         = "${var.connection_draining}"
+  connection_draining_timeout = "${var.connection_draining_timeout}"
+  bucket                      = "${local.access_logs_bucket}"
+  bucket_prefix               = "${local.lb_name}"
+  interval                    = 60
+  ssl_certificate_id          = "${data.aws_acm_certificate.cert.arn}"
+  instance_port               = 80
+  instance_protocol           = "http"
+  lb_port                     = 80
+  lb_port_https               = 443
+  lb_protocol                 = "http"
+  lb_protocol_https           = "https"
+  health_check                = ["${var.health_check}"]
+  tags                        = "${var.tags}"
+}
+
 
 
 
@@ -254,7 +295,7 @@ module "app_task_definition" {
   source   = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs//ecs-taskdefinitions//appwith_single_volume"
   app_name = "${local.common_name}"
 
-  container_name        = "${var.app_name}"
+  container_name        = "${var.app_name}-${var.app_submodule}"
   container_definitions = "${data.template_file.app_task_definition.rendered}"
 
   data_volume_name      = "key_dir"
@@ -270,7 +311,7 @@ module "app_task_definition" {
 
 module "app_service" {
   source                          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs/ecs_service//withloadbalancer//alb"
-  servicename                     = "${local.common_name}"
+  servicename                     = "${local.common_name}-${var.app_submodule}"
   clustername                     = "${module.ecs_cluster.ecs_cluster_id}"
   ecs_service_role                = "${var.ecs_service_role}"
   target_group_arn                = "${module.create_app_alb_int_targetgrp.target_group_arn}"
@@ -282,6 +323,23 @@ module "app_service" {
   service_desired_count           = "${var.service_desired_count}"
 }
 
+
+#with elb
+module "app_service" {
+  source                          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs/ecs_service//withloadbalancer//elb"
+  servicename                     = "${local.common_label}"
+  clustername                     = "${module.ecs_cluster.ecs_cluster_id}"
+  ecs_service_role                = "${data.terraform_remote_state.iam.service_alfresco_iam_role_ext_ecs_role_arn}"
+  elb_name                        = "${module.create_app_elb.environment_elb_name}"
+  containername                   = "${var.app_name}"
+  containerport                   = "80"
+  task_definition_family          = "${module.app_task_definition.task_definition_family}"
+  task_definition_revision        = "${module.app_task_definition.task_definition_revision}"
+  current_task_definition_version = "${data.aws_ecs_task_definition.app_task_definition.revision}"
+  service_desired_count           = "${var.service_desired_count}"
+}
+
+
 ############################################
 # CREATE USER DATA FOR EC2 RUNNING SERVICES
 ############################################
@@ -292,7 +350,7 @@ data "template_file" "user_data" {
   vars {
     keys_dir             = "${var.cache_home}"
     ebs_device           = "${var.ebs_device_name}"
-    app_name             = "${var.app_name}-${var.app_submodule}}"
+    app_name             = "${var.app_name}"
     env_identifier       = "${var.environment_identifier}"
     short_env_identifier = "${var.short_environment_name}"
     cluster_name         = "${module.ecs_cluster.ecs_cluster_name}"
@@ -308,7 +366,7 @@ data "template_file" "user_data" {
 
 module "launch_cfg" {
   source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//launch_configuration//blockdevice"
-  launch_configuration_name   = "${local.common_name}"
+  launch_configuration_name   = "${local.common_name}-${var.app_submodule}"
   image_id                    = "${var.ami_id}"
   instance_type               = "${var.instance_type}"
   volume_size                 = "${var.volume_size}"
@@ -330,7 +388,7 @@ module "launch_cfg" {
 
 module "auto_scale" {
   source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//autoscaling//group//default"
-  asg_name             = "${local.common_name}"
+  asg_name             = "${local.common_name}-${var.app_submodule}"
   subnet_ids           = ["${local.private_subnet_ids}"]
   asg_min              = "${var.asg_min}"
   asg_max              = "${var.asg_max}"

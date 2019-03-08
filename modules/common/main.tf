@@ -16,7 +16,7 @@ locals {
   cidr_block      = "${var.cidr_block}"
   internal_domain = "${var.internal_domain}"
   tags            = "${var.tags}"
-  common_name     = "${var.environment_identifier}-${var.spg_app_name}"
+  common_name     = "${var.short_environment_name}-${var.spg_app_name}"
 }
 
 #######################################
@@ -80,7 +80,7 @@ data "template_file" "s3alb_logs_policy" {
 
   vars {
     s3_bucket_name   = "${module.s3_lb_logs_bucket.s3_bucket_name}"
-    s3_bucket_prefix = "${var.short_environment_identifier}-*"
+    s3_bucket_prefix = "${var.short_environment_name}-*"
     aws_account_id   = "${data.aws_caller_identity.current.account_id}"
     lb_account_id    = "${var.lb_account_id}"
   }

@@ -78,6 +78,11 @@ output "short_environment_identifier" {
   value = "${var.short_environment_identifier}"
 }
 
+output "short_environment_name" {
+  value = "${var.short_environment_name}"
+}
+
+
 output "remote_state_bucket_name" {
   value = "${var.remote_state_bucket_name}"
 }

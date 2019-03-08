@@ -8,11 +8,11 @@ terragrunt = {
   }
 }
 
-#app_name = "spg_nginx"
+app_name = "spg_nginx"
 
-#alb_http_port = "80"
+alb_http_port = "80"
 
-#alb_https_port = "443"
+alb_https_port = "443"
 
 internet_zone_label = "public"
 

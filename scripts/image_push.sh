@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 if [ $# -ne 2 ]; then
-	echo "requires 2 arguments 1=CONFIG_BRANCH, 2=ENVIRONMENT_NAME"
+	echo "requires 2 arguments 1=ENV_CONFIG_BRANCH, 2=ENVIRONMENT_NAME"
 	exit 1
 fi
 
