@@ -128,9 +128,10 @@ locals {
   external_domain                = "${data.terraform_remote_state.common.external_domain}"
   public_zone_id                 = "${data.terraform_remote_state.common.public_zone_id}"
   environment_identifier         = "${data.terraform_remote_state.common.environment_identifier}"
-  short_environment_name   = "${data.terraform_remote_state.common.short_environment_name}"
+  short_environment_name         = "${data.terraform_remote_state.common.short_environment_name}"
   region                         = "${var.region}"
   spg_app_name                   = "${data.terraform_remote_state.common.spg_app_name}"
+  app_submodule                  = "crc"
   private_subnet_map             = "${data.terraform_remote_state.common.private_subnet_map}"
   ext_lb_security_groups         = ["${data.terraform_remote_state.security-groups.security_groups_sg_external_lb_id}"]
   int_lb_security_groups         = ["${data.terraform_remote_state.security-groups.security_groups_sg_internal_lb_id}"]
@@ -161,18 +162,54 @@ locals {
   ]
 
   # "${data.terraform_remote_state.common.monitoring_server_client_sg_id}",
+
+
+
+  listener = [
+    {
+      instance_port     = "61616"
+      instance_protocol = "TCP"
+      lb_port           = "61616"
+      lb_protocol       = "TCP"
+    },
+    {
+      instance_port     = "8181"
+      instance_protocol = "HTTP"
+      lb_port           = "8181"
+      lb_protocol       = "HTTP"
+    },
+    {
+      instance_port     = "9001"
+      instance_protocol = "TCP"
+      lb_port           = "9001"
+      lb_protocol       = "TCP"
+    },
+
+  ]
+
+  health_check = [
+    {
+      target              = "HTTP:8181/cxf/"
+      interval            = 30
+      healthy_threshold   = 2
+      unhealthy_threshold = 2
+      timeout             = 5
+    },
+  ]
+
+
 }
 
 ####################################################
 # NGINX??? - Application Specific
 ####################################################
-module "ecs-spg" {
-  source                         = "../modules/ecs-spg"
+module "ecs-crc" {
+  source                         = "../modules/ecs-crc"
   app_name                       = "${local.spg_app_name}"
   certificate_arn                = ["${local.certificate_arn}"]
   image_url                      = "${local.image_url}"
   image_version                  = "${local.image_version}"
-  short_environment_name  = "${local.short_environment_name}"
+  short_environment_name         = "${local.short_environment_name}"
   environment_identifier         = "${local.environment_identifier}"
   public_subnet_ids              = ["${local.public_subnet_ids}"]
   private_subnet_ids             = ["${local.private_subnet_ids}"]
@@ -211,7 +248,7 @@ module "ecs-spg" {
   keys_dir                       = "/opt/keys"
   kibana_host                    = "${local.monitoring_server_internal_url}"
   app_hostnames                  = "${local.app_hostnames}"
-  app_submodule                  = "mpx"
+  app_submodule                  = "${local.app_submodule}"
   region                         = "${local.region}"
   ecs_service_role               = "${local.ecs_service_role}"
   service_desired_count          = "${local.service_desired_count}"
@@ -222,15 +259,16 @@ module "ecs-spg" {
   ebs_volume_size                = "50"
   ebs_encrypted                  = "true"
   instance_type                  = "t2.medium"
-  asg_desired                    = "1"
-  asg_max                        = "1"
-  asg_min                        = "1"
+  asg_desired                    = "2"
+  asg_max                        = "3"
+  asg_min                        = "2"
   associate_public_ip_address    = true
   ami_id                         = "${local.ami_id}"
   instance_profile               = "${local.instance_profile}"
   ssh_deployer_key               = "${local.ssh_deployer_key}"
   s3_bucket_config = "${var.s3_bucket_config}"
   spg_build_inv_dir = "${var.spg_build_inv_dir}"
-
+  health_check = "${local.health_check}"
+  listener = "${local.listener}"
 }
 

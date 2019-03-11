@@ -1,0 +1,61 @@
+[
+    {
+        "cpu": ${cpu_units
+        },
+        "essential": true,
+        "image": "${image_url}:${version}",
+        "memory": ${memory
+        },
+        "name": "${container_name}",
+        "mountPoints": [
+            {
+                "sourceVolume": "${data_volume_name}",
+                "containerPath": "${data_volume_host_path}",
+                "readOnly": true
+            }
+        ],
+        "environment": [
+            {
+                "name": "SPG_BUILD_S3_REPO",
+                "value": "${s3_bucket_config}"
+            },
+
+            {
+            "name": "SPG_BUILD_INV_DIR",
+            "value": "${spg_build_inv_dir}"
+            },
+
+
+
+            {
+                "name": "KIBANA_HOST",
+                "value": "${kibana_host}"
+            }
+        ],
+        "portMappings": [
+            {
+                "hostPort": 8181,
+                "protocol": "tcp",
+                "containerPort": 8181
+            },
+            {
+            "hostPort": 61616,
+            "protocol": "tcp",
+            "containerPort": 61616
+            },
+            {
+            "hostPort": 2222,
+            "protocol": "tcp",
+            "containerPort": 22
+            }
+        ],
+        "logConfiguration": {
+            "logDriver": "awslogs",
+            "options": {
+                "awslogs-group": "${log_group_name}",
+                "awslogs-region": "${log_group_region}",
+                "awslogs-stream-prefix": "ecs-${container_name}"
+            }
+        }
+    }
+]

@@ -166,13 +166,13 @@ locals {
 ####################################################
 # NGINX??? - Application Specific
 ####################################################
-module "ecs-spg" {
-  source                         = "../modules/ecs-spg"
+module "ecs-mpx" {
+  source                         = "../modules/ecs-mpx"
   app_name                       = "${local.spg_app_name}"
   certificate_arn                = ["${local.certificate_arn}"]
   image_url                      = "${local.image_url}"
   image_version                  = "${local.image_version}"
-  short_environment_name   = "${local.short_environment_name}"
+  short_environment_name         = "${local.short_environment_name}"
   environment_identifier         = "${local.environment_identifier}"
   public_subnet_ids              = ["${local.public_subnet_ids}"]
   private_subnet_ids             = ["${local.private_subnet_ids}"]

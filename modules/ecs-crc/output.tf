@@ -1,19 +1,19 @@
 # LB int
-output "lb_int_id" {
-  value = "${module.create_app_alb_int.lb_id}"
-}
-
-output "lb_int_arn" {
-  value = "${module.create_app_alb_int.lb_arn}"
-}
-
-output "lb_int_arn_suffix" {
-  value = "${module.create_app_alb_int.lb_arn_suffix}"
-}
-
-output "lb_int_dns_name" {
-  value = "${module.create_app_alb_int.lb_dns_name}"
-}
+//output "lb_int_id" {
+//  value = "${module.create_app_alb_int.lb_id}"
+//}
+//
+//output "lb_int_arn" {
+//  value = "${module.create_app_alb_int.lb_arn}"
+//}
+//
+//output "lb_int_arn_suffix" {
+//  value = "${module.create_app_alb_int.lb_arn_suffix}"
+//}
+//
+//output "lb_int_dns_name" {
+//  value = "${module.create_app_alb_int.lb_dns_name}"
+//}
 
 output "lb_int_dns_alias" {
   value = "${aws_route53_record.dns_int_entry.fqdn}"
@@ -53,21 +53,21 @@ output "private_subnet_ids" {
 
 
 # LISTENER int
-output "https_lb_int_listener_id" {
-  value = "${element(module.create_app_alb_int_listener.listener_id,0)}"
-}
-
-output "https_lb_int_listener_arn" {
-  value = "${element(module.create_app_alb_int_listener.listener_arn,0)}"
-}
-
-output "http_lb_int_listener_id" {
-  value = "${element(module.create_app_alb_int_listener.listener_id,0)}"
-}
-
-output "http_lb_int_listener_arn" {
-  value = "${element(module.create_app_alb_int_listener.listener_arn,0)}"
-}
+//output "https_lb_int_listener_id" {
+//  value = "${element(module.create_app_alb_int_listener.listener_id,0)}"
+//}
+//
+//output "https_lb_int_listener_arn" {
+//  value = "${element(module.create_app_alb_int_listener.listener_arn,0)}"
+//}
+//
+//output "http_lb_int_listener_id" {
+//  value = "${element(module.create_app_alb_int_listener.listener_id,0)}"
+//}
+//
+//output "http_lb_int_listener_arn" {
+//  value = "${element(module.create_app_alb_int_listener.listener_arn,0)}"
+//}
 
 //# LISTENER ext
 //output "https_lb_ext_listener_id" {
@@ -89,22 +89,22 @@ output "http_lb_int_listener_arn" {
 
 
 
-# TARGET GROUPS int
-output "int_target_group_id" {
-  value = "${module.create_app_alb_int_targetgrp.target_group_id}"
-}
-
-output "int_target_group_arn" {
-  value = "${module.create_app_alb_int_targetgrp.target_group_arn}"
-}
-
-output "int_target_group_arn_suffix" {
-  value = "${module.create_app_alb_int_targetgrp.target_group_arn_suffix}"
-}
-
-output "int_target_group_name" {
-  value = "${module.create_app_alb_int_targetgrp.target_group_name}"
-}
+  //# TARGET GROUPS int
+  //output "int_target_group_id" {
+  //  value = "${module.create_app_alb_int_targetgrp.target_group_id}"
+  //}
+  //
+  //output "int_target_group_arn" {
+  //  value = "${module.create_app_alb_int_targetgrp.target_group_arn}"
+  //}
+  //
+  //output "int_target_group_arn_suffix" {
+  //  value = "${module.create_app_alb_int_targetgrp.target_group_arn_suffix}"
+  //}
+  //
+  //output "int_target_group_name" {
+  //  value = "${module.create_app_alb_int_targetgrp.target_group_name}"
+  //}
 
 //# TARGET GROUPS ext
 //output "ext_target_group_id" {

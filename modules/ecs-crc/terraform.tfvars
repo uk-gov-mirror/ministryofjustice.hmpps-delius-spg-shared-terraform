@@ -89,3 +89,7 @@ keys_dir = "/opt/keys"
 image_url = "mojdigitalstudio/hmpps-nginx-non-confd"
 
 version = "latest"
+
+
+internal = true
+
