@@ -11,6 +11,7 @@ def environments = [
 
   '-- choose env--',
   'delius-core-sandpit',
+  // 'delius-core-playpit',
   'delius-core-dev',
   'delius-test',
   'delius-po-test1',
@@ -194,14 +195,14 @@ pipeline {
         stage('Delius | SPG | ECS-SPG') {
           steps {
             script {
-              do_terraform(project.config, environment_name, project.spg, 'ecs-spg')
+              do_terraform(project.config, environment_name, project.spg, 'ecs-crc')
             }
           }
         }
 
         stage('Delius | SPG | push-spg-docker') {
             steps {
-                sh "NON_CONTAINER_WORKING_DIR=${project.spg};sh ./${project.spg}/scripts/image_push.sh ${project.config_branch} ${environment_name}"
+                sh "NON_CONTAINER_WORKING_DIR=${project.spg};sh ./${project.spg}/scripts/image_push.sh ${params.config_branch} ${environment_name}"
             }
         }
 
