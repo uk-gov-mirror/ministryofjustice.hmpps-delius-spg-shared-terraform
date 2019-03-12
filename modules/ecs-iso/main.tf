@@ -73,7 +73,7 @@ resource "aws_route53_record" "dns_int_entry" {
 }
 
 
-//need a dns record for the crc server, which shouldn't have need a load balancer as it
+//need a dns record for the iso server, which shouldn't have need a load balancer as it
 //resource "aws_route53_record" "dns_int_direct_entry" {
 //  zone_id = "${local.public_zone_id}"
 //  name    = "${local.application_endpoint}-int-direct.${local.external_domain}"
@@ -223,13 +223,14 @@ resource "aws_route53_record" "dns_int_entry" {
 
 #alfresco usage
 module "create_app_elb" {
-#  source          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//elb//create_elb"
+source          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//elb//create_elb"
 # requires provider 2.1.6
-  source          = "../create_elb"
+#  source          = "../create_elb"
   name            = "${local.common_name}-elb"
   subnets         = ["${var.private_subnet_ids}"]
   security_groups = ["${var.int_lb_security_groups}"]
   internal        = "true"
+#  region          = "${var.region}"
 
   cross_zone_load_balancing   = "true"
   idle_timeout                = "${var.backend_timeout}"
@@ -313,7 +314,7 @@ data "template_file" "app_task_definition" {
     log_group_region      = "${var.region}"
     memory                = "${var.backend_ecs_memory}"
     cpu_units             = "${var.backend_ecs_cpu_units}"
-    data_volume_name      = "key_dir"
+    data_volume_name      = "spg"
     data_volume_host_path = "${var.keys_dir}"
     kibana_host           = "${var.kibana_host}"
     s3_bucket_config = "${var.s3_bucket_config}"
@@ -328,7 +329,7 @@ module "app_task_definition" {
   container_name        = "${var.app_name}-${var.app_submodule}"
   container_definitions = "${data.template_file.app_task_definition.rendered}"
 
-  data_volume_name      = "key_dir"
+  data_volume_name      = "spg"
   data_volume_host_path = "${var.keys_dir}"
 
   data_volume_host_path = "${var.keys_dir}"
@@ -387,7 +388,6 @@ data "template_file" "user_data" {
     cluster_name         = "${module.ecs_cluster.ecs_cluster_name}"
     log_group_name       = "${module.create_loggroup.loggroup_name}"
     container_name       = "${var.app_name}-${var.app_submodule}"
-    keys_dir             = "${var.keys_dir}"
   }
 }
 

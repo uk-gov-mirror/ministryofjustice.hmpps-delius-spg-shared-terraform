@@ -3,12 +3,9 @@
 ####################################################
 
 /*
-[terragrunt] 2018/11/15 12:20:24 Running command: terraform output
-security_groups_sg_external_instance_id = sg-0ea5a84693db8eced
-security_groups_sg_external_lb_id = sg-04e995dc29aa06ebb
-security_groups_sg_internal_instance_id = sg-0c35c0650c6b032c3
-security_groups_sg_internal_lb_id = sg-09b7df827fb97a8ad
-security_groups_sg_rds_id = sg-01fe67e7807eb0fc4
+NOTE - ports 80 & 443 are from original alfresco ports....
+port 443 will be useful for hawtio
+port 80 inbound should be disabled
 */
 
 ####################################################
@@ -42,18 +39,18 @@ locals {
 ### external lb sg
 #-------------------------------------------------------------
 
-resource "aws_security_group_rule" "external_lb_ingress_http" {
-  security_group_id = "${local.external_lb_sg_id}"
-  from_port         = 80
-  to_port           = 80
-  protocol          = "tcp"
-  type              = "ingress"
-  description       = "${local.common_name}-lb-external-sg-http"
-
-  cidr_blocks = [
-    "${local.allowed_cidr_block}",
-  ]
-}
+//resource "aws_security_group_rule" "external_lb_ingress_http" {
+//  security_group_id = "${local.external_lb_sg_id}"
+//  from_port         = 80
+//  to_port           = 80
+//  protocol          = "tcp"
+//  type              = "ingress"
+//  description       = "${local.common_name}-lb-external-sg-http"
+//
+//  cidr_blocks = [
+//    "${local.allowed_cidr_block}",
+//  ]
+//}
 
 resource "aws_security_group_rule" "external_lb_ingress_https" {
   security_group_id = "${local.external_lb_sg_id}"
@@ -68,15 +65,15 @@ resource "aws_security_group_rule" "external_lb_ingress_https" {
   ]
 }
 
-resource "aws_security_group_rule" "external_lb_egress_http" {
-  security_group_id        = "${local.external_lb_sg_id}"
-  type                     = "egress"
-  from_port                = 80
-  to_port                  = 80
-  protocol                 = "tcp"
-  source_security_group_id = "${local.external_inst_sg_id}"
-  description              = "${local.common_name}-instance-internal-http"
-}
+//resource "aws_security_group_rule" "external_lb_egress_http" {
+//  security_group_id        = "${local.external_lb_sg_id}"
+//  type                     = "egress"
+//  from_port                = 80
+//  to_port                  = 80
+//  protocol                 = "tcp"
+//  source_security_group_id = "${local.external_inst_sg_id}"
+//  description              = "${local.common_name}-instance-internal-http"
+//}
 
 resource "aws_security_group_rule" "external_lb_egress_https" {
   security_group_id        = "${local.external_lb_sg_id}"
@@ -131,6 +128,31 @@ resource "aws_security_group_rule" "external_inst_egress_https" {
   description              = "${local.common_name}-instance-external-egress-https"
 }
 
+
+
+
+
+resource "aws_security_group_rule" "external_inst_egress_mutualtls" {
+  security_group_id        = "${local.external_inst_sg_id}"
+  type                     = "egress"
+  from_port                = 9001
+  to_port                  = 9001
+  protocol                 = "tcp"
+  source_security_group_id = "${local.internal_lb_sg_id}"
+  description              = "${local.common_name}-instance-external-egress-https"
+}
+
+resource "aws_security_group_rule" "external_inst_ingress_mutualtls" {
+  security_group_id        = "${local.external_inst_sg_id}"
+  type                     = "ingress"
+  from_port                = 9001
+  to_port                  = 9001
+  protocol                 = "tcp"
+  source_security_group_id = "${local.external_lb_sg_id}"
+  description              = "${local.common_name}-instance-external-ingress-https"
+}
+
+
 #-------------------------------------------------------------
 ### internal lb sg
 #-------------------------------------------------------------
@@ -165,6 +187,18 @@ resource "aws_security_group_rule" "internal_lb_ingress_https" {
   source_security_group_id = "${local.external_inst_sg_id}"
   description              = "${local.common_name}-lb-ingress-https"
 }
+
+resource "aws_security_group_rule" "internal_lb_ingress_mutualtls" {
+  security_group_id        = "${local.internal_lb_sg_id}"
+  type                     = "ingress"
+  from_port                = 9001
+  to_port                  = 9001
+  protocol                 = "tcp"
+  source_security_group_id = "${local.external_inst_sg_id}"
+  description              = "${local.common_name}-lb-ingress-https"
+}
+
+
 
 resource "aws_security_group_rule" "internal_lb_sg_egress_alb_backend_port" {
   security_group_id        = "${local.internal_lb_sg_id}"

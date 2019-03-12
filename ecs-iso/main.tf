@@ -5,9 +5,9 @@ terraform {
 
 provider "aws" {
   region  = "${var.region}"
-  version = "~> 1.16"
+  version = ">= 2.1.0"
   #2.1.0 needed for ecs elb graceperiod, is set in the local elb module
-  #version = "~> 2.10"
+#  version = "~> 2.10"
 }
 
 ####################################################
@@ -133,7 +133,7 @@ locals {
   short_environment_name         = "${data.terraform_remote_state.common.short_environment_name}"
   region                         = "${var.region}"
   spg_app_name                   = "${data.terraform_remote_state.common.spg_app_name}"
-  app_submodule                  = "crc"
+  app_submodule                  = "iso"
   private_subnet_map             = "${data.terraform_remote_state.common.private_subnet_map}"
   ext_lb_security_groups         = ["${data.terraform_remote_state.security-groups.security_groups_sg_external_lb_id}"]
   int_lb_security_groups         = ["${data.terraform_remote_state.security-groups.security_groups_sg_internal_lb_id}"]
@@ -149,7 +149,7 @@ locals {
   public_cidr_block              = ["${data.terraform_remote_state.common.db_cidr_block}"]
   config-bucket                  = "${data.terraform_remote_state.common.common_s3-config-bucket}"
   ecs_service_role               = "${data.terraform_remote_state.iam.iam_role_ext_ecs_role_arn}"
-  service_desired_count          = "1"
+  service_desired_count          = "3"
   cloudwatch_log_retention       = "${var.cloudwatch_log_retention}"
   s3_bucket_config = "${var.s3_bucket_config}"
   spg_build_inv_dir = "${var.spg_build_inv_dir}"
@@ -205,8 +205,8 @@ locals {
 ####################################################
 # Application Specific
 ####################################################
-module "ecs-crc" {
-  source                         = "../modules/ecs-crc"
+module "ecs-iso" {
+  source                         = "../modules/ecs-iso"
   app_name                       = "${local.spg_app_name}"
   app_submodule                  = "${local.app_submodule}"
   certificate_arn                = ["${local.certificate_arn}"]
@@ -248,7 +248,7 @@ module "ecs-crc" {
   backend_unhealthy_threshold    = "10"
   target_type                    = "instance"
   cloudwatch_log_retention       = "${local.cloudwatch_log_retention}"
-  keys_dir                       = "/opt/keys"
+  keys_dir                       = "/opt/spg"
   kibana_host                    = "${local.monitoring_server_internal_url}"
   app_hostnames                  = "${local.app_hostnames}"
   region                         = "${local.region}"
