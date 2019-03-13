@@ -73,7 +73,7 @@ resource "aws_route53_record" "dns_int_entry" {
 }
 
 
-//need a dns record for the iso server, which shouldn't have need a load balancer as it
+//need a dns record for the crc server, which shouldn't have need a load balancer as it
 //resource "aws_route53_record" "dns_int_direct_entry" {
 //  zone_id = "${local.public_zone_id}"
 //  name    = "${local.application_endpoint}-int-direct.${local.external_domain}"
@@ -223,14 +223,13 @@ resource "aws_route53_record" "dns_int_entry" {
 
 #alfresco usage
 module "create_app_elb" {
-source          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//elb//create_elb"
+#  source          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//elb//create_elb"
 # requires provider 2.1.6
-#  source          = "../create_elb"
+  source          = "../loadbalancer/create_elb"
   name            = "${local.common_name}-elb"
   subnets         = ["${var.private_subnet_ids}"]
   security_groups = ["${var.int_lb_security_groups}"]
   internal        = "true"
-#  region          = "${var.region}"
 
   cross_zone_load_balancing   = "true"
   idle_timeout                = "${var.backend_timeout}"
@@ -314,7 +313,7 @@ data "template_file" "app_task_definition" {
     log_group_region      = "${var.region}"
     memory                = "${var.backend_ecs_memory}"
     cpu_units             = "${var.backend_ecs_cpu_units}"
-    data_volume_name      = "spg"
+    data_volume_name      = "key_dir"
     data_volume_host_path = "${var.keys_dir}"
     kibana_host           = "${var.kibana_host}"
     s3_bucket_config = "${var.s3_bucket_config}"
@@ -326,10 +325,10 @@ module "app_task_definition" {
   source   = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs//ecs-taskdefinitions//appwith_single_volume"
   app_name = "${local.common_name}"
 
-  container_name        = "${var.app_name}-${var.app_submodule}"
+  container_name        = "${local.common_name}"
   container_definitions = "${data.template_file.app_task_definition.rendered}"
 
-  data_volume_name      = "spg"
+  data_volume_name      = "key_dir"
   data_volume_host_path = "${var.keys_dir}"
 
   data_volume_host_path = "${var.keys_dir}"
@@ -380,14 +379,14 @@ data "template_file" "user_data" {
   template = "${file("${var.user_data}")}"
 
   vars {
-    keys_dir             = "${var.keys_dir}"
     ebs_device           = "${var.ebs_device_name}"
-    app_name             = "${var.app_name}"
+    app_name             = "${var.app_name}-${var.app_submodule}}"
     env_identifier       = "${var.environment_identifier}"
     short_env_identifier = "${var.short_environment_name}"
     cluster_name         = "${module.ecs_cluster.ecs_cluster_name}"
     log_group_name       = "${module.create_loggroup.loggroup_name}"
     container_name       = "${var.app_name}-${var.app_submodule}"
+    keys_dir             = "${var.keys_dir}"
   }
 }
 
@@ -397,7 +396,7 @@ data "template_file" "user_data" {
 
 module "launch_cfg" {
   source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//launch_configuration//blockdevice"
-  launch_configuration_name   = "${local.common_name}-${var.app_submodule}"
+  launch_configuration_name   = "${local.common_name}"
   image_id                    = "${var.ami_id}"
   instance_type               = "${var.instance_type}"
   volume_size                 = "${var.volume_size}"

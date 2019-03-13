@@ -167,7 +167,7 @@ locals {
 # NGINX??? - Application Specific
 ####################################################
 module "ecs-mpx" {
-  source                         = "../modules/ecs-mpx"
+  source                         = "../modules/ecs-alb"
   app_name                       = "${local.spg_app_name}"
   certificate_arn                = ["${local.certificate_arn}"]
   image_url                      = "${local.image_url}"

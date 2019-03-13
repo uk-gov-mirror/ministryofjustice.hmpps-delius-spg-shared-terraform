@@ -14,7 +14,7 @@ variable "deployment_minimum_healthy_percent" {
 }
 
 variable "current_task_definition_version" {}
-
+#provider 2.1.0 onwards
 variable  "health_check_grace_period_seconds" {
   #5 minute default start up time
   default = "600"

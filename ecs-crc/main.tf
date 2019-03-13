@@ -206,7 +206,7 @@ locals {
 # Application Specific
 ####################################################
 module "ecs-crc" {
-  source                         = "../modules/ecs-crc"
+  source                         = "../modules/ecs-elb"
   app_name                       = "${local.spg_app_name}"
   app_submodule                  = "${local.app_submodule}"
   certificate_arn                = ["${local.certificate_arn}"]

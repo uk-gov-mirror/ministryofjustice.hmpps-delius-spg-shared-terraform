@@ -149,7 +149,7 @@ locals {
   public_cidr_block              = ["${data.terraform_remote_state.common.db_cidr_block}"]
   config-bucket                  = "${data.terraform_remote_state.common.common_s3-config-bucket}"
   ecs_service_role               = "${data.terraform_remote_state.iam.iam_role_ext_ecs_role_arn}"
-  service_desired_count          = "3"
+  service_desired_count          = "2"
   cloudwatch_log_retention       = "${var.cloudwatch_log_retention}"
   s3_bucket_config = "${var.s3_bucket_config}"
   spg_build_inv_dir = "${var.spg_build_inv_dir}"
@@ -206,7 +206,7 @@ locals {
 # Application Specific
 ####################################################
 module "ecs-iso" {
-  source                         = "../modules/ecs-iso"
+  source                         = "../modules/ecs-nlb"
   app_name                       = "${local.spg_app_name}"
   app_submodule                  = "${local.app_submodule}"
   certificate_arn                = ["${local.certificate_arn}"]
@@ -226,6 +226,7 @@ module "ecs-iso" {
   public_zone_id                 = "${local.public_zone_id}"
   external_domain                = "${local.external_domain}"
   internal_domain                = "${local.internal_domain}"
+  internal_or_external_label     = "int"
   alb_backend_port               = "9001"
   alb_http_port                  = "80"
   alb_https_port                 = "443"
@@ -234,7 +235,7 @@ module "ecs-iso" {
   backend_app_protocol           = "HTTP"
   backend_app_template_file      = "template.json"
   backend_check_app_path         = "/cxf/"
-  backend_check_interval         = "120"
+  backend_check_interval         = "30"
   backend_ecs_cpu_units          = "256"
   backend_ecs_desired_count      = "1"
   backend_ecs_memory             = "2048"

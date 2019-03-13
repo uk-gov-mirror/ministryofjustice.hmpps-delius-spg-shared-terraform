@@ -11,7 +11,7 @@
             {
                 "sourceVolume": "${data_volume_name}",
                 "containerPath": "${data_volume_host_path}",
-                "readOnly": true
+                "readOnly": false
             }
         ],
         "environment": [

@@ -188,3 +188,4 @@ variable "health_check" {
   type        = "list"
 }
 
+variable internal_or_external_label{}

@@ -96,17 +96,21 @@ mount -a
 
 
 #ansible and users
-sudo yum install -y \
+sudo -i
+
+yum install -y \
     git \
     wget \
     yum-utils
 
-sudo easy_install pip
+echo 'preppip' > /tmp/paul.log
+
+easy_install pip
 
 PATH=/usr/local/bin:$PATH
 
 
-sudo pip install ansible==2.6 virtualenv awscli boto botocore boto3
+pip install ansible==2.6 virtualenv awscli boto botocore boto3
 
 echo 'downloading users'
 /usr/bin/curl -o ~/users.yml https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/dev.yml

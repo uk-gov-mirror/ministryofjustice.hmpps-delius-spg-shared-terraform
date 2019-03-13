@@ -149,7 +149,7 @@ resource "aws_security_group_rule" "external_inst_ingress_mutualtls" {
   to_port                  = 9001
   protocol                 = "tcp"
   source_security_group_id = "${local.external_lb_sg_id}"
-  description              = "${local.common_name}-instance-external-ingress-https"
+  description              = "${local.common_name}-instance-external-ingress-mutualtls"
 }
 
 
