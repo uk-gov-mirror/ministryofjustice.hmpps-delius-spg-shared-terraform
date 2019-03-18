@@ -1,23 +1,23 @@
 # # LB int
-//output "ecs_spg_lb_int_id" {
-//  value = "${module.ecs-mpx.lb_int_id}"
-//}
-//
-//output "ecs_spg_lb_int_arn" {
-//  value = "${module.ecs-mpx.lb_int_arn}"
-//}
-//
-//output "ecs_spg_lb_int_arn_suffix" {
-//  value = "${module.ecs-mpx.lb_int_arn_suffix}"
-//}
-//
-//output "ecs_spg_lb_int_dns_name" {
-//  value = "${module.ecs-mpx.lb_int_dns_name}"
-//}
-//
-//output "ecs_spg_lb_int_dns_alias" {
-//  value = "${module.ecs-mpx.lb_int_dns_alias}"
-//}
+output "ecs_spg_lb_int_id" {
+  value = "${module.ecs-mpx.lb_int_id}"
+}
+
+output "ecs_spg_lb_int_arn" {
+  value = "${module.ecs-mpx.lb_int_arn}"
+}
+
+output "ecs_spg_lb_int_arn_suffix" {
+  value = "${module.ecs-mpx.lb_int_arn_suffix}"
+}
+
+output "ecs_spg_lb_int_dns_name" {
+  value = "${module.ecs-mpx.lb_int_dns_name}"
+}
+
+output "ecs_spg_lb_int_dns_alias" {
+  value = "${module.ecs-mpx.lb_int_dns_alias}"
+}
 
 //# # LB ext
 //output "ecs_spg_lb_ext_id" {
@@ -41,22 +41,22 @@
 //}
 //
 
-//# TARGET GROUPS int
-//output "ecs_spg_int_target_group_id" {
-//  value = "${module.ecs-mpx.int_target_group_id}"
-//}
-//
-//output "ecs_spg_int_target_group_arn" {
-//  value = "${module.ecs-mpx.int_target_group_arn}"
-//}
-//
-//output "ecs_spg_int_target_group_arn_suffix" {
-//  value = "${module.ecs-mpx.int_target_group_arn_suffix}"
-//}
-//
-//output "ecs_spg_int_target_group_name" {
-//  value = "${module.ecs-mpx.int_target_group_name}"
-//}
+# TARGET GROUPS int
+output "ecs_spg_int_target_group_id" {
+  value = "${module.ecs-mpx.int_target_group_id}"
+}
+
+output "ecs_spg_int_target_group_arn" {
+  value = "${module.ecs-mpx.int_target_group_arn}"
+}
+
+output "ecs_spg_int_target_group_arn_suffix" {
+  value = "${module.ecs-mpx.int_target_group_arn_suffix}"
+}
+
+output "ecs_spg_int_target_group_name" {
+  value = "${module.ecs-mpx.int_target_group_name}"
+}
 
 //# TARGET GROUPS ext
 //output "ecs_spg_ext_target_group_id" {
@@ -77,22 +77,22 @@
 
 
 
-//# LISTENER int
-//output "ecs_spg_https_lb_int_listener_id" {
-//  value = "${module.ecs-mpx.https_lb_int_listener_id}"
-//}
-//
-//output "ecs_spg_https_lb_int_listener_arn" {
-//  value = "${module.ecs-mpx.https_lb_int_listener_arn}"
-//}
-//
-//output "ecs_spg_http_lb_int_listener_id" {
-//  value = "${module.ecs-mpx.http_lb_int_listener_id}"
-//}
-//
-//output "ecs_spg_http_lb_int_listener_arn" {
-//  value = "${module.ecs-mpx.http_lb_int_listener_arn}"
-//}
+# LISTENER int
+output "ecs_spg_https_lb_int_listener_id" {
+  value = "${module.ecs-mpx.https_lb_int_listener_id}"
+}
+
+output "ecs_spg_https_lb_int_listener_arn" {
+  value = "${module.ecs-mpx.https_lb_int_listener_arn}"
+}
+
+output "ecs_spg_http_lb_int_listener_id" {
+  value = "${module.ecs-mpx.http_lb_int_listener_id}"
+}
+
+output "ecs_spg_http_lb_int_listener_arn" {
+  value = "${module.ecs-mpx.http_lb_int_listener_arn}"
+}
 
 # ECS CLUSTER
 output "ecs_spg_ecs_cluster_arn" {

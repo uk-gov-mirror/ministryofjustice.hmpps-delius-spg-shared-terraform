@@ -63,7 +63,3 @@ variable "interval" {
   default = 60
 }
 
-
-
-//
-//variable region {}

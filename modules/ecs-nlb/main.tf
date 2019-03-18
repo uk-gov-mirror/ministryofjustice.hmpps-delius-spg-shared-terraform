@@ -32,17 +32,17 @@ locals {
 module "create_app_nlb_int" {
 //  source              = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_lb"
   source              = "../loadbalancer/nlb/create_nlb"
-  lb_name             = "${local.common_name}-nlb-${local.internal_or_external_label}"
+  lb_name             = "${local.common_name}"
   subnet_ids          = ["${local.private_subnet_ids}"]
   s3_bucket_name      = "${local.access_logs_bucket}"
 //  security_groups     = ["${local.int_lb_security_groups}"]
   tags                = "${var.tags}"
-  internal            = true
+  internal            = false
   load_balancer_type  = "network"
+  az_lb_eip_allocation_ids       = "${var.az_lb_eip_allocation_ids}"
+//  private_subnet_ids       = "${var.private_subnet_ids}"
+  public_subnet_ids = "${var.public_subnet_ids}"
 }
-
-
-
 
 
 ###############################################
@@ -51,7 +51,7 @@ module "create_app_nlb_int" {
 
 resource "aws_route53_record" "dns_int_entry" {
   zone_id = "${local.public_zone_id}"
-  name    = "${local.application_endpoint}-${var.app_submodule}-int.${local.external_domain}"
+  name    = "${local.application_endpoint}-ext"
   type    = "A"
 
   alias {
@@ -133,15 +133,15 @@ module "create_app_alb_int_listener_9001" {
   lb_arn           = "${module.create_app_nlb_int.lb_arn}"
   target_group_arn = "${module.create_app_nlb_int_targetgrp.target_group_arn}"
 }
-
-module "create_app_alb_int_listener_8181" {
-  source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_listener"
-  lb_port          = "8181"
-  lb_protocol      = "TCP"
-  lb_arn           = "${module.create_app_nlb_int.lb_arn}"
-  target_group_arn = "${module.create_app_nlb_int_targetgrp.target_group_arn}"
-}
-
+//
+//module "create_app_alb_int_listener_8181" {
+//  source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_listener"
+//  lb_port          = "8181"
+//  lb_protocol      = "TCP"
+//  lb_arn           = "${module.create_app_nlb_int.lb_arn}"
+//  target_group_arn = "${module.create_app_nlb_int_targetgrp.target_group_arn}"
+//}
+//
 
 
 
@@ -177,7 +177,7 @@ module "create_app_nlb_int_targetgrp" {
 //  source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//targetgroup"
   source               = "../loadbalancer/nlb/targetgroup"
   appname              = "${local.short_environment_name}-${var.app_submodule}-int"
-  target_port          = "8181"
+  target_port          = "9001"
   target_protocol      = "TCP"
   vpc_id               = "${var.vpc_id}"
   check_interval       = "${var.backend_check_interval}"

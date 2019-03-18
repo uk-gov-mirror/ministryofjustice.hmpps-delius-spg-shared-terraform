@@ -116,6 +116,36 @@ data "aws_ami" "amazon_ami" {
   owners = ["591542846629"] # AWS
 }
 
+
+
+#-------------------------------------------------------------
+### Getting the persistent eip
+#-------------------------------------------------------------
+data "terraform_remote_state" "persistent_spg" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.remote_state_bucket_name}"
+    key    = "persistent/spg/terraform.tfstate"
+    region = "${var.region}"
+  }
+}
+
+#-------------------------------------------------------------
+### Getting the vpc details
+#-------------------------------------------------------------
+data "terraform_remote_state" "vpc" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.remote_state_bucket_name}"
+    key    = "vpc/terraform.tfstate"
+    region = "${var.region}"
+  }
+}
+
+
+
 ####################################################
 # Locals
 ####################################################
@@ -199,6 +229,19 @@ locals {
     },
   ]
 
+  az_lb_eip_allocation_ids = [
+"${data.terraform_remote_state.persistent_spg.spg_az1_lb_eip.allocation_id}",
+"${data.terraform_remote_state.persistent_spg.spg_az2_lb_eip.allocation_id}",
+"${data.terraform_remote_state.persistent_spg.spg_az3_lb_eip.allocation_id}"
+
+]
+
+//  public_subnet_ids       = [
+//    "${data.terraform_remote_state.vpc.vpc_public-subnet-az1}",
+//    "${data.terraform_remote_state.vpc.vpc_public-subnet-az2}",
+//    "${data.terraform_remote_state.vpc.vpc_public-subnet-az3}"
+//  ]
+
 
 }
 
@@ -231,8 +274,8 @@ module "ecs-iso" {
   alb_http_port                  = "80"
   alb_https_port                 = "443"
   deregistration_delay           = "90"
-  backend_app_port               = "8181"
-  backend_app_protocol           = "HTTP"
+  backend_app_port               = "9001"
+  backend_app_protocol           = "TCP"
   backend_app_template_file      = "template.json"
   backend_check_app_path         = "/cxf/"
   backend_check_interval         = "30"
@@ -262,16 +305,19 @@ module "ecs-iso" {
   ebs_volume_size                = "50"
   ebs_encrypted                  = "true"
   instance_type                  = "t2.medium"
-  asg_desired                    = "2"
+  asg_desired                    = "1"
   asg_max                        = "3"
-  asg_min                        = "2"
+  asg_min                        = "1"
   associate_public_ip_address    = true
   ami_id                         = "${local.ami_id}"
   instance_profile               = "${local.instance_profile}"
   ssh_deployer_key               = "${local.ssh_deployer_key}"
-  s3_bucket_config = "${var.s3_bucket_config}"
-  spg_build_inv_dir = "${var.spg_build_inv_dir}"
-  health_check = "${local.health_check}"
-  listener = "${local.listener}"
+  s3_bucket_config               = "${var.s3_bucket_config}"
+  spg_build_inv_dir              = "${var.spg_build_inv_dir}"
+  health_check                   = "${local.health_check}"
+  listener                       = "${local.listener}"
+  az_lb_eip_allocation_ids       = "${local.az_lb_eip_allocation_ids}"
+
+
 }
 

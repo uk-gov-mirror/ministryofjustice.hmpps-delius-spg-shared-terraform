@@ -1,10 +1,3 @@
-//provider "aws" {
-//  #  version = "~> 1.16"
-//  #2.1.0 needed for ecs gra
-//  region  = "${var.region}"
-//  version = "~> 2.1.0"
-//}
-
 resource "aws_elb" "environment" {
   name            = "${var.name}"
   subnets         = ["${var.subnets}"]

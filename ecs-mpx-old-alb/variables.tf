@@ -15,4 +15,3 @@ variable "spg_build_inv_dir" {}
 variable "tags" {
   type = "map"
 }
-

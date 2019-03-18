@@ -189,3 +189,8 @@ variable "health_check" {
 }
 
 variable internal_or_external_label{}
+
+variable az_lb_eip_allocation_ids {
+  type = "list"
+}
+

@@ -139,7 +139,7 @@ resource "aws_security_group_rule" "external_inst_egress_mutualtls" {
   to_port                  = 9001
   protocol                 = "tcp"
   source_security_group_id = "${local.internal_lb_sg_id}"
-  description              = "${local.common_name}-instance-external-egress-https"
+  description              = "${local.common_name}-instance-external-egress-mutualtls"
 }
 
 resource "aws_security_group_rule" "external_inst_ingress_mutualtls" {
@@ -151,6 +151,30 @@ resource "aws_security_group_rule" "external_inst_ingress_mutualtls" {
   source_security_group_id = "${local.external_lb_sg_id}"
   description              = "${local.common_name}-instance-external-ingress-mutualtls"
 }
+
+
+
+resource "aws_security_group_rule" "external_inst_egress_mutualtls" {
+  security_group_id        = "${local.external_inst_sg_id}"
+  type                     = "egress"
+  from_port                = 8989
+  to_port                  = 8989
+  protocol                 = "tcp"
+  source_security_group_id = "${local.internal_lb_sg_id}"
+  description              = "${local.common_name}-instance-external-egress-soapint"
+}
+
+resource "aws_security_group_rule" "external_inst_ingress_mutualtls" {
+  security_group_id        = "${local.external_inst_sg_id}"
+  type                     = "ingress"
+  from_port                = 8989
+  to_port                  = 8989
+  protocol                 = "tcp"
+  source_security_group_id = "${local.external_lb_sg_id}"
+  description              = "${local.common_name}-instance-external-ingress-soapint"
+}
+
+
 
 
 #-------------------------------------------------------------

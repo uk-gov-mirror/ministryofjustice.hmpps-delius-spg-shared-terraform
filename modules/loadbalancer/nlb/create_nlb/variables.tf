@@ -25,3 +25,10 @@ variable "load_balancer_type" {
 variable "tags" {
   type = "map"
 }
+
+variable az_lb_eip_allocation_ids {
+  type = "list"
+}
+variable public_subnet_ids {
+  type = "list"
+}
