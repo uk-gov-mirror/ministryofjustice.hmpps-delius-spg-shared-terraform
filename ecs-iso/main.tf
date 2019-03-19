@@ -7,7 +7,7 @@ provider "aws" {
   region  = "${var.region}"
   version = ">= 2.1.0"
   #2.1.0 needed for ecs elb graceperiod, is set in the local elb module
-#  version = "~> 2.10"
+  #version = "~> 1.16"
 }
 
 ####################################################

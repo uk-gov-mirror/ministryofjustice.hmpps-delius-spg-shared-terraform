@@ -340,8 +340,6 @@ module "app_task_definition" {
   data_volume_name      = "spg"
   data_volume_host_path = "${var.keys_dir}"
 
-  data_volume_host_path = "${var.keys_dir}"
-  data_volume_host_path = "${var.keys_dir}"
 }
 
 ############################################
@@ -391,14 +389,14 @@ data "template_file" "user_data" {
   template = "${file("${var.user_data}")}"
 
   vars {
-    keys_dir             = "${var.keys_dir}"
     ebs_device           = "${var.ebs_device_name}"
-    app_name             = "${var.app_name}"
+    app_name             = "${var.app_name}-${var.app_submodule}}"
     env_identifier       = "${var.environment_identifier}"
     short_env_identifier = "${var.short_environment_name}"
     cluster_name         = "${module.ecs_cluster.ecs_cluster_name}"
     log_group_name       = "${module.create_loggroup.loggroup_name}"
     container_name       = "${var.app_name}-${var.app_submodule}"
+    keys_dir             = "${var.keys_dir}"
   }
 }
 
@@ -408,7 +406,7 @@ data "template_file" "user_data" {
 
 module "launch_cfg" {
   source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//launch_configuration//blockdevice"
-  launch_configuration_name   = "${local.common_name}-${var.app_submodule}"
+  launch_configuration_name   = "${local.common_name}"
   image_id                    = "${var.ami_id}"
   instance_type               = "${var.instance_type}"
   volume_size                 = "${var.volume_size}"

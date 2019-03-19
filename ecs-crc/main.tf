@@ -5,7 +5,9 @@ terraform {
 
 provider "aws" {
   region  = "${var.region}"
-  version = "~> 1.16"
+  version = ">= 2.1.0"
+  #2.1.0 needed for ecs elb graceperiod, is set in the local elb module
+  #version = "~> 1.16"
 }
 
 ####################################################
@@ -192,7 +194,8 @@ locals {
       target              = "HTTP:8181/cxf/"
       interval            = 30
       healthy_threshold   = 2
-      unhealthy_threshold = 2
+      #set to 10 to allow spg 5 mins to spin up
+      unhealthy_threshold = 10
       timeout             = 5
     },
   ]
@@ -246,7 +249,7 @@ module "ecs-crc" {
   backend_unhealthy_threshold    = "10"
   target_type                    = "instance"
   cloudwatch_log_retention       = "${local.cloudwatch_log_retention}"
-  keys_dir                       = "/opt/keys"
+  keys_dir                       = "/opt/spg"
   kibana_host                    = "${local.monitoring_server_internal_url}"
   app_hostnames                  = "${local.app_hostnames}"
   region                         = "${local.region}"
