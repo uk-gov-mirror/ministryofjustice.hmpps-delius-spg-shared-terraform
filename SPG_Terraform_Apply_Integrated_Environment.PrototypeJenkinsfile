@@ -9,7 +9,7 @@ project.spg       = 'hmpps-delius-spg-shared-terraform'
 
 def environments = [
 
-  '-- choose env--',
+  '-- choose env --',
   'delius-core-sandpit',
   // 'delius-core-playpit',
   'delius-core-dev',
@@ -20,6 +20,7 @@ def environments = [
 ]
 
 def prepare_env() {
+
     sh '''
     #!/usr/env/bin bash
     docker pull mojdigitalstudio/hmpps-terraform-builder:latest
@@ -125,12 +126,12 @@ pipeline {
         )
         string(
           name: 'config_branch',
-          defaultValue: 'master',
+          defaultValue: '97-update-potest2-enviro',
           description: 'Branch for hmpps-env-configs'
         )
         string(
           name: 'spg_branch',
-          defaultValue: 'master',
+          defaultValue: '19-create-crcstubs-as-seperate-asg',
           description: 'Branch for hmpps-delius-spg-shared-terraform'
         )
     }
@@ -142,8 +143,19 @@ pipeline {
 
     stages {
 
+
+  stage ('Validate Environment') {
+            when {
+                expression { params.environment_name == '-- choose env --' }
+            }
+            steps {
+                 error('no environment chosen')
+            }
+        }
+
         stage('setup') {
             steps {
+
                 slackSend(message: "Build started on \"${environment_name}\" - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL.replace(':8080','')}|Open>)")
 
                 dir( project.config ) {
@@ -192,13 +204,32 @@ pipeline {
           }
         }
 
-        stage('Delius | SPG | ECS-SPG') {
+        stage('Delius | SPG | ECS-SPG-CRC') {
           steps {
             script {
               do_terraform(project.config, environment_name, project.spg, 'ecs-crc')
-            }
+            }0
           }
         }
+
+
+        stage('Delius | SPG | ECS-SPG-MPX') {
+          steps {
+            script {
+              do_terraform(project.config, environment_name, project.spg, 'ecs-crc')
+            }0
+          }
+        }
+
+
+        stage('Delius | SPG | ECS-SPG-ISO') {
+          steps {
+            script {
+              do_terraform(project.config, environment_name, project.spg, 'ecs-crc')
+            }0
+          }
+        }
+
 
         stage('Delius | SPG | push-spg-docker') {
             steps {

@@ -19,7 +19,7 @@ resource "aws_security_group_rule" "http" {
   to_port           = "80"
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
-  description       = "${local.common_name}-http"
+  description       = "${local.common_name}-http80"
 }
 
 resource "aws_security_group_rule" "all" {
