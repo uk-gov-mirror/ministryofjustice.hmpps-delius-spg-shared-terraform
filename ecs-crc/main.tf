@@ -151,10 +151,10 @@ locals {
   ecs_service_role               = "${data.terraform_remote_state.iam.iam_role_ext_ecs_role_arn}"
   service_desired_count          = "1"
   cloudwatch_log_retention       = "${var.cloudwatch_log_retention}"
-  s3_bucket_config = "${var.s3_bucket_config}"
-  spg_build_inv_dir = "${var.spg_build_inv_dir}"
-  instance_profile = "${data.terraform_remote_state.iam.iam_policy_ext_app_instance_profile_name}"
-  sg_map_ids             = "${data.terraform_remote_state.common.sg_map_ids}"
+  s3_bucket_config               = "${var.s3_bucket_config}"
+  spg_build_inv_dir              = "${var.spg_build_inv_dir}"
+  instance_profile               = "${data.terraform_remote_state.iam.iam_policy_ext_app_instance_profile_name}"
+  sg_map_ids                     = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
     "${data.terraform_remote_state.security-groups.security_groups_sg_external_instance_id}",
     "${data.terraform_remote_state.common.sg_map_ids.bastion_in_sg_id  }",
@@ -192,9 +192,9 @@ locals {
   health_check = [
     {
       target              = "HTTP:8181/cxf/"
-      interval            = 30
+      interval            = 60
       healthy_threshold   = 2
-      #set to 10 to allow spg 5 mins to spin up
+      #set to 10 to allow spg 10 mins to spin up
       unhealthy_threshold = 10
       timeout             = 5
     },

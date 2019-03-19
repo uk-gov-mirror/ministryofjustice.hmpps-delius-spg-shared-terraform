@@ -45,7 +45,7 @@ resource "aws_security_group_rule" "internal_inst_sg_ingress_alb_http_port" {
 
 
 ## Allow JMS access from SPG GW to ANY server in private cidr block with the port range specified by delius domain
-resource "aws_security_group_rule" "spg_gw_egress_jms_private" {
+resource "aws_security_group_rule" "internal_inst_egress_jms_private" {
   security_group_id        = "${local.internal_inst_sg_id}"
   type                     = "egress"
   protocol                 = "tcp"
@@ -58,7 +58,7 @@ resource "aws_security_group_rule" "spg_gw_egress_jms_private" {
 
 
 ## Allow JMS access to SPG GW to from any server in private CIDR block with the port range specified by SPG domain
-resource "aws_security_group_rule" "spg_gw_ingress_jms_private" {
+resource "aws_security_group_rule" "internal_inst_ingress_jms_private" {
   security_group_id        = "${local.internal_inst_sg_id}"
   type                     = "ingress"
   protocol                 = "tcp"

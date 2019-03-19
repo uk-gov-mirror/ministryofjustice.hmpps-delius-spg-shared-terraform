@@ -216,7 +216,7 @@ pipeline {
         stage('Delius | SPG | ECS-SPG-MPX') {
           steps {
             script {
-              do_terraform(project.config, environment_name, project.spg, 'ecs-crc')
+              do_terraform(project.config, environment_name, project.spg, 'ecs-mpx')
             }
           }
         }
@@ -225,7 +225,7 @@ pipeline {
         stage('Delius | SPG | ECS-SPG-ISO') {
           steps {
             script {
-              do_terraform(project.config, environment_name, project.spg, 'ecs-crc')
+              do_terraform(project.config, environment_name, project.spg, 'ecs-iso')
             }
           }
         }

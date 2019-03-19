@@ -181,6 +181,13 @@ locals {
       lb_protocol       = "HTTP"
     },
     {
+      instance_port     = "8989"
+      instance_protocol = "HTTP"
+      lb_port           = "8989"
+      lb_protocol       = "HTTP"
+    },
+
+    {
       instance_port     = "9001"
       instance_protocol = "TCP"
       lb_port           = "9001"
@@ -192,9 +199,9 @@ locals {
   health_check = [
     {
       target              = "HTTP:8181/cxf/"
-      interval            = 30
+      interval            = 60
       healthy_threshold   = 2
-      #set to 10 to allow spg 5 mins to spin up
+      #set to 10 to allow spg 10 mins to spin up
       unhealthy_threshold = 10
       timeout             = 5
     },

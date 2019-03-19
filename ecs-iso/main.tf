@@ -197,37 +197,37 @@ locals {
 
 
 
-  listener = [
-    {
-      instance_port     = "61616"
-      instance_protocol = "TCP"
-      lb_port           = "61616"
-      lb_protocol       = "TCP"
-    },
-    {
-      instance_port     = "8181"
-      instance_protocol = "HTTP"
-      lb_port           = "8181"
-      lb_protocol       = "HTTP"
-    },
-    {
-      instance_port     = "9001"
-      instance_protocol = "TCP"
-      lb_port           = "9001"
-      lb_protocol       = "TCP"
-    },
-
-  ]
-
-  health_check = [
-    {
-      target              = "HTTP:8181/cxf/"
-      interval            = 30
-      healthy_threshold   = 2
-      unhealthy_threshold = 2
-      timeout             = 5
-    },
-  ]
+////  listener = [
+////    {
+////      instance_port     = "61616"
+////      instance_protocol = "TCP"
+////      lb_port           = "61616"
+////      lb_protocol       = "TCP"
+////    },
+////    {
+////      instance_port     = "8181"
+////      instance_protocol = "HTTP"
+////      lb_port           = "8181"
+////      lb_protocol       = "HTTP"
+////    },
+////    {
+////      instance_port     = "9001"
+////      instance_protocol = "TCP"
+////      lb_port           = "9001"
+////      lb_protocol       = "TCP"
+////    },
+//
+//  ]
+//
+//  health_check = [
+//    {
+//      target              = "HTTP:8181/cxf/"
+//      interval            = 30
+//      healthy_threshold   = 2
+//      unhealthy_threshold = 2
+//      timeout             = 5
+//    },
+//  ]
 
   az_lb_eip_allocation_ids = [
 "${data.terraform_remote_state.persistent_spg.spg_az1_lb_eip.allocation_id}",
@@ -314,8 +314,8 @@ module "ecs-iso" {
   ssh_deployer_key               = "${local.ssh_deployer_key}"
   s3_bucket_config               = "${var.s3_bucket_config}"
   spg_build_inv_dir              = "${var.spg_build_inv_dir}"
-  health_check                   = "${local.health_check}"
-  listener                       = "${local.listener}"
+//  health_check                   = "${local.health_check}"
+//  listener                       = "${local.listener}"
   az_lb_eip_allocation_ids       = "${local.az_lb_eip_allocation_ids}"
 
 

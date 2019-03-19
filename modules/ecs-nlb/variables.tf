@@ -172,10 +172,10 @@ variable "connection_draining_timeout" {
   default     = 300
 }
 
-variable "listener" {
-  description = "A list of listener blocks"
-  type        = "list"
-}
+//variable "listener" {
+//  description = "A list of listener blocks"
+//  type        = "list"
+//}
 
 variable "access_logs" {
   description = "An access logs block"
@@ -183,10 +183,10 @@ variable "access_logs" {
   default     = []
 }
 
-variable "health_check" {
-  description = "A health check block"
-  type        = "list"
-}
+//variable "health_check" {
+//  description = "A health check block"
+//  type        = "list"
+//}
 
 variable internal_or_external_label{}
 
