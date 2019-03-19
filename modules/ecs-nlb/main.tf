@@ -62,69 +62,6 @@ resource "aws_route53_record" "dns_int_entry" {
 }
 
 
-//need a dns record for the iso server, which shouldn't have need a load balancer as it
-//resource "aws_route53_record" "dns_int_direct_entry" {
-//  zone_id = "${local.public_zone_id}"
-//  name    = "${local.application_endpoint}-int-direct.${local.external_domain}"
-//  type    = "A"
-//
-//  alias {
-//    name                   = "${module.create_app_alb_int.lb_dns_name}"
-//    zone_id                = "${module.create_app_alb_int.lb_zone_id}"
-//    evaluate_target_health = false
-//  }
-//}
-
-
-
-############################################
-# CREATE EXTERNAL LB FOR spg
-############################################
-//module "create_app_alb_ext" {
-//  source          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_lb"
-//  lb_name         = "${local.short_environment_identifier}-ext"
-//  subnet_ids      = ["${local.public_subnet_ids}"]
-//  s3_bucket_name  = "${local.access_logs_bucket}"
-//  security_groups = ["${local.ext_lb_security_groups}"]
-//  tags            = "${var.tags}"
-//  internal = false
-//}
-
-###############################################
-# Create EXTERNAL route53 entry for spg lb
-###############################################
-
-//resource "aws_route53_record" "dns_ext_entry" {
-//  zone_id = "${local.public_zone_id}"
-//  name    = "${local.application_endpoint}.${local.external_domain}"
-//  type    = "A"
-//
-//  alias {
-//    name                   = "${module.create_app_alb_ext.lb_dns_name}"
-//    zone_id                = "${module.create_app_alb_ext.lb_zone_id}"
-//    evaluate_target_health = false
-//  }
-//}
-
-
-
-
-
-
-
-#-------------------------------------------------------------
-### Create app listeners int
-#-------------------------------------------------------------
-
-#module "create_app_alb_int_listener_with_https" {
-#  source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_listener_with_https"
-#  lb_port          = "${var.alb_backend_port}"
-#  lb_protocol      = "${var.alb_listener_protocol}"
-#  lb_arn           = "${module.create_app_alb_int.lb_arn}"
-#  target_group_arn = "${module.create_app_alb_int_targetgrp.target_group_arn}"
-#  ssl_policy       = "${var.public_ssl_policy}"
-#  certificate_arn  = ["${local.certificate_arn}"]
-#}
 
 module "create_app_alb_int_listener_9001" {
   source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_listener"
@@ -133,41 +70,6 @@ module "create_app_alb_int_listener_9001" {
   lb_arn           = "${module.create_app_nlb_int.lb_arn}"
   target_group_arn = "${module.create_app_nlb_int_targetgrp.target_group_arn}"
 }
-//
-//module "create_app_alb_int_listener_8181" {
-//  source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_listener"
-//  lb_port          = "8181"
-//  lb_protocol      = "TCP"
-//  lb_arn           = "${module.create_app_nlb_int.lb_arn}"
-//  target_group_arn = "${module.create_app_nlb_int_targetgrp.target_group_arn}"
-//}
-//
-
-
-
-
-#-------------------------------------------------------------
-### Create app listeners ext
-#-------------------------------------------------------------
-
-//module "create_app_alb_ext_listener_with_https" {
-//  source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_listener_with_https"
-//  lb_port          = "${var.alb_backend_port}"
-//  lb_protocol      = "${var.alb_listener_protocol}"
-//  lb_arn           = "${module.create_app_alb_ext.lb_arn}"
-//  target_group_arn = "${module.create_app_alb_ext_targetgrp.target_group_arn}"
-//  ssl_policy       = "${var.public_ssl_policy}"
-//  certificate_arn  = ["${local.certificate_arn}"]
-//}
-
-//module "create_app_alb_ext_listener" {
-//  source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_listener"
-//  lb_port          = "${var.alb_http_port}"
-//  lb_protocol      = "HTTP"
-//  lb_arn           = "${module.create_app_alb_ext.lb_arn}"
-//  target_group_arn = "${module.create_app_alb_ext_targetgrp.target_group_arn}"
-//}
-
 ############################################
 # CREATE INT TARGET GROUPS FOR APP PORTS
 ############################################
@@ -191,93 +93,11 @@ module "create_app_nlb_int_targetgrp" {
   deregistration_delay = "${var.deregistration_delay}"
   target_type          = "${var.target_type}"
   tags                 = "${var.tags}"
-//  stickiness = {
-//  [
-//   enabled = false
-//    type = "lb_cookie"
-//        ]
-//  }
+
 }
 
 
 
-
-
-//# elb with cert
-//module "create_app_elb" {
-//  source          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//elb//create_elb"
-//  name            = "${local.lb_name}-ext"
-//  subnets         = ["${local.public_subnet_ids}"]
-//  security_groups = ["${aws_security_group.external_lb_sg.id}"]
-//  internal        = "${var.internal}"
-//
-//  cross_zone_load_balancing   = "${var.cross_zone_load_balancing}"
-//  idle_timeout                = "${var.idle_timeout}"
-//  connection_draining         = "${var.connection_draining}"
-//  connection_draining_timeout = "${var.connection_draining_timeout}"
-//  bucket                      = "${local.access_logs_bucket}"
-//  bucket_prefix               = "${local.lb_name}"
-//  interval                    = 60
-//  ssl_certificate_id          = "${data.aws_acm_certificate.cert.arn}"
-//  instance_port               = 80
-//  instance_protocol           = "http"
-//  lb_port                     = 80
-//  lb_port_https               = 443
-//  lb_protocol                 = "http"
-//  lb_protocol_https           = "https"
-//  health_check                = ["${var.health_check}"]
-//  tags                        = "${var.tags}"
-//}
-
-
-#elb
-//module "create_app_elb" {
-//source          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//elb//create_elb"
-//#  source          = "../create_elb"
-//  name            = "${local.common_name}-elb"
-//  subnets         = ["${var.private_subnet_ids}"]
-//  security_groups = ["${var.int_lb_security_groups}"]
-//  internal        = "true"
-//#  region          = "${var.region}"
-//
-//  cross_zone_load_balancing   = "true"
-//  idle_timeout                = "${var.backend_timeout}"
-//  connection_draining         = "${var.connection_draining}"
-//  connection_draining_timeout = "${var.connection_draining_timeout}"
-//  bucket                      = "${local.access_logs_bucket}"
-//  bucket_prefix               = "${local.common_name}-elb"
-//  interval                    = 60
-//  listener                    = ["${var.listener}"]
-//  health_check                = ["${var.health_check}"]
-//
-//  tags = "${var.tags}"
-//}
-
-
-
-
-############################################
-# CREATE EXT TARGET GROUPS FOR APP PORTS
-############################################
-
-//module "create_app_alb_ext_targetgrp" {
-//  source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//targetgroup"
-//  appname              = "${local.short_environment_identifier}-ext"
-//  target_port          = "${var.backend_app_port}"
-//  target_protocol      = "${var.backend_app_protocol}"
-//  vpc_id               = "${var.vpc_id}"
-//  check_interval       = "${var.backend_check_interval}"
-//  check_path           = "${var.backend_check_app_path}"
-//  check_port           = "${var.backend_app_port}"
-//  check_protocol       = "${var.backend_app_protocol}"
-//  timeout              = "${var.backend_timeout}"
-//  healthy_threshold    = "${var.backend_healthy_threshold}"
-//  unhealthy_threshold  = "${var.backend_unhealthy_threshold}"
-//  return_code          = "${var.backend_return_code}"
-//  deregistration_delay = "${var.deregistration_delay}"
-//  target_type          = "${var.target_type}"
-//  tags                 = "${var.tags}"
-//}
 
 ############################################
 # CREATE ECS CLUSTER FOR spg
@@ -364,22 +184,6 @@ module "app_service" {
 }
 
 
-#with predefined elb
-//module "app_service" {
-//  source                          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs/ecs_service//withloadbalancer//elb"
-//  servicename                     = "${local.common_name}"
-//  clustername                     = "${module.ecs_cluster.ecs_cluster_id}"
-//  ecs_service_role                = "${var.ecs_service_role}"
-//  elb_name                        = "${module.create_app_elb.environment_elb_name}"
-//  containername                   = "${var.app_name}-${var.app_submodule}"
-//  #only one containerport can be specified, and only 1 elb
-//  containerport                   = "8181"
-//  task_definition_family          = "${module.app_task_definition.task_definition_family}"
-//  task_definition_revision        = "${module.app_task_definition.task_definition_revision}"
-//  current_task_definition_version = "${data.aws_ecs_task_definition.app_task_definition.revision}"
-//  service_desired_count           = "${var.service_desired_count}"
-//}
-
 
 ############################################
 # CREATE USER DATA FOR EC2 RUNNING SERVICES
@@ -436,15 +240,3 @@ module "auto_scale" {
   launch_configuration = "${module.launch_cfg.launch_name}"
   tags                 = "${var.tags}"
 }
-
-############################################
-# UPLOAD TO S3
-############################################
-
-
-# resource "aws_s3_bucket_object" "nginx_bucket_object" {
-#   key    = "${local.common_name}/config/nginx.conf"
-#   bucket = "${local.config_bucket}"
-#   source = "./templates/nginx.conf"
-#   etag   = "${md5(file("./templates/nginx.conf"))}"
-# }
