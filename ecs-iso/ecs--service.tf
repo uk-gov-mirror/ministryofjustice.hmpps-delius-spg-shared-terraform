@@ -1,0 +1,105 @@
+############################################
+# CREATE ECS CLUSTER FOR spg
+############################################
+# ##### ECS Cluster
+
+module "ecs_cluster" {
+  source       = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs//ecs_cluster"
+  cluster_name = "${local.common_name}"
+}
+
+
+
+############################################
+# CREATE LOG GROUPS FOR CONTAINER LOGS
+############################################
+
+module "create_loggroup" {
+  source                   = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//cloudwatch//loggroup"
+  log_group_path           = "${local.short_environment_name}"
+  loggroupname             = "${local.app_name}-${local.app_submodule}"
+  cloudwatch_log_retention = "${local.cloudwatch_log_retention}"
+  tags                     = "${local.tags}"
+}
+
+
+############################################
+# CREATE ECS SERVICES
+############################################
+
+
+#with predefined alb or nlb
+
+module "app_service" {
+  source                          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs/ecs_service//withloadbalancer//alb"
+  servicename                     = "${local.common_name}"
+  clustername                     = "${module.ecs_cluster.ecs_cluster_id}"
+  ecs_service_role                = "${local.ecs_service_role}"
+  target_group_arn                = "${module.create_app_nlb_int_targetgrp.target_group_arn}"
+  containername                   = "${local.app_name}-${local.app_submodule}"
+  containerport                   = "${local.backend_app_port}"
+  task_definition_family          = "${module.app_task_definition.task_definition_family}"
+  task_definition_revision        = "${module.app_task_definition.task_definition_revision}"
+  current_task_definition_version = "${data.aws_ecs_task_definition.app_task_definition.revision}"
+  service_desired_count           = "${local.service_desired_count}"
+}
+
+
+
+############################################
+# CREATE USER DATA FOR EC2 RUNNING SERVICES
+############################################
+
+data "template_file" "user_data" {
+  template = "${file("../user_data/spg_user_data.sh")}"
+
+  vars {
+    ebs_device = "${local.ebs_device_name}"
+    app_name = "${local.app_name}-${local.app_submodule}}"
+    env_identifier = "${local.environment_identifier}"
+    short_env_identifier = "${local.short_environment_name}"
+    cluster_name = "${module.ecs_cluster.ecs_cluster_name}"
+    log_group_name = "${module.create_loggroup.loggroup_name}"
+    container_name = "${local.app_name}-${local.app_submodule}"
+
+
+    data_volume_host_path = "${local.data_volume_host_path}"
+    data_volume_name      = "${local.data_volume_name}"
+  }
+}
+############################################
+# CREATE LAUNCH CONFIG FOR EC2 RUNNING SERVICES
+############################################
+
+module "launch_cfg" {
+  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//launch_configuration//blockdevice"
+  launch_configuration_name   = "${local.common_name}"
+  image_id                    = "${local.ami_id}"
+  instance_type               = "${local.instance_type}"
+  volume_size                 = "${local.volume_size}"
+  instance_profile            = "${local.instance_profile}"
+  key_name                    = "${local.ssh_deployer_key}"
+  ebs_device_name             = "${local.ebs_device_name}"
+  ebs_volume_type             = "${local.ebs_volume_type}"
+  ebs_volume_size             = "${local.ebs_volume_size}"
+  ebs_encrypted               = "${local.ebs_encrypted}"
+  associate_public_ip_address = "${local.associate_public_ip_address}"
+  security_groups             = ["${local.instance_security_groups}"]
+  user_data                   = "${data.template_file.user_data.rendered}"
+
+}
+
+############################################
+# CREATE AUTO SCALING GROUP
+############################################
+
+module "auto_scale" {
+  source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//autoscaling//group//default"
+  asg_name             = "${local.common_name}"
+  subnet_ids           = ["${local.private_subnet_ids}"]
+  asg_min              = "${local.asg_min}"
+  asg_max              = "${local.asg_max}"
+  asg_desired          = "${local.asg_desired}"
+  launch_configuration = "${module.launch_cfg.launch_name}"
+  tags                 = "${local.tags}"
+}

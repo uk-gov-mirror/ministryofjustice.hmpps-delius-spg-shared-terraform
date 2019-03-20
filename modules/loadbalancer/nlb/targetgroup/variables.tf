@@ -9,19 +9,8 @@ variable "deregistration_delay" {
 }
 
 variable "target_type" {}
-variable "check_interval" {}
-variable "check_path" {}
-variable "check_port" {}
-variable "check_protocol" {}
-variable "timeout" {}
-variable "healthy_threshold" {}
-variable "unhealthy_threshold" {}
-variable "return_code" {}
 
 variable "tags" {
   type = "map"
 }
 
-//variable stickiness {
-//  type = "list"
-//}

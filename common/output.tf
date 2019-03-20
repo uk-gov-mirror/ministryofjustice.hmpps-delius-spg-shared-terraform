@@ -6,20 +6,20 @@ output "region" {
 }
 
 output "common_account_id" {
-  value = "${module.common.common_account_id}"
+  value = "${data.aws_caller_identity.current.account_id}"
 }
 
-output "common_sg_outbound_id" {
-  value = "${module.common.common_sg_outbound_id}"
-}
+//output "common_sg_outbound_id" {
+//  value = "${aws_security_group.vpc-sg-outbound.id}"
+//}
 
 # S3 Buckets
 output "common_s3-config-bucket" {
-  value = "${module.common.common_s3-config-bucket}"
+  value = "${module.s3config_bucket.s3_bucket_name}"
 }
 
 output "common_s3_lb_logs_bucket" {
-  value = "${module.common.common_s3_lb_logs_bucket}"
+  value = "${module.s3_lb_logs_bucket.s3_bucket_name}"
 }
 
 # SSH KEY
@@ -163,8 +163,8 @@ output "private_subnet_ids" {
 }
 
 # Security groups
-output "sg_map_ids" {
-  value = "${local.sg_map_ids}"
+output "security_group_map_ids" {
+  value = "${local.security_group_map_ids}"
 }
 
 # spg hosts

@@ -1,11 +1,9 @@
 [
     {
-        "cpu": ${cpu_units
-        },
+        "cpu": ${cpu_units},
         "essential": true,
         "image": "${image_url}:${version}",
-        "memory": ${memory
-        },
+        "memory": ${memory},
         "name": "${container_name}",
         "mountPoints": [
             {
@@ -29,7 +27,7 @@
 
             {
                 "name": "KIBANA_HOST",
-                "value": "${kibana_host}"
+                "value": "${kibana_host}NOTUSEDYET"
             }
         ],
         "portMappings": [

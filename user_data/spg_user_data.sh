@@ -80,17 +80,17 @@ chkconfig awslogs on
 # Mount our EBS volume on boot
 cp /usr/share/zoneinfo/Europe/London /etc/localtime
 
-mkdir -p ${keys_dir}
+mkdir -p ${data_volume_host_path}
 
 pvcreate ${ebs_device}
 
 vgcreate data ${ebs_device}
 
-lvcreate -l100%VG -n keys data
+lvcreate -l100%VG -n ${data_volume_name} data
 
-mkfs.xfs /dev/data/keys
+mkfs.xfs /dev/data/${data_volume_name}
 
-echo "/dev/mapper/data-keys ${keys_dir} xfs defaults 0 0" >> /etc/fstab
+echo "/dev/mapper/data-${data_volume_name} ${data_volume_host_path} xfs defaults 0 0" >> /etc/fstab
 
 mount -a
 
