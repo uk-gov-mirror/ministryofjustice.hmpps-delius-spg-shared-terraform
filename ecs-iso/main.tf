@@ -6,7 +6,7 @@ terraform {
 provider "aws" {
   region                                   = "${var.region}"
   version                                  = ">= 2.1.0"
-  #2.1.0 needed for ecs elb graceperiod, is set in the local elb module
+  #2.1.0 needed for ecs elb graceperiod, which is set in the local elb module
   #version                                  = "~> 1.16"
 }
 
@@ -22,8 +22,8 @@ locals {
 
   tags                                 = "${var.tags}"
     short_environment_name               = "${data.terraform_remote_state.common.short_environment_name}"
-    common_name                         = "${local.short_environment_name}-${local.app_hostnames["external"]}-${local.app_submodule}"
     app_hostnames                        = "${data.terraform_remote_state.common.app_hostnames}"
+    common_name                         = "${local.short_environment_name}-${local.app_hostnames["external"]}-${local.app_submodule}"
     spg_app_name                         = "${data.terraform_remote_state.common.spg_app_name}"
     app_name                             = "${local.spg_app_name}"
     app_submodule                        = "iso"
