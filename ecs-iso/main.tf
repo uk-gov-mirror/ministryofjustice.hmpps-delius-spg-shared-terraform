@@ -18,7 +18,8 @@ provider "aws" {
 
 locals {
 
-#common
+#common (lots of duplication here, needs further refactoring)
+
   tags                                 = "${var.tags}"
     short_environment_name               = "${data.terraform_remote_state.common.short_environment_name}"
     common_name                         = "${local.short_environment_name}-${local.app_hostnames["external"]}-${local.app_submodule}"
@@ -29,9 +30,13 @@ locals {
     application_endpoint                 = "${local.app_hostnames["external"]}"
     environment_identifier               = "${data.terraform_remote_state.common.environment_identifier}"
 
-   #network common
+   #network common (protocol needs to match between front end and back end)
     backend_app_port                     = "9001"
     backend_app_protocol                 = "TCP"
+    frontend_app_port                     = "9001"
+    frontend_app_protocol                 = "${local.backend_app_protocol}"
+
+
 
 ####################################################
 
