@@ -94,80 +94,11 @@
 //  value = "${module.ecs-mpx.http_lb_int_listener_arn}"
 //}
 
-# ECS CLUSTER
-output "ecs_spg_ecs_cluster_arn" {
-  value = "${module.ecs-mpx.ecs_cluster_arn}"
-}
-
-output "ecs_spg_ecs_cluster_id" {
-  value = "${module.ecs-mpx.ecs_cluster_id}"
-}
-
-output "ecs_spg_ecs_cluster_name" {
-  value = "${module.ecs-mpx.ecs_cluster_name}"
-}
-
-# LOG GROUPS
-output "ecs_spg_loggroup_arn" {
-  value = "${module.ecs-mpx.loggroup_arn}"
-}
-
-output "ecs_spg_loggroup_name" {
-  value = "${module.ecs-mpx.loggroup_name}"
-}
-
-# TASK DEFINITION
-output "ecs_spg_task_definition_arn" {
-  value = "${module.ecs-mpx.task_definition_arn}"
-}
-
-output "ecs_spg_task_definition_family" {
-  value = "${module.ecs-mpx.task_definition_family}"
-}
-
-output "ecs_spg_task_definition_revision" {
-  value = "${module.ecs-mpx.task_definition_revision}"
-}
-
-# ECS SERVICE
-output "ecs_spg_service_id" {
-  value = "${module.ecs-mpx.ecs_service_id}"
-}
-
-output "ecs_spg_service_name" {
-  value = "${module.ecs-mpx.ecs_service_name}"
-}
-
-output "ecs_spg_service_cluster" {
-  value = "${module.ecs-mpx.ecs_service_cluster}"
-}
-
-# Launch config
-output "ecs_spg_launch_id" {
-  value = "${module.ecs-mpx.launch_id}"
-}
-
-output "ecs_spg_launch_name" {
-  value = "${module.ecs-mpx.launch_name}"
-}
-
-# ASG
-output "autoscale_id" {
-  value = "${module.ecs-mpx.autoscale_id}"
-}
-
-output "ecs_spg_autoscale_arn" {
-  value = "${module.ecs-mpx.autoscale_arn}"
-}
-
-output "ecs_spg_autoscale_name" {
-  value = "${module.ecs-mpx.autoscale_name}"
-}
 
 output "ecs_spg_public_subnet_ids" {
-  value = "${module.ecs-mpx.public_subnet_ids}"
+  value = "${local.public_subnet_ids}"
 }
 
 output "ecs_spg_private_subnet_ids" {
-  value = "${module.ecs-mpx.private_subnet_ids}"
+  value = "${local.private_subnet_ids}"
 }

@@ -1,3 +1,4 @@
+
 ############################################
 # CREATE ECS CLUSTER FOR spg
 ############################################
@@ -27,15 +28,14 @@ module "create_loggroup" {
 # CREATE ECS SERVICES
 ############################################
 
-
-#with predefined alb or nlb
+#with predefined elb
 
 module "app_service" {
-  source                          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs/ecs_service//withloadbalancer//alb"
+  source                          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs/ecs_service//withloadbalancer//elb"
   servicename                     = "${local.common_name}"
   clustername                     = "${module.ecs_cluster.ecs_cluster_id}"
   ecs_service_role                = "${local.ecs_service_role}"
-  target_group_arn                = "${module.create_app_nlb_ext_targetgrp.target_group_arn}"
+  elb_name                        = "${module.create_app_elb.environment_elb_name}"
   containername                   = "${local.app_name}-${local.app_submodule}"
   containerport                   = "${local.backend_app_port}"
   task_definition_family          = "${module.app_task_definition.task_definition_family}"
@@ -43,6 +43,7 @@ module "app_service" {
   current_task_definition_version = "${data.aws_ecs_task_definition.app_task_definition.revision}"
   service_desired_count           = "${local.service_desired_count}"
 }
+
 
 
 
@@ -54,19 +55,20 @@ data "template_file" "user_data" {
   template = "${file("${local.user_data}")}"
 
   vars {
-    ebs_device = "${local.ebs_device_name}"
-    app_name = "${local.app_name}-${local.app_submodule}}"
-    env_identifier = "${local.environment_identifier}"
+    ebs_device           = "${local.ebs_device_name}"
+    app_name             = "${local.app_name}-${local.app_submodule}}"
+    env_identifier       = "${local.environment_identifier}"
     short_env_identifier = "${local.short_environment_name}"
-    cluster_name = "${module.ecs_cluster.ecs_cluster_name}"
-    log_group_name = "${module.create_loggroup.loggroup_name}"
-    container_name = "${local.app_name}-${local.app_submodule}"
+    cluster_name         = "${module.ecs_cluster.ecs_cluster_name}"
+    log_group_name       = "${module.create_loggroup.loggroup_name}"
+    container_name       = "${local.app_name}-${local.app_submodule}"
 
 
     data_volume_host_path = "${local.data_volume_host_path}"
     data_volume_name      = "${local.data_volume_name}"
   }
 }
+
 ############################################
 # CREATE LAUNCH CONFIG FOR EC2 RUNNING SERVICES
 ############################################

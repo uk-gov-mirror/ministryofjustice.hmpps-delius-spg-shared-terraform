@@ -1,11 +1,11 @@
 # key
-output "self_signed_server_private_key" {
-  value     = "${module.server_key.private_key}"
+output "self_signed_cert_private_key" {
+  value     = "${module.generate_private_key.private_key}"
   sensitive = true
 }
 
 # csr
-output "self_signed_server_cert_request_pem" {
-  value     = "${module.server_csr.cert_request_pem}"
+output "self_signed_cert_csr_pem" {
+  value     = "${module.generate_csr.cert_request_pem}"
   sensitive = true
 }

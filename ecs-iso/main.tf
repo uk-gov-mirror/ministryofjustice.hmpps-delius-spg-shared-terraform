@@ -70,6 +70,8 @@ locals {
   #ecs service -  log group
   ########################################################################################################
   cloudwatch_log_retention = "${var.cloudwatch_log_retention}"
+
+
   ########################################################################################################
   #ecs service - app service
   ########################################################################################################
@@ -87,15 +89,17 @@ locals {
   ########################################################################################################
   ebs_device_name = "/dev/xvdb"
   ebs_encrypted   = "true"
-  volume_size     = "50"
   ebs_volume_size = "50"
   ebs_volume_type = "standard"
+
+  volume_size     = "50"
+
   ########################################################################################################
   #ecs launch config
   ########################################################################################################
   ami_id = "${data.aws_ami.amazon_ami.id}"
-  instance_type               = "t2.medium"
   instance_profile            = "${data.terraform_remote_state.iam.iam_policy_ext_app_instance_profile_name}"
+  instance_type               = "t2.medium"
   ssh_deployer_key            = "${data.terraform_remote_state.common.common_ssh_deployer_key}"
   associate_public_ip_address = true
 
@@ -116,15 +120,16 @@ locals {
   backend_ecs_cpu_units = "256"
   backend_ecs_memory    = "2048"
   #regular config bucket - not sure what this is used for yet
-  config-bucket = "${data.terraform_remote_state.common.common_s3-config-bucket}"
+  config-bucket         = "${data.terraform_remote_state.common.common_s3-config-bucket}"
   #vars for docker app
   #s3 bucket for ANISBLE jobs (derived from env properties
-  s3_bucket_config = "${var.s3_bucket_config}"
-  spg_build_inv_dir = "${var.spg_build_inv_dir}"
+  s3_bucket_config      = "${var.s3_bucket_config}"
+  spg_build_inv_dir     = "${var.spg_build_inv_dir}"
   #vars for docker container
   kibana_host           = "NOTUSED(yet)"
   data_volume_host_path = "/opt/spg"
   data_volume_name      = "spg"
 
+  user_data             = "../user_data/spg_user_data.sh"
   ########################################################################################################
 }
