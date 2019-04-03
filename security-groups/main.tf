@@ -40,7 +40,7 @@ locals {
   public_cidr_block      = ["${data.terraform_remote_state.common.db_cidr_block}"]
   private_cidr_block     = ["${data.terraform_remote_state.common.private_cidr_block}"]
 //  db_cidr_block          = ["${data.terraform_remote_state.common.db_cidr_block}"]
-  sg_map_ids             = "${data.terraform_remote_state.common.sg_map_ids}"
+  sg_map_ids             = "${data.terraform_remote_state.common.security_group_map_ids}"
   weblogic_domain_ports  = "${var.weblogic_domain_ports}"
   spg_partnergateway_domain_ports  = "${var.spg_partnergateway_domain_ports}"
 
