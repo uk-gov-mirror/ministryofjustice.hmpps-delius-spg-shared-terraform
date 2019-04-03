@@ -1,6 +1,6 @@
 
 ############################################
-# CREATE INTERNAL LB FOR spg
+# CREATE EXTERNAL LB FOR spg (iso)
 ############################################
 module "create_app_nlb_ext" {
   //  source              = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_lb"

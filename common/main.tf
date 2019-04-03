@@ -14,6 +14,20 @@ provider "aws" {
 ####################################################
 
 locals {
+  spg_app_name                   = "${var.spg_app_name}"
+  environment_identifier         = "${var.environment_identifier}"
+  short_environment_name   = "${var.short_environment_name}"
+
+  common_name                    = "${var.short_environment_name}-${var.spg_app_name}"
+  full_common_name               = "${var.environment_identifier}-${var.spg_app_name}"
+
+
+
+  app_hostnames = {
+    internal = "${var.spg_app_name}-int"
+    external = "${var.spg_app_name}"
+  }
+
   vpc_id                         = "${data.terraform_remote_state.vpc.vpc_id}"
   cidr_block                     = "${data.terraform_remote_state.vpc.vpc_cidr_block}"
   allowed_cidr_block             = ["${data.terraform_remote_state.vpc.vpc_cidr_block}"]
@@ -21,13 +35,9 @@ locals {
   private_zone_id                = "${data.terraform_remote_state.vpc.private_zone_id}"
   external_domain                = "${data.terraform_remote_state.vpc.public_zone_name}"
   public_zone_id                 = "${data.terraform_remote_state.vpc.public_zone_id}"
-  common_name                    = "${var.short_environment_name}-${var.spg_app_name}"
   lb_account_id                  = "${var.lb_account_id}"
   region                         = "${var.region}"
   role_arn                       = "${var.role_arn}"
-  spg_app_name                   = "${var.spg_app_name}"
-  environment_identifier         = "${var.environment_identifier}"
-  short_environment_name   = "${var.short_environment_name}"
   remote_state_bucket_name       = "${var.remote_state_bucket_name}"
   s3_lb_policy_file              = "../policies/s3_alb_policy.json"
 #  monitoring_server_external_url = "${data.terraform_remote_state.monitor.monitoring_server_external_url}"
@@ -36,10 +46,7 @@ locals {
   ssh_deployer_key               = "${data.terraform_remote_state.vpc.ssh_deployer_key}"
   eng_root_arn                   = "${var.eng_root_arn}"
 
-  app_hostnames = {
-    internal = "${var.spg_app_name}-int"
-    external = "${var.spg_app_name}"
-  }
+
 
 
   security_group_map_ids = {

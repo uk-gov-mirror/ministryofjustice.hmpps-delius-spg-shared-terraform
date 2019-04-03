@@ -48,7 +48,7 @@ resource "aws_route53_record" "dns_int_entry" {
 module "create_app_elb" {
 #  source          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//elb//create_elb"
 # requires provider 2.1.6
-  source          = "../loadbalancer/create_elb"
+  source          = "../loadbalancer/elb/create_elb"
   name            = "${local.common_name}-elb"
   subnets         = ["${var.private_subnet_ids}"]
   security_groups = ["${var.int_lb_security_groups}"]

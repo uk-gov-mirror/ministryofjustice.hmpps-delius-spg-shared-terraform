@@ -27,19 +27,6 @@ data "terraform_remote_state" "iam" {
   }
 }
 
-#-------------------------------------------------------------
-### Getting the security groups details
-#-------------------------------------------------------------
-//in common
-//data "terraform_remote_state" "security-groups" {
-//  backend = "s3"
-//
-//  config {
-//    bucket = "${var.remote_state_bucket_name}"
-//    key    = "spg/security-groups/terraform.tfstate"
-//    region = "${var.region}"
-//  }
-//}
 
 #-------------------------------------------------------------
 ### Getting the s3bucket
@@ -81,17 +68,4 @@ data "terraform_remote_state" "persistent_spg" {
   }
 }
 
-////in common
-//#-------------------------------------------------------------
-//### Getting the vpc details
-//#-------------------------------------------------------------
-//data "terraform_remote_state" "vpc" {
-//  backend = "s3"
-//
-//  config {
-//    bucket = "${var.remote_state_bucket_name}"
-//    key    = "vpc/terraform.tfstate"
-//    region = "${var.region}"
-//  }
-//}
 

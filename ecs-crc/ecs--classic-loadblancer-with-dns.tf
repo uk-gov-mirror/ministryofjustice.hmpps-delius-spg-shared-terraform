@@ -1,6 +1,6 @@
 
 ############################################
-# CREATE INTERNAL LB FOR spg (mpx)
+# CREATE INTERNAL LB FOR spg (crc)
 ############################################
 
 
