@@ -47,9 +47,9 @@ data "template_file" "s3alb_logs_policy" {
 
   vars {
     s3_bucket_name   = "${module.s3_lb_logs_bucket.s3_bucket_name}"
-    s3_bucket_prefix = "${var.short_environment_name}-*"
+    s3_bucket_prefix = "${local.hmpps_asset_name_prefix}-*"
     aws_account_id   = "${data.aws_caller_identity.current.account_id}"
-    lb_account_id    = "${var.lb_account_id}"
+    lb_account_id    = "${local.lb_account_id}"
   }
 }
 

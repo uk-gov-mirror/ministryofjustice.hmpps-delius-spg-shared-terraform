@@ -87,6 +87,13 @@ output "project_name_abbreviated" {
   value = "${local.project_name_abbreviated}"
 }
 
+output "hmpps_asset_name_prefix" {
+  value = "${local.hmpps_asset_name_prefix}"
+}
+
+
+
+
 output "remote_state_bucket_name" {
   value = "${local.remote_state_bucket_name}"
 }
