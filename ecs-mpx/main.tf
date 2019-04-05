@@ -129,7 +129,7 @@ locals {
   ########################################################################################################
   ecs_service_role = "${data.terraform_remote_state.iam.iam_role_ext_ecs_role_arn}"
   service_desired_count = "10" # maxed out on the basis the serive count is decoupled from the ASG
-  sg_map_ids            = "${data.terraform_remote_state.common.security_group_map_ids}"
+  sg_map_ids            = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
 //    "${local.sg_map_ids["external_inst_sg_id"]}", //for iso
     "${local.sg_map_ids["internal_inst_sg_id"]}", //for mpx

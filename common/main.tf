@@ -50,9 +50,8 @@ locals {
   eng_root_arn                   = "${var.eng_root_arn}"
 
 
-
-
-  security_group_map_ids = {
+#security_group_map_ids
+  sg_map_ids            = {
     external_inst_sg_id = "${data.terraform_remote_state.security-groups.sg_spg_nginx_in}"
     internal_inst_sg_id = "${data.terraform_remote_state.security-groups.sg_spg_api_in}"
     external_lb_sg_id   = "${data.terraform_remote_state.security-groups.sg_spg_external_lb_in}"
