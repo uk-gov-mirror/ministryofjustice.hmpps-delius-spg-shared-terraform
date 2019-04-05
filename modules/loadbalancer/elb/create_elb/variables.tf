@@ -38,7 +38,7 @@ variable "connection_draining_timeout" {
 
 variable "tags" {
   description = "A mapping of tags to assign to the resource"
-  default     = {}
+  type="map"
 }
 
 variable "listener" {

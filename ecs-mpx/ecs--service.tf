@@ -96,7 +96,8 @@ module "launch_cfg" {
 ############################################
 
 module "auto_scale" {
-  source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//autoscaling//group//default"
+//  source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//autoscaling//group//default"
+  source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//autoscaling//group//asg_classic_lb"
   asg_name             = "${local.common_name}"
   subnet_ids           = ["${local.private_subnet_ids}"]
   asg_min              = "${local.asg_min}"
@@ -104,4 +105,5 @@ module "auto_scale" {
   asg_desired          = "${local.asg_desired}"
   launch_configuration = "${module.launch_cfg.launch_name}"
   tags                 = "${local.tags}"
+  load_balancers       = ["${module.create_app_elb.environment_elb_name}"]
 }

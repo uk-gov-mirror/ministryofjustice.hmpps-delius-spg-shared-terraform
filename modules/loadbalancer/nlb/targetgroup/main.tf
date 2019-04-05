@@ -5,7 +5,7 @@ resource "aws_lb_target_group" "environment" {
   vpc_id               = "${var.vpc_id}"
   deregistration_delay = "${var.deregistration_delay}"
   target_type          = "${var.target_type}"
-
+  health_check         = ["${var.health_check}"]
 
 
   #stickiness is only valid for ALBs, when NLB is used, it must be explicitly set to false as of 20/03/2019 otherwise terraform trips up
@@ -16,6 +16,8 @@ resource "aws_lb_target_group" "environment" {
         enabled = false
         type = "lb_cookie"
   }
+
+
 
 
   tags = "${merge(var.tags, map("Name", "${var.appname}-tg"))}"

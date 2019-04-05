@@ -2,7 +2,7 @@
 
 
 #-------------------------------------------------------------
-### internal instance sg
+### internal instance sg aka sg_spg_api_in
 #-------------------------------------------------------------
 resource "aws_security_group_rule" "internal_inst_sg_ingress_self" {
   security_group_id = "${local.internal_inst_sg_id}"
@@ -22,25 +22,27 @@ resource "aws_security_group_rule" "internal_inst_sg_egress_self" {
   self              = true
 }
 
-resource "aws_security_group_rule" "internal_inst_sg_ingress_alb_backend_port" {
+resource "aws_security_group_rule" "internal_inst_sg_ingress_unsigned_soap" {
   security_group_id        = "${local.internal_inst_sg_id}"
   type                     = "ingress"
-  from_port                = "${var.alb_backend_port}"
-  to_port                  = "${var.alb_backend_port}"
+  from_port                = "8989"
+  to_port                  = "8989"
   protocol                 = "tcp"
   source_security_group_id = "${local.internal_lb_sg_id}"
   description              = "${local.common_name}-instance-internal-sg"
 }
 
-resource "aws_security_group_rule" "internal_inst_sg_ingress_alb_http_port" {
+resource "aws_security_group_rule" "internal_inst_sg_ingress_signed_soap" {
   security_group_id        = "${local.internal_inst_sg_id}"
   type                     = "ingress"
-  from_port                = "${var.alb_http_port}"
-  to_port                  = "${var.alb_http_port}"
+  from_port                = "8181"
+  to_port                  = "8181"
   protocol                 = "tcp"
   source_security_group_id = "${local.internal_lb_sg_id}"
   description              = "${local.common_name}-instance-internal-sg"
 }
+
+
 
 
 

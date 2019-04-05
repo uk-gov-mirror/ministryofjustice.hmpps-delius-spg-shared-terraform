@@ -46,6 +46,39 @@ locals {
 
   target_type = "instance"
 
+  #for haproxy, possibly just a tcp check would be better (on port 9001?)
+  #for iso, needs to check on 8181 until certificates are working properly on 9001
+
+    health_check = [
+    {
+      protocol          = "TCP"
+      port              = 8181
+      interval          = 30
+      healthy_threshold = 10
+      #set to 10 to allow spg 10 mins to spin up (can be reduced once sm is pre installed on docker)
+      unhealthy_threshold = 10
+      #path and matcher must be blank for TCP protocol
+      path              = ""
+      matcher           = ""
+    },
+  ]
+
+//  #use http whilst ISO is proxy - this doesn't work as has to be same protocol as NLB
+//  health_check = [
+//    {
+//      protocol          = "HTTP"
+//      path              = "/cxf/"
+//      port              = 8181
+//      interval          = 30
+    //      matcher           = "200"
+//      healthy_threshold = 2
+//      #set to 10 to allow spg 10 mins to spin up (can be reduced once sm is pre installed on docker)
+//      unhealthy_threshold = 10
+//    },
+//  ]
+
+
+
   ########################################################################################################
   #Network Loadbalancer
   ########################################################################################################
@@ -77,12 +110,13 @@ locals {
   ########################################################################################################
   ecs_service_role = "${data.terraform_remote_state.iam.iam_role_ext_ecs_role_arn}"
   service_desired_count = "2"
-  sg_map_ids            = "${data.terraform_remote_state.common.security_group_map_ids}"
+//  sg_map_ids            = "${data.terraform_remote_state.common.security_group_map_ids}"
+  sg_map_ids            = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
     "${local.sg_map_ids["external_inst_sg_id"]}", //for iso
-    "${local.sg_map_ids["internal_inst_sg_id"]}", //for mpx
+//    "${local.sg_map_ids["internal_inst_sg_id"]}", //for mpx
     "${local.sg_map_ids["bastion_in_sg_id"]}",
-    "${local.sg_map_ids["outbound_sg_id"]}",
+//    "${local.sg_map_ids["outbound_sg_id"]}",
   ]
   ########################################################################################################
   #ecs service block device

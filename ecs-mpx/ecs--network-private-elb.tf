@@ -21,7 +21,7 @@ module "create_app_elb" {
   bucket_prefix               = "${local.common_name}-elb"
   interval                    = 60
   listener                    = ["${local.listener}"]
-  health_check                = ["${local.health_check}"]
+  health_check                = ["${local.health_check_elb}"]
 
   tags = "${local.tags}"
 }
@@ -44,4 +44,21 @@ resource "aws_route53_record" "dns_int_entry" {
   }
 }
 
+
+############################################
+# CREATE INT TARGET GROUPS FOR APP PORTS
+############################################
+
+//nlb  target group
+module "create_app_elb_int_targetgrp" {
+  //  source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//targetgroup"
+  source               = "../modules/loadbalancer/nlb/targetgroup"
+  appname              = "${local.common_name}-int"
+  target_port          = "${local.backend_app_port}"
+  target_protocol      = "${local.backend_app_protocol}"
+  vpc_id               = "${local.vpc_id}"
+  target_type          = "${local.target_type}"
+  tags                 = "${local.tags}"
+  health_check         = "${local.health_check_tg}"
+}
 

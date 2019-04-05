@@ -10,6 +10,11 @@ variable "deregistration_delay" {
 
 variable "target_type" {}
 
+variable "health_check" {
+  description = "A health check block"
+  type        = "list"
+}
+
 variable "tags" {
   type = "map"
 }

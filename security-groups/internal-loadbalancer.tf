@@ -1,21 +1,11 @@
 
 #-------------------------------------------------------------
-### internal lb sg
+### internal lb sg aka sg_spg_internal_lb_in
 #-------------------------------------------------------------
 
 
-resource "aws_security_group_rule" "internal_lb_ingress_mutualtls" {
-  security_group_id        = "${local.internal_lb_sg_id}"
-  type                     = "ingress"
-  from_port                = 9001
-  to_port                  = 9001
-  protocol                 = "tcp"
-  source_security_group_id = "${local.external_inst_sg_id}"
-  description              = "${local.common_name}-lb-ingress-mutualtls-9001"
-}
 
-
-
+//8181 for cxf signed soap listener and hawtio
 
 resource "aws_security_group_rule" "internal_lb_ingress_http_8181" {
   security_group_id        = "${local.internal_lb_sg_id}"
@@ -24,9 +14,24 @@ resource "aws_security_group_rule" "internal_lb_ingress_http_8181" {
   to_port                  = 8181
   protocol                 = "tcp"
   source_security_group_id = "${local.external_inst_sg_id}"
-  description              = "${local.common_name}-lb-ingress-http-8181"
+  description              = "from-ext-inst-ingress-http-8181"
 }
 
+
+
+resource "aws_security_group_rule" "internal_lb_egress_http_8181" {
+  security_group_id        = "${local.internal_lb_sg_id}"
+  type                     = "egress"
+  from_port                = 8181
+  to_port                  = 8181
+  protocol                 = "tcp"
+  source_security_group_id = "${local.internal_inst_sg_id}"
+  description              = "to-int-inst-engress-http-8181"
+}
+
+
+
+//8989 for iso to mpx soap proxy
 
 resource "aws_security_group_rule" "internal_lb_ingress_http_8989" {
   security_group_id        = "${local.internal_lb_sg_id}"
@@ -35,12 +40,25 @@ resource "aws_security_group_rule" "internal_lb_ingress_http_8989" {
   to_port                  = 8989
   protocol                 = "tcp"
   source_security_group_id = "${local.external_inst_sg_id}"
-  description              = "${local.common_name}-lb-ingress-http-8989"
+  description              = "from-ext-inst-ingress-http-8989"
+}
+
+
+
+resource "aws_security_group_rule" "internal_lb_egress_http_8989" {
+  security_group_id        = "${local.internal_lb_sg_id}"
+  type                     = "egress"
+  from_port                = 8989
+  to_port                  = 8989
+  protocol                 = "tcp"
+  source_security_group_id = "${local.internal_inst_sg_id}"
+  description              = "to-int-inst-ingress-http-8989"
 }
 
 
 
 
+//internal jms
 
 resource "aws_security_group_rule" "internal_lb_ingress_jms_61616" {
   security_group_id        = "${local.internal_lb_sg_id}"
@@ -49,32 +67,19 @@ resource "aws_security_group_rule" "internal_lb_ingress_jms_61616" {
   to_port                  = 61616
   protocol                 = "tcp"
   source_security_group_id = "${local.external_inst_sg_id}"
-  description              = "${local.common_name}-lb-ingress-jms-61616"
+  description              = "from-ext-inst-ingress-jms-61616"
 }
 
 
 
 
 
-resource "aws_security_group_rule" "internal_lb_sg_egress_alb_backend_port" {
+resource "aws_security_group_rule" "internal_lb_egress_jms_61616" {
   security_group_id        = "${local.internal_lb_sg_id}"
   type                     = "egress"
-  from_port                = "${var.alb_backend_port}"
-  to_port                  = "${var.alb_backend_port}"
+  from_port                = 61616
+  to_port                  = 61616
   protocol                 = "tcp"
   source_security_group_id = "${local.internal_inst_sg_id}"
-  description              = "${local.common_name}"
-}
-
-
-
-## Allow JMS access to SPG GW to from any server in private CIDR block with the port range specified by SPG domain
-resource "aws_security_group_rule" "internal_lb_ingress_jms_private" {
-  security_group_id        = "${local.internal_lb_sg_id}"
-  type                     = "ingress"
-  protocol                 = "tcp"
-  from_port                = "${var.spg_partnergateway_domain_ports["jms_broker"]}"
-  to_port                  = "${var.spg_partnergateway_domain_ports["jms_broker_ssl"]}"
-  cidr_blocks              = ["${local.private_cidr_block}"]
-  description              = "in"
+  description              = "to-int-inst-ingress-jms-61616"
 }
