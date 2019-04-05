@@ -167,8 +167,8 @@ output "private_subnet_ids" {
 }
 
 # Security groups
-output "security_group_map_ids" {
-  value = "${local.security_group_map_ids}"
+output "sg_map_ids" {
+  value = "${local.sg_map_ids}"
 }
 
 # spg hosts
