@@ -23,7 +23,9 @@ locals {
 
   short_environment_name = "${data.terraform_remote_state.common.short_environment_name}"
   app_hostnames          = "${data.terraform_remote_state.common.app_hostnames}"
-  common_name            = "${local.short_environment_name}-${local.app_hostnames["external"]}-${local.app_submodule}"
+  project_name_abbreviated = "${data.terraform_remote_state.common.project_name_abbreviated}"
+  common_name            = "${local.project_name_abbreviated}-${local.app_hostnames["external"]}-${local.app_submodule}"
+//  common_name            = "${local.short_environment_name}-${local.app_hostnames["external"]}-${local.app_submodule}"
   spg_app_name           = "${data.terraform_remote_state.common.spg_app_name}"
   app_name               = "${local.spg_app_name}"
   app_submodule          = "crc"

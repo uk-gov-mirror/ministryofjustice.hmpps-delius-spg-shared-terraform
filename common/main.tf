@@ -16,7 +16,10 @@ provider "aws" {
 locals {
   spg_app_name                   = "${var.spg_app_name}"
   environment_identifier         = "${var.environment_identifier}"
-  short_environment_name   = "${var.short_environment_name}"
+  short_environment_identifier   = "${var.short_environment_identifier}"
+
+  short_environment_name         = "${var.short_environment_name}"
+  project_name_abbreviated       = "${var.project_name_abbreviated}"
 
   common_name                    = "${var.short_environment_name}-${var.spg_app_name}"
   full_common_name               = "${var.environment_identifier}-${var.spg_app_name}"

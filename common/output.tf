@@ -59,32 +59,36 @@ output "common_name" {
 }
 
 output "lb_account_id" {
-  value = "${var.lb_account_id}"
+  value = "${local.lb_account_id}"
 }
 
 output "role_arn" {
-  value = "${var.role_arn}"
+  value = "${local.role_arn}"
 }
 
 output "spg_app_name" {
-  value = "${var.spg_app_name}"
+  value = "${local.spg_app_name}"
 }
 
 output "environment_identifier" {
-  value = "${var.environment_identifier}"
+  value = "${local.environment_identifier}"
 }
 
 output "short_environment_identifier" {
-  value = "${var.short_environment_identifier}"
+  value = "${local.short_environment_identifier}"
 }
 
 output "short_environment_name" {
-  value = "${var.short_environment_name}"
+  value = "${local.short_environment_name}"
 }
 
 
+output "project_name_abbreviated" {
+  value = "${local.project_name_abbreviated}"
+}
+
 output "remote_state_bucket_name" {
-  value = "${var.remote_state_bucket_name}"
+  value = "${local.remote_state_bucket_name}"
 }
 
 output "s3_lb_policy_file" {
