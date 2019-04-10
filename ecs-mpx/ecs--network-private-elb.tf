@@ -32,7 +32,7 @@ module "create_app_elb" {
 # Create INTERNAL route53 entry for spg lb
 ###############################################
 
-resource "aws_route53_record" "dns_int_entry" {
+resource "aws_route53_record" "dns_spg_mpx_int_entry" {
   zone_id = "${local.public_zone_id}"
   name    = "${local.application_endpoint}-${local.app_submodule}-int.${local.external_domain}"
   type    = "A"
@@ -43,6 +43,34 @@ resource "aws_route53_record" "dns_int_entry" {
     evaluate_target_health = false
   }
 }
+
+#jms broker could be moved out of mpx server and onto amazonMQ or other server
+resource "aws_route53_record" "dns_spg_jms_int_entry" {
+  zone_id = "${local.public_zone_id}"
+  name    = "${local.application_endpoint}-jms-int.${local.external_domain}"
+  type    = "A"
+
+  alias {
+    name                   = "${module.create_app_elb.environment_elb_dns_name}"
+    zone_id                = "${module.create_app_elb.environment_elb_zone_id}"
+    evaluate_target_health = false
+  }
+}
+
+
+#gw-int-direct WAS a manual dns record pointing at a single mpx instance. This should be removed once all apps in non prod have been rebuilt with correct value (spg-jms-int)
+resource "aws_route53_record" "dns_spg_gw_int_direct_entry_TEMPORARY" {
+  zone_id = "${local.public_zone_id}"
+  name    = "gw-int-direct.${local.external_domain}"
+  type    = "A"
+
+  alias {
+    name                   = "${module.create_app_elb.environment_elb_dns_name}"
+    zone_id                = "${module.create_app_elb.environment_elb_zone_id}"
+    evaluate_target_health = false
+  }
+}
+
 
 
 ############################################
