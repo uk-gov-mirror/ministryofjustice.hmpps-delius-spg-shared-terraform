@@ -21,7 +21,7 @@ module "create_app_elb" {
   bucket_prefix               = "${local.common_name}-elb"
   interval                    = 60
   listener                    = ["${local.listener}"]
-  health_check                = ["${local.health_check}"]
+  health_check                = ["${local.health_check_elb}"]
 
   tags = "${local.tags}"
 }
@@ -32,7 +32,7 @@ module "create_app_elb" {
 # Create INTERNAL route53 entry for spg lb
 ###############################################
 
-resource "aws_route53_record" "dns_int_entry" {
+resource "aws_route53_record" "dns_crc_int_entry" {
   zone_id = "${local.public_zone_id}"
   name    = "${local.application_endpoint}-${local.app_submodule}-int.${local.external_domain}"
   type    = "A"

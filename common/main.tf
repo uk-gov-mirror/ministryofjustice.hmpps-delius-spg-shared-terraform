@@ -24,7 +24,7 @@ locals {
   common_name                    = "${var.short_environment_name}-${var.spg_app_name}"
   full_common_name               = "${var.environment_identifier}-${var.spg_app_name}"
 
-  hmpps_asset_name_prefix        = "${var.project_name_abbreviated}"
+  hmpps_asset_name_prefix        = "${var.short_environment_name}-${var.project_name_abbreviated}"
 
   app_hostnames = {
     internal = "${var.spg_app_name}-int"

@@ -133,7 +133,7 @@ locals {
   service_desired_count = "10" # maxed out on the basis the serive count is decoupled from the ASG
   sg_map_ids            = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
-//    "${local.sg_map_ids["external_inst_sg_id"]}", //for iso
+//    "${local.sg_map_ids["external_inst_sg_id"]}", //for iso and crc stub
     "${local.sg_map_ids["internal_inst_sg_id"]}", //for mpx
     "${local.sg_map_ids["bastion_in_sg_id"]}",
     "${local.sg_map_ids["outbound_sg_id"]}",
