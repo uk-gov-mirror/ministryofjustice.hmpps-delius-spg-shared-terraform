@@ -93,7 +93,7 @@ locals {
   az_lb_eip_allocation_ids = [
     "${data.terraform_remote_state.persistent_eip.spg_az1_lb_eip.allocation_id}",
     "${data.terraform_remote_state.persistent_eip.spg_az2_lb_eip.allocation_id}",
-    "${data.terraform_remote_state.persistent_spg.spg_az3_lb_eip.allocation_id}",
+    "${data.terraform_remote_state.persistent_eip.spg_az3_lb_eip.allocation_id}",
   ]
 
   #for dns
