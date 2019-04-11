@@ -18,13 +18,16 @@ locals {
   environment_identifier         = "${var.environment_identifier}"
   short_environment_identifier   = "${var.short_environment_identifier}"
 
+  #as of 11/04/2019 in env/common/common.properties, env name also has project name in it
+  #export TG_SHORT_ENVIRONMENT_NAME="${TG_PROJECT_NAME_ABBREVIATED}-${TG_ENVIRONMENT_TYPE}"
+
   short_environment_name         = "${var.short_environment_name}"
   project_name_abbreviated       = "${var.project_name_abbreviated}"
 
   common_name                    = "${var.short_environment_name}-${var.spg_app_name}"
   full_common_name               = "${var.environment_identifier}-${var.spg_app_name}"
 
-  hmpps_asset_name_prefix        = "${var.short_environment_name}-${var.project_name_abbreviated}"
+  hmpps_asset_name_prefix        = "${var.short_environment_name}"
 
   app_hostnames = {
     internal = "${var.spg_app_name}-int"
