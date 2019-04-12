@@ -55,7 +55,7 @@ resource "aws_route53_record" "dns_ext_entry" {
 module "create_app_nlb_ext_targetgrp" {
   //  source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//targetgroup"
   source               = "../modules/loadbalancer/nlb/targetgroup"
-  appname              = "${local.common_name}-ext"
+  appname              = "${local.common_name}"
   target_port          = "${local.backend_app_port}"
   target_protocol      = "${local.backend_app_protocol}"
   vpc_id               = "${local.vpc_id}"
