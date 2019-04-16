@@ -5,7 +5,7 @@
 
 
 
-//8181 for cxf signed soap listener and hawtio
+//8181 for cxf signed soap listener and hawtio from external loadbalancer
 
 resource "aws_security_group_rule" "internal_lb_ingress_http_8181" {
   security_group_id        = "${local.internal_lb_sg_id}"
@@ -18,7 +18,7 @@ resource "aws_security_group_rule" "internal_lb_ingress_http_8181" {
 }
 
 
-
+//8181 for internal loadbalancer to innstance
 resource "aws_security_group_rule" "internal_lb_egress_http_8181" {
   security_group_id        = "${local.internal_lb_sg_id}"
   type                     = "egress"
@@ -31,8 +31,7 @@ resource "aws_security_group_rule" "internal_lb_egress_http_8181" {
 
 
 
-//8989 for iso to mpx soap proxy
-
+//8989 for iso to mpx soap proxy (no haproxy)
 resource "aws_security_group_rule" "internal_lb_ingress_http_8989" {
   security_group_id        = "${local.internal_lb_sg_id}"
   type                     = "ingress"
@@ -44,7 +43,7 @@ resource "aws_security_group_rule" "internal_lb_ingress_http_8989" {
 }
 
 
-
+//8989 from internal lb to instance
 resource "aws_security_group_rule" "internal_lb_egress_http_8989" {
   security_group_id        = "${local.internal_lb_sg_id}"
   type                     = "egress"
@@ -58,22 +57,28 @@ resource "aws_security_group_rule" "internal_lb_egress_http_8989" {
 
 
 
-//internal jms
 
-resource "aws_security_group_rule" "internal_lb_ingress_jms_61616" {
+
+
+
+
+
+
+## Allow JMS access to SPG GW to from any server in private CIDR block with the port range specified by SPG domain
+resource "aws_security_group_rule" "internal_inst_ingress_jms_private" {
   security_group_id        = "${local.internal_lb_sg_id}"
   type                     = "ingress"
-  from_port                = 61616
-  to_port                  = 61616
   protocol                 = "tcp"
-  source_security_group_id = "${local.external_inst_sg_id}"
-  description              = "from-ext-inst-ingress-jms-61616"
+  from_port                = "${var.spg_partnergateway_domain_ports["jms_broker"]}"
+  to_port                  = "${var.spg_partnergateway_domain_ports["jms_broker_ssl"]}"
+  cidr_blocks              = ["${local.private_cidr_block}"]
+  description              = "in"
 }
 
 
 
 
-
+//jms from internal loadbalancer to instance
 resource "aws_security_group_rule" "internal_lb_egress_jms_61616" {
   security_group_id        = "${local.internal_lb_sg_id}"
   type                     = "egress"
