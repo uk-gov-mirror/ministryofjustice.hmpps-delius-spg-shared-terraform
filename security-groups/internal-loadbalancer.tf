@@ -65,7 +65,7 @@ resource "aws_security_group_rule" "internal_lb_egress_http_8989" {
 
 
 ## Allow JMS access to SPG GW to from any server in private CIDR block with the port range specified by SPG domain
-resource "aws_security_group_rule" "internal_inst_ingress_jms_private" {
+resource "aws_security_group_rule" "internal_lb_ingress_jms_private" {
   security_group_id        = "${local.internal_lb_sg_id}"
   type                     = "ingress"
   protocol                 = "tcp"
@@ -79,11 +79,11 @@ resource "aws_security_group_rule" "internal_inst_ingress_jms_private" {
 
 
 //jms from internal loadbalancer to instance
-resource "aws_security_group_rule" "internal_lb_egress_jms_61616" {
+resource "aws_security_group_rule" "internal_lb_egress_jms_61616_7" {
   security_group_id        = "${local.internal_lb_sg_id}"
   type                     = "egress"
-  from_port                = 61616
-  to_port                  = 61616
+  from_port                = "${var.spg_partnergateway_domain_ports["jms_broker"]}"
+  to_port                  = "${var.spg_partnergateway_domain_ports["jms_broker_ssl"]}"
   protocol                 = "tcp"
   source_security_group_id = "${local.internal_inst_sg_id}"
   description              = "to-int-inst-ingress-jms-61616"
