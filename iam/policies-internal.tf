@@ -1,0 +1,54 @@
+#-------------------------------------------------------------
+### INTERNAL IAM POLICES FOR ECS SERVICES
+#-------------------------------------------------------------
+
+data "template_file" "iam_policy_ecs_int" {
+  template = "${local.ecs_role_policy_file}"
+
+  vars {
+    aws_lb_arn = "*"
+  }
+}
+
+module "create-iam-ecs-role-int" {
+  source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//role"
+  rolename   = "${local.common_name}-int-ecs-svc"
+  policyfile = "${local.ecs_policy_file}"
+}
+
+module "create-iam-ecs-policy-int" {
+  source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//rolepolicy"
+  policyfile = "${data.template_file.iam_policy_ecs_int.rendered}"
+  rolename   = "${module.create-iam-ecs-role-int.iamrole_name}"
+}
+
+#-------------------------------------------------------------
+### INTERNAL IAM POLICES FOR EC2 RUNNING ECS SERVICES
+#-------------------------------------------------------------
+
+data "template_file" "iam_policy_app_int" {
+  template = "${local.ec2_internal_policy_file}"
+
+  vars {
+    s3-config-bucket   = "${local.s3-config-bucket}"
+    app_role_arn       = "${module.create-iam-app-role-int.iamrole_arn}"
+    backups-bucket     = "${local.environment_identifier}-${local.backups-bucket-name}"
+  }
+}
+
+module "create-iam-app-role-int" {
+  source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=pre-shared-vpc//modules//iam//role"
+  rolename   = "${local.common_name}-int-ec2"
+  policyfile = "${local.ec2_policy_file}"
+}
+
+module "create-iam-instance-profile-int" {
+  source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=pre-shared-vpc//modules//iam//instance_profile"
+  role   = "${module.create-iam-app-role-int.iamrole_name}"
+}
+
+module "create-iam-app-policy-int" {
+  source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=pre-shared-vpc//modules//iam//rolepolicy"
+  policyfile = "${data.template_file.iam_policy_app_int.rendered}"
+  rolename   = "${module.create-iam-app-role-int.iamrole_name}"
+}

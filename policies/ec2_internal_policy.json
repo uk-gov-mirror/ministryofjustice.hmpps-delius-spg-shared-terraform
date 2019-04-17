@@ -10,7 +10,10 @@
                 "ecs:Poll",
                 "ecs:RegisterContainerInstance",
                 "ecs:Submit*",
-                "ecs:StartTelemetrySession"
+                "ecs:StartTelemetrySession",
+                "ecr:GetAuthorizationToken",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer"
             ],
             "Resource": [
                 "*"
@@ -58,7 +61,10 @@
             ],
             "Resource": [
                 "arn:aws:s3:::${s3-config-bucket}",
-                "arn:aws:s3:::${s3-config-bucket}/*"
+                "arn:aws:s3:::${s3-config-bucket}/*",
+                "arn:aws:s3:::${backups-bucket}",
+                "arn:aws:s3:::${backups-bucket}/*"
+
             ]
         },
         {

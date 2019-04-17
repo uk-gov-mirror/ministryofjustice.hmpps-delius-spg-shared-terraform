@@ -119,7 +119,7 @@ locals {
     "${local.sg_map_ids["external_inst_sg_id"]}", //for iso
 //    "${local.sg_map_ids["internal_inst_sg_id"]}", //for mpx
     "${local.sg_map_ids["bastion_in_sg_id"]}",
-//    "${local.sg_map_ids["outbound_sg_id"]}",
+    "${local.sg_map_ids["outbound_sg_id"]}",
   ]
   ########################################################################################################
   #ecs service block device
