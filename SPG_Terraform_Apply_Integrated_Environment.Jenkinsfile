@@ -133,7 +133,7 @@ pipeline {
           description: 'Branch for hmpps-env-configs'
         )
         string(
-          name: 'spg_branch',
+          name: 'spg_terraform_branch',
           defaultValue: '19-create-crcstubs-as-seperate-asg',
           description: 'Branch for hmpps-delius-spg-shared-terraform'
         )
@@ -168,7 +168,7 @@ pipeline {
                   git url: 'git@github.com:ministryofjustice/' + project.network, branch: project.network_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
                 }
                 dir( project.spg ) {
-                  git url: 'git@github.com:ministryofjustice/' + project.spg, branch: params.spg_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
+                  git url: 'git@github.com:ministryofjustice/' + project.spg, branch: params.spg_terraform_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
                 }
 
                 prepare_env()
