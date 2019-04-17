@@ -13,3 +13,4 @@ output "ecr_repository_arn" {
 output "ecr_repository_name" {
   value = "${module.ecr.repository_name}"
 }
+

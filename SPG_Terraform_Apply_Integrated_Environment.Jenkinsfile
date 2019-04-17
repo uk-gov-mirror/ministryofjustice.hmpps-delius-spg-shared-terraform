@@ -1,10 +1,7 @@
-#NOTE - there is currently a custom jenkins pipeline job that mirrors this, but with parameters
-#https://jenkins.engineering-dev.probation.hmpps.dsd.io/job/SPG/job/SPG_Terraform_Apply_Integrated_Environment/configure
+#this file represents an inline jenkins pipeline for easy testing without messing around with git push/pulls
 
 def project = [:]
-project.config_branch = 'delius-test__spg'
 project.network_branch = 'master'
-project.spg_branch = 'feature/issue-6-image-push-not-executable'
 project.config    = 'hmpps-env-configs'
 project.network   = 'hmpps-delius-network-terraform'
 project.dcore     = 'hmpps-delius-core-terraform'
@@ -14,16 +11,19 @@ project.spg       = 'hmpps-delius-spg-shared-terraform'
 
 def environments = [
 
-  '-- choose env--',
+  '-- choose env --',
   'delius-core-sandpit',
   'delius-core-dev',
   'delius-test',
   'delius-po-test1',
   'delius-po-test2',
   'delius-training-test',
+  'delius-training',
+
 ]
 
 def prepare_env() {
+
     sh '''
     #!/usr/env/bin bash
     docker pull mojdigitalstudio/hmpps-terraform-builder:latest
@@ -127,6 +127,16 @@ pipeline {
           choices: environments,
           description: 'Select environment for creation or updating.'
         )
+        string(
+          name: 'config_branch',
+          defaultValue: '97-update-potest2-enviro',
+          description: 'Branch for hmpps-env-configs'
+        )
+        string(
+          name: 'spg_branch',
+          defaultValue: '19-create-crcstubs-as-seperate-asg',
+          description: 'Branch for hmpps-delius-spg-shared-terraform'
+        )
     }
 
     tools {
@@ -136,18 +146,29 @@ pipeline {
 
     stages {
 
+
+  stage ('Validate Environment') {
+            when {
+                expression { params.environment_name == '-- choose env --' }
+            }
+            steps {
+                 error('no environment chosen')
+            }
+        }
+
         stage('setup') {
             steps {
+
                 slackSend(message: "Build started on \"${environment_name}\" - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL.replace(':8080','')}|Open>)")
 
                 dir( project.config ) {
-                  git url: 'git@github.com:ministryofjustice/' + project.config, branch: project.config_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
+                  git url: 'git@github.com:ministryofjustice/' + project.config, branch: params.config_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
                 }
                 dir( project.network ) {
                   git url: 'git@github.com:ministryofjustice/' + project.network, branch: project.network_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
                 }
                 dir( project.spg ) {
-                  git url: 'git@github.com:ministryofjustice/' + project.spg, branch: project.spg_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
+                  git url: 'git@github.com:ministryofjustice/' + project.spg, branch: params.spg_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
                 }
 
                 prepare_env()
@@ -186,24 +207,43 @@ pipeline {
           }
         }
 
-        stage('Delius | SPG | ECS-SPG') {
+        stage('Delius | SPG | ECS-SPG-CRC') {
           steps {
             script {
-              do_terraform(project.config, environment_name, project.spg, 'ecs-spg')
+              do_terraform(project.config, environment_name, project.spg, 'ecs-crc')
             }
           }
         }
 
+
+        stage('Delius | SPG | ECS-SPG-MPX') {
+          steps {
+            script {
+              do_terraform(project.config, environment_name, project.spg, 'ecs-mpx')
+            }
+          }
+        }
+
+
+        stage('Delius | SPG | ECS-SPG-ISO') {
+          steps {
+            script {
+              do_terraform(project.config, environment_name, project.spg, 'ecs-iso')
+            }
+          }
+        }
+
+
         stage('Delius | SPG | push-spg-docker') {
             steps {
-                sh "NON_CONTAINER_WORKING_DIR=${project.spg};sh ./${project.spg}/scripts/image_push.sh ${project.config_branch} ${environment_name}"
+                  sh "NON_CONTAINER_WORKING_DIR=${project.spg};sh ./${project.spg}/scripts/image_push.sh ${params.config_branch} ${environment_name}"
             }
         }
 
 
         stage('Delius | SPG | prune-docker-fs') {
             steps {
-                sh "sh ./${project.spg}/scripts/prune_docker_fs.sh"
+                   sh "sh ./${project.spg}/scripts/prune_docker_fs.sh"
             }
         }
     }

@@ -1,3 +1,5 @@
+#this file represents an inline jenkins pipeline for easy testing without messing around with git push/pulls
+
 def project = [:]
 project.network_branch = 'master'
 project.config    = 'hmpps-env-configs'
@@ -11,12 +13,13 @@ def environments = [
 
   '-- choose env --',
   'delius-core-sandpit',
-  // 'delius-core-playpit',
   'delius-core-dev',
   'delius-test',
   'delius-po-test1',
   'delius-po-test2',
   'delius-training-test',
+  'delius-training',
+
 ]
 
 def prepare_env() {
@@ -233,14 +236,14 @@ pipeline {
 
         stage('Delius | SPG | push-spg-docker') {
             steps {
-                sh "NON_CONTAINER_WORKING_DIR=${project.spg};sh ./${project.spg}/scripts/image_push.sh ${params.config_branch} ${environment_name}"
+                  sh "NON_CONTAINER_WORKING_DIR=${project.spg};sh ./${project.spg}/scripts/image_push.sh ${params.config_branch} ${environment_name}"
             }
         }
 
 
         stage('Delius | SPG | prune-docker-fs') {
             steps {
-                sh "sh ./${project.spg}/scripts/prune_docker_fs.sh"
+                   sh "sh ./${project.spg}/scripts/prune_docker_fs.sh"
             }
         }
     }
