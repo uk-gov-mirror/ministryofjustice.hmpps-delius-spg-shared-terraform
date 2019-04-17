@@ -1,4 +1,4 @@
-#this file represents an inline jenkins pipeline for easy testing without messing around with git push/pulls
+// this file represents an inline jenkins pipeline for easy testing without messing around with git push/pulls
 
 def project = [:]
 project.network_branch = 'master'
