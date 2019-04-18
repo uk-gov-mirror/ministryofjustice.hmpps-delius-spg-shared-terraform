@@ -77,7 +77,7 @@ def apply_submodule(config_dir, env_name, git_project_dir, submodule_name) {
 def confirm() {
     if (project.confirm_steps == false)
     {
-        env.Continue = true
+        env.Continue = "true"
     }
     else
     {
@@ -241,7 +241,7 @@ pipeline {
 
         stage('Delius | SPG | push-spg-docker') {
             steps {
-            
+
                   sh "NON_CONTAINER_WORKING_DIR=${project.spg};sh ./${project.spg}/scripts/image_push.sh ${params.config_branch} ${environment_name}"
             }
         }
