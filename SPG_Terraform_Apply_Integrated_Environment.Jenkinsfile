@@ -1,13 +1,11 @@
-// this file represents an inline jenkins pipeline for easy testing without messing around with git push/pulls
-
 def project = [:]
-project.network_branch = 'master'
-project.config    = 'hmpps-env-configs'
-project.network   = 'hmpps-delius-network-terraform'
-project.dcore     = 'hmpps-delius-core-terraform'
-project.alfresco  = 'hmpps-delius-alfresco-shared-terraform'
-project.spg       = 'hmpps-delius-spg-shared-terraform'
-//project.ndmis     = 'hmpps-ndmis-terraform' //
+project.network_branch  = 'master'
+project.config          = 'hmpps-env-configs'
+project.network         = 'hmpps-delius-network-terraform'
+project.dcore           = 'hmpps-delius-core-terraform'
+project.alfresco        = 'hmpps-delius-alfresco-shared-terraform'
+project.spg             = 'hmpps-delius-spg-shared-terraform'
+project.confirm_steps   = false;
 
 def environments = [
 
@@ -77,22 +75,24 @@ def apply_submodule(config_dir, env_name, git_project_dir, submodule_name) {
 }
 
 def confirm() {
-    try {
-        timeout(time: 15, unit: 'MINUTES') {
-            env.Continue = input(
-                id: 'Proceed1', message: 'Apply plan?', parameters: [
-                    [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Apply Terraform']
-                ]
-            )
-        }
-    } catch(err) { // timeout reached or input false
-        def user = err.getCauses()[0].getUser()
-        env.Continue = false
-        if('SYSTEM' == user.toString()) { // SYSTEM means timeout.
-            echo "Timeout"
-            error("Build failed because confirmation timed out")
-        } else {
-            echo "Aborted by: [${user}]"
+    if (project.confirm_steps == true) {
+        try {
+            timeout(time: 15, unit: 'MINUTES') {
+                env.Continue = input(
+                    id: 'Proceed1', message: 'Apply plan?', parameters: [
+                        [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Apply Terraform']
+                    ]
+                )
+            }
+        } catch(err) { // timeout reached or input false
+            def user = err.getCauses()[0].getUser()
+            env.Continue = false
+            if('SYSTEM' == user.toString()) { // SYSTEM means timeout.
+                echo "Timeout"
+                error("Build failed because confirmation timed out")
+            } else {
+                echo "Aborted by: [${user}]"
+            }
         }
     }
 }

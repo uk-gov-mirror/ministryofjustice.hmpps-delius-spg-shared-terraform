@@ -40,6 +40,7 @@ pipeline {
         stage ('push-spg-docker') {
             steps {
                 sh 'sh scripts/image_push.sh'
+                sh "NON_CONTAINER_WORKING_DIR=${project.spg};sh ./${project.spg}/scripts/image_push.sh ${params.config_branch} ${environment_name}"
             }
         }
 
