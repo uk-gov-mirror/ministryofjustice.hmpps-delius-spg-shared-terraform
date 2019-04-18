@@ -75,12 +75,6 @@ def apply_submodule(config_dir, env_name, git_project_dir, submodule_name) {
 }
 
 def confirm() {
-    if (project.confirm_steps == false)
-    {
-        env.Continue = "true"
-    }
-    else
-    {
         try {
             timeout(time: 15, unit: 'MINUTES') {
                 env.Continue = input(
@@ -99,15 +93,14 @@ def confirm() {
                 echo "Aborted by: [${user}]"
             }
         }
-    }
 }
 
 def do_terraform(config_dir, env_name, git_project, component) {
     if (plan_submodule(config_dir, env_name, git_project, component) == "2") {
-        confirm()
-        if (env.Continue == "true") {
+        //confirm()
+        //if (env.Continue == "true") {
             apply_submodule(config_dir, env_name, git_project, component)
-        }
+        //}
     }
     else {
         env.Continue = true
