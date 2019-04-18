@@ -5,7 +5,7 @@ project.network         = 'hmpps-delius-network-terraform'
 project.dcore           = 'hmpps-delius-core-terraform'
 project.alfresco        = 'hmpps-delius-alfresco-shared-terraform'
 project.spg             = 'hmpps-delius-spg-shared-terraform'
-project.confirm_steps   = false;
+
 
 def environments = [
 
@@ -97,9 +97,12 @@ def confirm() {
 
 def do_terraform(config_dir, env_name, git_project, component) {
     if (plan_submodule(config_dir, env_name, git_project, component) == "2") {
+        //skip confirm steps
         //confirm()
         //if (env.Continue == "true") {
+
             apply_submodule(config_dir, env_name, git_project, component)
+
         //}
     }
     else {
