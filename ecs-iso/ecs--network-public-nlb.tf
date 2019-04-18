@@ -102,7 +102,7 @@ data "aws_network_interface" "from_nlb_arn_suffix_per_subnet" {
 
 
 #using NLB, have to specify the CIDR blocks that will come through the NLB
-#CIDR will include, POs, the LB/VPC, pauls test address
+#CIDR will include, POs, the LB/VPC
 
 #-------------------------------------------------------------
 ### port 9001
@@ -114,6 +114,6 @@ resource "aws_security_group_rule" "external_inst_ingress_mutualtls" {
   to_port                  = 65535
   protocol                 = "tcp"
   #  protocol          = -1
-  cidr_blocks              = ["${formatlist("%s/32",flatten(data.aws_network_interface.from_nlb_arn_suffix_per_subnet.*.private_ips))}","81.154.113.115/32"] #pauls home ip for testing 81.154.113.115
+  cidr_blocks              = ["${formatlist("%s/32",flatten(data.aws_network_interface.from_nlb_arn_suffix_per_subnet.*.private_ips))}"]
   description              = "${local.common_name}-external-ingress-mutualtls-from-lbs-and-paul"
 }
