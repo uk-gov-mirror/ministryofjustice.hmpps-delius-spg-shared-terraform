@@ -14,7 +14,7 @@ output "iam_role_ext_ecs_role_name" {
 
 # APP ROLE
 output "iam_policy_ext_app_role_arn" {
-  value = "${module.create-iam-app-role-ext.iamrole_name}"
+  value = "${module.create-iam-app-role-ext.iamrole_arn}"
 }
 
 output "iam_policy_ext_app_role_name" {
@@ -42,7 +42,7 @@ output "iam_role_int_ecs_role_name" {
 
 # APP ROLE
 output "iam_policy_int_app_role_arn" {
-  value = "${module.create-iam-app-role-int.iamrole_name}"
+  value = "${module.create-iam-app-role-int.iamrole_arn}"
 }
 
 output "iam_policy_int_app_role_name" {
