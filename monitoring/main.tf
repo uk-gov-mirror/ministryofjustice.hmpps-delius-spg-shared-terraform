@@ -19,6 +19,8 @@ locals {
   short_environment_name = "${data.terraform_remote_state.common.short_environment_name}"
   app_hostnames          = "${data.terraform_remote_state.common.app_hostnames}"
   project_name_abbreviated = "${data.terraform_remote_state.common.project_name_abbreviated}"
+  spg_app_name = "${data.terraform_remote_state.common.spg_app_name}"
+
 
 
 

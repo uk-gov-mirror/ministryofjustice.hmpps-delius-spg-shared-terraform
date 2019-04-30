@@ -47,6 +47,8 @@ variable "alarms_enabled" {
 
 variable "build_tag" {
   description = "Semantic version number"
+  default ="0.0"
+
 }
 
 variable "tags" {
