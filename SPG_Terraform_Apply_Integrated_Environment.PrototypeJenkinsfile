@@ -1,13 +1,13 @@
 //this file represents an inline jenkins pipeline for easy testing without messing around with git push/pulls
 
 def project = [:]
-project.network_branch = 'master'
-project.config    = 'hmpps-env-configs'
-project.network   = 'hmpps-delius-network-terraform'
-project.dcore     = 'hmpps-delius-core-terraform'
-project.alfresco  = 'hmpps-delius-alfresco-shared-terraform'
-project.spg       = 'hmpps-delius-spg-shared-terraform'
-//project.ndmis     = 'hmpps-ndmis-terraform' //
+project.network_branch  = 'master'
+project.config          = 'hmpps-env-configs'
+project.network         = 'hmpps-delius-network-terraform'
+project.dcore           = 'hmpps-delius-core-terraform'
+project.alfresco        = 'hmpps-delius-alfresco-shared-terraform'
+project.spg             = 'hmpps-delius-spg-shared-terraform'
+
 
 def environments = [
 
@@ -29,6 +29,22 @@ def prepare_env() {
     docker pull mojdigitalstudio/hmpps-terraform-builder:latest
     '''
 }
+
+
+
+
+
+def getBuildTag() {
+    sh '''
+    #!/bin/bash +x
+    . ./functions.sh
+    tag
+    read_tag
+    '''
+    env.buildTag = sh (script: 'cat semvertag.txt', returnStdout: true).trim()
+}
+
+
 
 def plan_submodule(config_dir, env_name, git_project_dir, submodule_name) {
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
@@ -99,10 +115,13 @@ def confirm() {
 
 def do_terraform(config_dir, env_name, git_project, component) {
     if (plan_submodule(config_dir, env_name, git_project, component) == "2") {
-        confirm()
-        if (env.Continue == "true") {
+        //skip confirm steps
+        //confirm()
+        //if (env.Continue == "true") {
+
             apply_submodule(config_dir, env_name, git_project, component)
-        }
+
+        //}
     }
     else {
         env.Continue = true
@@ -175,6 +194,31 @@ pipeline {
             }
         }
 
+
+        stage('setup') {
+            steps {
+//                checkout scm
+                sh '''
+                  #!/bin/bash +x
+                  virtualenv .venv
+                  . .venv/bin/activate
+                  pip install git+https://github.com/ministryofjustice/semvertag.git@1.1.0
+                  git fetch --tags # Fetch once for subsiquent stages
+                '''
+            }
+        }
+
+        stage('Tag repository') {
+            steps {
+                script {
+                    getBuildTag()
+                }
+            }
+        }
+
+
+
+
         stage('Delius | SPG | Common') {
           steps {
             script {
@@ -182,6 +226,16 @@ pipeline {
             }
           }
         }
+
+
+        stage('Delius | SPG | Montioring') {
+          steps {
+            script {
+              do_terraform(project.config, environment_name, project.spg, 'monitoring')
+            }
+          }
+        }
+
 
         stage('Delius | SPG | IAM') {
           steps {

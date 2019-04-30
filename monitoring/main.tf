@@ -12,12 +12,19 @@ provider "aws" {
 # Shared data and constants
 
 locals {
-  db_name           = "${var.project_name}${var.environment_type}"
-  environment_name  = "${var.project_name}-${var.environment_type}"
+//  db_name           = "${var.project_name}${var.environment_type}"
+//  environment_name  = "${var.project_name}-${var.environment_type}"
   tags              = "${merge(var.tags, map("Build", "${var.build_tag}"))}"
-  db_cpu_alarm      = "80"
-  db_storage_alarm  = "${var.db_storage * 0.2}"
-  db_memory_alarm   = "${var.db_memory * 0.1}"
-  redis_cpu_alarm   = "90"
-  redis_swap_alarm  = "50000000"
+
+  short_environment_name = "${data.terraform_remote_state.common.short_environment_name}"
+  app_hostnames          = "${data.terraform_remote_state.common.app_hostnames}"
+  project_name_abbreviated = "${data.terraform_remote_state.common.project_name_abbreviated}"
+
+
+
+  //  db_cpu_alarm      = "80"
+//  db_storage_alarm  = "${var.db_storage * 0.2}"
+//  db_memory_alarm   = "${var.db_memory * 0.1}"
+//  redis_cpu_alarm   = "90"
+//  redis_swap_alarm  = "50000000"
 }
