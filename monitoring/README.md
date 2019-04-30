@@ -1,0 +1,1 @@
+The VCMS application is implemented as an Elastic Beanstalk application, providing load balancing and autoscaling 

@@ -184,6 +184,16 @@ pipeline {
           }
         }
 
+
+        stage('Delius | SPG | Montioring') {
+          steps {
+            script {
+              do_terraform(project.config, environment_name, project.spg, 'monitoring')
+            }
+          }
+        }
+
+
         stage('Delius | SPG | IAM') {
           steps {
             script {
