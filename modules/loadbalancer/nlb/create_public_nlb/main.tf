@@ -7,8 +7,9 @@ resource "aws_lb" "environment" {
 
   access_logs {
     bucket = "${var.s3_bucket_name}"
-    prefix = "${var.lb_name}-lb"
-    enabled = "${var.logs_enabled}"
+    prefix = "${var.lb_name}-nlb"
+    enabled = false
+    //TODO hardcoded to false as was getting permissions errors "${var.logs_enabled}"
   }
 
   tags = "${merge(var.tags, map("Name", "${var.lb_name}-lb"))}"

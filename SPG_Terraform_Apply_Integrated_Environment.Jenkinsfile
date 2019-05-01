@@ -185,7 +185,7 @@ pipeline {
         }
 
 
-        stage('Delius | SPG | Montioring') {
+        stage('Delius | SPG | Monitoring') {
           steps {
             script {
               do_terraform(project.config, environment_name, project.spg, 'monitoring')
