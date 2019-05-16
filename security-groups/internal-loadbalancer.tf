@@ -57,7 +57,27 @@ resource "aws_security_group_rule" "internal_lb_egress_http_8989" {
 
 
 
+resource "aws_security_group_rule" "internal_lb_ingress_ssh_2222" {
+  security_group_id        = "${local.internal_lb_sg_id}"
+  type                     = "ingress"
+  from_port                = 2222
+  to_port                  = 2222
+  protocol                 = "tcp"
+  cidr_blocks              = ["${data.terraform_remote_state.vpc.eng_vpc_cidr}"]
+  description              = "from-engineering-ssh-2222"
+}
 
+
+//8989 from internal lb to instance
+resource "aws_security_group_rule" "internal_lb_egress_ssh_2222" {
+  security_group_id        = "${local.internal_lb_sg_id}"
+  type                     = "egress"
+  from_port                = 2222
+  to_port                  = 2222
+  protocol                 = "tcp"
+  source_security_group_id = "${local.internal_inst_sg_id}"
+  description              = "to-int-inst-ingress-ssh-2222"
+}
 
 
 
