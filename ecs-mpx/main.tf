@@ -136,7 +136,7 @@ locals {
   #ecs service - app service
   ########################################################################################################
   ecs_service_role = "${data.terraform_remote_state.iam.iam_role_ext_ecs_role_arn}"
-  service_desired_count = "10" # maxed out on the basis the serive count is decoupled from the ASG
+  service_desired_count = "3" # maxed out on the basis the serive count is decoupled from the ASG
   sg_map_ids            = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
 //    "${local.sg_map_ids["external_inst_sg_id"]}", //for iso and crc stub
@@ -164,9 +164,9 @@ locals {
   ########################################################################################################
   #ecs asg
   ########################################################################################################
-  asg_desired = "1"
-  asg_max = "1"
-  asg_min = "1"
+  asg_desired = "3"
+  asg_max = "3"
+  asg_min = "3"
 
   ########################################################################################################
   #ecs task definition
