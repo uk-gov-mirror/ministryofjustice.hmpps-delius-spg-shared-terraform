@@ -62,7 +62,8 @@ locals {
   backend_timeout        = "60"
   external_domain        = "${data.terraform_remote_state.common.external_domain}"
   public_zone_id         = "${data.terraform_remote_state.common.public_zone_id}"
-  int_lb_security_groups = "${local.sg_map_ids["internal_lb_sg_id"]}"
+  int_lb_security_groups = ["${local.sg_map_ids["internal_lb_sg_id"]}",
+                            "${local.sg_map_ids["bastion_in_sg_id"]}"]
 
   listener = [
     {
