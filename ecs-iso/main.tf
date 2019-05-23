@@ -7,8 +7,8 @@ provider "aws" {
   region  = "${var.region}"
   version = ">= 2.1.0"
 
-  #2.1.0 needed for ecs elb graceperiod, which is set in the local elb module
-  #version                                  = "~> 1.16"
+  #2.1.0 needed for ecs elb graceperiod, is set in the local elb module
+  #version = "~> 1.16"
 }
 
 ####################################################
@@ -104,16 +104,19 @@ locals {
   ########################################################################################################
 
   ########################################################################################################
-  #ecs service -  log group
+  #ecs asg
   ########################################################################################################
-  cloudwatch_log_retention = "${var.cloudwatch_log_retention}"
+
+  asg_desired = "1"
+  asg_max     = "1"
+  asg_min     = "1"
 
 
   ########################################################################################################
   #ecs service - app service
   ########################################################################################################
   ecs_service_role = "${data.terraform_remote_state.iam.iam_role_ext_ecs_role_arn}"
-  service_desired_count = "3"
+  service_desired_count = "1"
   sg_map_ids            = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
     "${local.sg_map_ids["external_inst_sg_id"]}", //for iso
@@ -128,9 +131,7 @@ locals {
   ebs_encrypted   = "true"
   ebs_volume_size = "50"
   ebs_volume_type = "standard"
-
-  volume_size     = "50"
-
+  volume_size = "50"
   ########################################################################################################
   #ecs launch config
   ########################################################################################################
@@ -139,14 +140,6 @@ locals {
   instance_type               = "t2.medium"
   ssh_deployer_key            = "${data.terraform_remote_state.common.common_ssh_deployer_key}"
   associate_public_ip_address = true
-
-  ########################################################################################################
-  #ecs asg
-  ########################################################################################################
-
-  asg_desired = "3"
-  asg_max     = "3"
-  asg_min     = "3"
 
   ########################################################################################################
   #ecs task definition
@@ -166,7 +159,11 @@ locals {
   kibana_host           = "NOTUSED(yet)"
   data_volume_host_path = "/opt/spg"
   data_volume_name      = "spg"
-
   user_data             = "../user_data/spg_user_data.sh"
   ########################################################################################################
 }
+
+########################################################################################################
+#ecs service -  log group
+########################################################################################################
+cloudwatch_log_retention = "${var.cloudwatch_log_retention}"

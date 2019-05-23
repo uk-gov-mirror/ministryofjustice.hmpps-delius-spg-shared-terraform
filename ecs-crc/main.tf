@@ -129,9 +129,14 @@ locals {
   ########################################################################################################
 
   ########################################################################################################
-  #ecs service -  log group
+  #ecs asg
   ########################################################################################################
-  cloudwatch_log_retention = "${var.cloudwatch_log_retention}"
+
+  asg_desired = "1"
+  asg_max     = "1"
+  asg_min     = "1"
+
+
   ########################################################################################################
   #ecs service - app service
   ########################################################################################################
@@ -160,12 +165,6 @@ locals {
   instance_type               = "t2.medium"
   ssh_deployer_key            = "${data.terraform_remote_state.common.common_ssh_deployer_key}"
   associate_public_ip_address = true
-  ########################################################################################################
-  #ecs asg
-  ########################################################################################################
-  asg_desired = "1"
-  asg_max = "1"
-  asg_min = "1"
 
   ########################################################################################################
   #ecs task definition
@@ -187,36 +186,7 @@ locals {
   data_volume_name      = "spg"
   user_data             = "../user_data/spg_user_data.sh"
 
-  //  account_id                     = "${data.terraform_remote_state.common.common_account_id}"
-  //  alb_backend_port               = "9001"
-  //  alb_http_port                  = "80"
-  //  alb_https_port                 = "443"
-  //  backend_app_template_file      = "template.json"
-  //  backend_check_app_path         = "/cxf/"
-  //  backend_check_interval         = "120"
-  //  backend_ecs_desired_count      = "1"
-  //  backend_healthy_threshold      = "2"
-  //  backend_maxConnections         = "500"
-  //  backend_maxConnectionsPerRoute = "200"
-  //  backend_return_code            = "200,302"
-  //  backend_timeoutInSeconds       = "60"
-  //  backend_timeoutRetries         = "10"
-  //  backend_unhealthy_threshold    = "10"
-  //  certificate_arn                = ["${data.aws_acm_certificate.cert.arn}"]
-  //  cidr_block                     = "${data.terraform_remote_state.common.vpc_cidr_block}"
-
-  //  deregistration_delay           = "90"
-  //  health_check = "${local.health_check}"
-  //  internal_domain                = "${data.terraform_remote_state.common.internal_domain}"
-  //  keys_dir                       = "/opt/spg"
-  //  listener = "${local.listener}"
-  //  monitoring_server_internal_url = "tmpdoesnotexist"                                                                    # "${data.terraform_remote_state.common.monitoring_server_internal_url}"
-  //  private_subnet_map             = "${data.terraform_remote_state.common.private_subnet_map}"
-  //  private_zone_id                = "${data.terraform_remote_state.common.private_zone_id}"
-  //  public_cidr_block              = ["${data.terraform_remote_state.common.db_cidr_block}"]
-  //  region                         = "${var.region}"
-
-  //  ext_lb_security_groups         = ["${data.terraform_remote_state.security-groups.security_groups_sg_external_lb_id}"]
-
-  # "${data.terraform_remote_state.common.monitoring_server_client_sg_id}",
-}
+########################################################################################################
+#ecs service -  log group
+########################################################################################################
+cloudwatch_log_retention = "${var.cloudwatch_log_retention}"

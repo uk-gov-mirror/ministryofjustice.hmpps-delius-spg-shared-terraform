@@ -14,9 +14,6 @@ locals {
     "client_auth",
   ]
 
-}
-
-
 ############################################
 # SIGN CERT
 ############################################
@@ -33,16 +30,16 @@ module "sign_cert" {
   allowed_uses = ["${local.allowed_uses}"]
 }
 
-
-############################################
-# ADD TO SSM
-############################################
-# CERT
-module "parameter_store_put_cert" {
-  source         = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=pre-shared-vpc//modules//ssm//parameter_store_file"
-  parameter_name = "${var.app_common_name}-${var.dns_common_name}-crt"
-  description    = "${var.app_common_name}-${var.dns_common_name}-private-crt"
-  type           = "String"
-  value          = "${module.sign_cert.cert_pem}"
-  tags           = "${local.tags}"
-}
+//
+//############################################
+//# ADD TO SSM
+//############################################
+//# CERT
+//module "parameter_store_put_cert" {
+//  source         = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=pre-shared-vpc//modules//ssm//parameter_store_file"
+//  parameter_name = "${var.app_common_name}-${var.dns_common_name}-crt"
+//  description    = "${var.app_common_name}-${var.dns_common_name}-private-crt"
+//  type           = "String"
+//  value          = "${module.sign_cert.cert_pem}"
+//  tags           = "${local.tags}"
+//}

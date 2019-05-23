@@ -15,3 +15,12 @@ output "self_signed_server_iam_server_certificate_arn" {
 output "self_signed_server_iam_server_certificate_path" {
   value = "${module.iam_server_certificate.path}"
 }
+
+## AWS PARAMETER STORE
+output "self_signed_server_ssm_cert_pem_name" {
+  value = "${module.iam_server_certificate.name}"
+}
+
+output "self_signed_server_ssm_private_key_name" {
+  value = "${module.iam_server_certificate}"
+}

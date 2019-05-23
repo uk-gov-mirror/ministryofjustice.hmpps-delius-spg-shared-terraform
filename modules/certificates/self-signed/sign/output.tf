@@ -12,14 +12,5 @@ output "self_signed_server_cert_request_pem" {
 
 # cert
 output "self_signed_server_cert_pem" {
-  value = "${module.sign_cert.cert_pem}"
-}
-
-## AWS PARAMETER STORE
-output "self_signed_server_ssm_cert_pem_name" {
-  value = "${module.parameter_store_put_cert.name}"
-}
-
-output "self_signed_server_ssm_private_key_name" {
-  value = "${module.parameter_store_put_  .name}"
+  value = "${module.sign_cert.cert_pem  }"
 }
