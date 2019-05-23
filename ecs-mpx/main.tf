@@ -187,9 +187,10 @@ locals {
   data_volume_name      = "spg"
   user_data             = "../user_data/spg_user_data.sh"
   ########################################################################################################
-}
 
 ########################################################################################################
 #ecs service -  log group
 ########################################################################################################
-cloudwatch_log_retention = "${var.cloudwatch_log_retention}"
+  cloudwatch_log_retention = "${var.cloudwatch_log_retention}"
+
+}
