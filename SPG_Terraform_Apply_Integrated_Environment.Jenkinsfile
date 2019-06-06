@@ -130,7 +130,6 @@ pipeline {
         )
         string(
           name: 'config_branch',
-          defaultValue: '97-update-potest2-enviro',
           description: 'Branch for hmpps-env-configs'
         )
         string(
