@@ -4,10 +4,6 @@ variable "internal" {
   default = "true"
 }
 
-//variable "subnet_ids" {
-//  type = "list"
-//}
-
 variable "enable_deletion_protection" {
   default = "false"
 }

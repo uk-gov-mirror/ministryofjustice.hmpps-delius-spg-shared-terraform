@@ -16,7 +16,7 @@
 # CREATE EXTERNAL LB FOR spg (iso)
 ############################################
 module "create_app_nlb_ext" {
-  //  source              = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_lb"
+  //  original source              = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_lb"
   source                    = "../modules/loadbalancer/nlb/create_public_nlb"
 
   az_lb_eip_allocation_ids  = "${local.az_lb_eip_allocation_ids}"
@@ -53,7 +53,7 @@ resource "aws_route53_record" "dns_ext_entry" {
 
 //nlb  target group
 module "create_app_nlb_ext_targetgrp" {
-  //  source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//targetgroup"
+  // original source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//targetgroup"
   source               = "../modules/loadbalancer/nlb/targetgroup"
   appname              = "${local.common_name}"
   target_port          = "${local.backend_app_port}"

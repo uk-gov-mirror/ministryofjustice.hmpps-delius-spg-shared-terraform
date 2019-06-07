@@ -61,8 +61,6 @@ locals {
     internal_lb_sg_id   = "${data.terraform_remote_state.security-groups.sg_spg_internal_lb_in}"
     bastion_in_sg_id    = "${data.terraform_remote_state.security-groups.sg_ssh_bastion_in_id}"
     outbound_sg_id      = "${aws_security_group.vpc-sg-outbound.id}"
-    //    jms_in_sg_id        = "${data.terraform_remote_state.security-groups.sg_spg_jms_in_sg_id}"
-    #db_sg_id            = "${data.terraform_remote_state.security-groups.sg_spg_db_in}"
   }
 
 

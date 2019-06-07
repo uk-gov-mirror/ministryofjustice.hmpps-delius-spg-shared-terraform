@@ -35,7 +35,6 @@ data "template_file" "ecr_policy" {
 
   vars {
     role_arn     = "${jsonencode(local.role_arns)}"
-//    eng_root_arn = "${local.eng_root_arn}"
   }
 }
 

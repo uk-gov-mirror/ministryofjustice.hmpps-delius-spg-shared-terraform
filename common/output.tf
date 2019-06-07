@@ -9,9 +9,6 @@ output "common_account_id" {
   value = "${data.aws_caller_identity.current.account_id}"
 }
 
-//output "common_sg_outbound_id" {
-//  value = "${aws_security_group.vpc-sg-outbound.id}"
-//}
 
 # S3 Buckets
 output "common_s3-config-bucket" {
