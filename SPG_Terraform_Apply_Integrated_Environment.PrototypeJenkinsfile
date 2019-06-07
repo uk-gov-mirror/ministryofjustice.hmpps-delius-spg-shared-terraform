@@ -148,12 +148,12 @@ pipeline {
         )
         string(
           name: 'config_branch',
-          defaultValue: '97-update-potest2-enviro',
+          defaultValue: 'master',
           description: 'Branch for hmpps-env-configs'
         )
         string(
           name: 'spg_terraform_branch',
-          defaultValue: '19-create-crcstubs-as-seperate-asg',
+          defaultValue: 'master',
           description: 'Branch for hmpps-delius-spg-shared-terraform'
         )
     }
