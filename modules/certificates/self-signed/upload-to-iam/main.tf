@@ -3,7 +3,7 @@
 ############################################
 # upload to IAM
 module "iam_server_certificate" {
-  source            = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=pre-shared-vpc//modules//iam_certificate"
+  source            = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam_certificate"
   name_prefix       = "${var.internal_domain}-cert"
   certificate_body  = "${var.cert_request_pem}"
   private_key       = "${var.private_key}"
