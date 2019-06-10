@@ -126,16 +126,18 @@ pipeline {
     parameters {
         choice(
           name: 'environment_name',
+          defaultValue: 'delius-auto-test',
           choices: environments,
           description: 'Select environment for creation or updating.'
         )
         string(
           name: 'config_branch',
+          defaultValue: 'master',
           description: 'Branch for hmpps-env-configs'
         )
         string(
           name: 'spg_terraform_branch',
-          defaultValue: 'master',
+          defaultValue: '19-create-crcstubs-as-seperate-asg',
           description: 'Branch for hmpps-delius-spg-shared-terraform'
         )
     }
