@@ -244,21 +244,6 @@ pipeline {
             }
           }
         }
-
-
-        stage('Delius | SPG | push-spg-docker') {
-            steps {
-
-                  sh "NON_CONTAINER_WORKING_DIR=${project.spg};sh ./${project.spg}/scripts/image_push.sh ${params.config_branch} ${environment_name}"
-            }
-        }
-
-
-        stage('Delius | SPG | prune-docker-fs') {
-            steps {
-                   sh "sh ./${project.spg}/scripts/prune_docker_fs.sh"
-            }
-        }
     }
 
     post {
