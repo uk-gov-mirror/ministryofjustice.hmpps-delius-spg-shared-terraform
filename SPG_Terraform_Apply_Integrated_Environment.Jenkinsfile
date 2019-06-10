@@ -126,7 +126,6 @@ pipeline {
     parameters {
         choice(
           name: 'environment_name',
-          defaultValue: 'delius-auto-test',
           choices: environments,
           description: 'Select environment for creation or updating.'
         )
