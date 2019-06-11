@@ -10,7 +10,7 @@ ENVIRONMENT_NAME=$2
 
 echo "CONFIG_BRANCH = $CONFIG_BRANCH"
 
-echo 'cloning env configs'
+echo "cloning env configs with command: git clone -b ${CONFIG_BRANCH} git@github.com:ministryofjustice/hmpps-env-configs.git $(pwd)/env_configs"
 git clone -b ${CONFIG_BRANCH} git@github.com:ministryofjustice/hmpps-env-configs.git $(pwd)/env_configs
 #ls -laR
 CUSTOM_COMMON_PROPERTIES_DIR=$(pwd)/env_configs/common
