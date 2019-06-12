@@ -132,25 +132,27 @@ def debug_env() {
 }
 
 
+//usage
+//run_custom_script ("${project.config}", "${environment_name}",project.spg, "./scripts/image_push.sh ${config_branch} ${environment_name}")
 
-def run_custom_script(config_dir, env_name, git_project_dir, script_path) {
-    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
-        sh """
-        #!/usr/env/bin bash
-        echo "RUN SCRIPT for ${env_name} | ${script_path} - script from git project ${git_project_dir}"
-        set +e
-        cp -R -n "${config_dir}" "${git_project_dir}/env_configs"
-        cd "${git_project_dir}"
-        docker run --rm \
-        -v `pwd`:/home/tools/data \
-        -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
-        bash -c "\
-            source env_configs/${env_name}/${env_name}.properties; \
-            $script_path;"
-        set -e
-        """
-    }
-}
+//def run_custom_script(config_dir, env_name, git_project_dir, script_path) {
+//    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
+//        sh """
+//        #!/usr/env/bin bash
+//        echo "RUN SCRIPT for ${env_name} | ${script_path} - script from git project ${git_project_dir}"
+//        set +e
+//        cp -R -n "${config_dir}" "${git_project_dir}/env_configs"
+//        cd "${git_project_dir}"
+//        docker run --rm \
+//        -v `pwd`:/home/tools/data \
+//        -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
+//        bash -c "\
+//            source env_configs/${env_name}/${env_name}.properties; \
+//           $script_path;"
+//        set -e
+//        """
+//    }
+//}
 
 
 pipeline {

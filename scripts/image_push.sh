@@ -5,16 +5,16 @@ if [ $# -ne 2 ]; then
 	exit 1
 fi
 
-#CONFIG_BRANCH=$1
-#ENVIRONMENT_NAME=$2
+CONFIG_BRANCH=$1
+ENVIRONMENT_NAME=$2
 
-#echo "CONFIG_BRANCH = $CONFIG_BRANCH"
+echo "CONFIG_BRANCH = $CONFIG_BRANCH"
 
-#echo "cloning env configs with command: git clone -b ${CONFIG_BRANCH} git@github.com:ministryofjustice/hmpps-env-configs.git $(pwd)/env_configs"
-#git clone -b ${CONFIG_BRANCH} git@github.com:ministryofjustice/hmpps-env-configs.git $(pwd)/env_configs
+echo "cloning env configs with command: git clone -b ${CONFIG_BRANCH} git@github.com:ministryofjustice/hmpps-env-configs.git $(pwd)/env_configs"
+git clone -b ${CONFIG_BRANCH} git@github.com:ministryofjustice/hmpps-env-configs.git $(pwd)/env_configs
 #ls -laR
-#CUSTOM_COMMON_PROPERTIES_DIR=$(pwd)/env_configs/common
-#source $(pwd)/env_configs/${ENVIRONMENT_NAME}/${ENVIRONMENT_NAME}.properties
+CUSTOM_COMMON_PROPERTIES_DIR=$(pwd)/env_configs/common
+source $(pwd)/env_configs/${ENVIRONMENT_NAME}/${ENVIRONMENT_NAME}.properties
 
 # Error handler function
 exit_on_error() {
