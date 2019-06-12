@@ -214,16 +214,16 @@ pipeline {
 
         stage('Delius | SPG | push-spg-docker') {
             steps {
-                   run_custom_script ("${params.config}", "${environment_name}",project.spg, "./${project.spg}/scripts/image_push.sh ${config_branch} ${environment_name}")
+                   run_custom_script ("${project.config}", "${environment_name}",project.spg, "./scripts/image_push.sh ${config_branch} ${environment_name}")
             }
         }
 
-
-        stage('Delius | SPG | prune-docker-fs') {
-            steps {
-                   sh "sh ./${project.spg}/scripts/prune_docker_fs.sh"
-            }
-        }
+//not needed as image built fresh in docker
+        //stage('Delius | SPG | prune-docker-fs') {
+        //    steps {
+        //          sh "sh ./${project.spg}/scripts/prune_docker_fs.sh"
+        //    }
+        //}
     }
 
     post {
