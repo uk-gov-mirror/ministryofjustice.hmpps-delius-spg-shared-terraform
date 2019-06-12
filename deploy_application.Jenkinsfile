@@ -146,7 +146,6 @@ def run_custom_script(config_dir, env_name, git_project_dir, script_path) {
         -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
         bash -c "\
             source env_configs/${env_name}/${env_name}.properties; \
-            cd ${submodule_name}; \
             $script_path;"
         set -e
         """
@@ -215,7 +214,7 @@ pipeline {
 
         stage('Delius | SPG | push-spg-docker') {
             steps {
-                   run_custom_script ("${params.config_branch}", "${environment_name}",project.spg, "./${project.spg}/scripts/image_push.sh")
+                   run_custom_script ("${params.config}", "${environment_name}",project.spg, "./${project.spg}/scripts/image_push.sh ${config_branch} ${environment_name}")
             }
         }
 
