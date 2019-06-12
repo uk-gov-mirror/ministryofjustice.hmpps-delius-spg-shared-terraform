@@ -131,6 +131,29 @@ def debug_env() {
     '''
 }
 
+
+
+def run_custom_script(config_dir, env_name, git_project_dir, script_path) {
+    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
+        sh """
+        #!/usr/env/bin bash
+        echo "RUN SCRIPT for ${env_name} | ${script_path} - script from git project ${git_project_dir}"
+        set +e
+        cp -R -n "${config_dir}" "${git_project_dir}/env_configs"
+        cd "${git_project_dir}"
+        docker run --rm \
+        -v `pwd`:/home/tools/data \
+        -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
+        bash -c "\
+            source env_configs/${env_name}/${env_name}.properties; \
+            cd ${submodule_name}; \
+            $script_path;"
+        set -e
+        """
+    }
+}
+
+
 pipeline {
 
     agent { label "jenkins_slave" }
@@ -192,8 +215,7 @@ pipeline {
 
         stage('Delius | SPG | push-spg-docker') {
             steps {
-
-                  sh "NON_CONTAINER_WORKING_DIR=${project.spg};sh ./${project.spg}/scripts/image_push.sh ${params.config_branch} ${environment_name}"
+                   run_custom_script ("${params.config_branch}", "${environment_name}",project.spg, "./${project.spg}/scripts/image_push.sh")
             }
         }
 
