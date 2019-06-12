@@ -222,11 +222,13 @@ pipeline {
         }
 
 
-        stage('Delius | SPG | prune-docker-fs') {
-            steps {
-                   sh "sh ./${project.spg}/scripts/prune_docker_fs.sh"
-            }
-        }
+// PC - I may have used this because of ecs not refreshing docker images as expected
+// the prune script wipes all images, not just spg so should be filtered accordingly if it is used
+//        stage('Delius | SPG | prune-docker-fs') {
+//            steps {
+//                   sh "sh ./${project.spg}/scripts/prune_docker_fs.sh"
+//            }
+//       }
     }
 
     post {
