@@ -6,20 +6,17 @@ output "region" {
 }
 
 output "common_account_id" {
-  value = "${module.common.common_account_id}"
+  value = "${data.aws_caller_identity.current.account_id}"
 }
 
-output "common_sg_outbound_id" {
-  value = "${module.common.common_sg_outbound_id}"
-}
 
 # S3 Buckets
 output "common_s3-config-bucket" {
-  value = "${module.common.common_s3-config-bucket}"
+  value = "${module.s3config_bucket.s3_bucket_name}"
 }
 
 output "common_s3_lb_logs_bucket" {
-  value = "${module.common.common_s3_lb_logs_bucket}"
+  value = "${module.s3_lb_logs_bucket.s3_bucket_name}"
 }
 
 # SSH KEY
@@ -59,27 +56,43 @@ output "common_name" {
 }
 
 output "lb_account_id" {
-  value = "${var.lb_account_id}"
+  value = "${local.lb_account_id}"
 }
 
 output "role_arn" {
-  value = "${var.role_arn}"
+  value = "${local.role_arn}"
 }
 
 output "spg_app_name" {
-  value = "${var.spg_app_name}"
+  value = "${local.spg_app_name}"
 }
 
 output "environment_identifier" {
-  value = "${var.environment_identifier}"
+  value = "${local.environment_identifier}"
 }
 
 output "short_environment_identifier" {
-  value = "${var.short_environment_identifier}"
+  value = "${local.short_environment_identifier}"
 }
 
+output "short_environment_name" {
+  value = "${local.short_environment_name}"
+}
+
+
+output "project_name_abbreviated" {
+  value = "${local.project_name_abbreviated}"
+}
+
+output "hmpps_asset_name_prefix" {
+  value = "${local.hmpps_asset_name_prefix}"
+}
+
+
+
+
 output "remote_state_bucket_name" {
-  value = "${var.remote_state_bucket_name}"
+  value = "${local.remote_state_bucket_name}"
 }
 
 output "s3_lb_policy_file" {

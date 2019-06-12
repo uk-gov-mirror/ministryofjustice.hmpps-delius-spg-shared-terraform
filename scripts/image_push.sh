@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 if [ $# -ne 2 ]; then
-	echo "requires 2 arguments 1=CONFIG_BRANCH, 2=ENVIRONMENT_NAME"
+	echo "requires 2 arguments 1=ENV_CONFIG_BRANCH, 2=ENVIRONMENT_NAME"
 	exit 1
 fi
 
@@ -10,9 +10,9 @@ ENVIRONMENT_NAME=$2
 
 echo "CONFIG_BRANCH = $CONFIG_BRANCH"
 
-echo 'cloning env configs'
+echo "cloning env configs with command: git clone -b ${CONFIG_BRANCH} git@github.com:ministryofjustice/hmpps-env-configs.git $(pwd)/env_configs"
 git clone -b ${CONFIG_BRANCH} git@github.com:ministryofjustice/hmpps-env-configs.git $(pwd)/env_configs
-ls -laR
+#ls -laR
 CUSTOM_COMMON_PROPERTIES_DIR=$(pwd)/env_configs/common
 source $(pwd)/env_configs/${ENVIRONMENT_NAME}/${ENVIRONMENT_NAME}.properties
 
@@ -51,7 +51,7 @@ exit_on_error $? !!
 echo "--> Image pull success"
 
 # PUSH
-dest_ecr_repo_name="${TG_ENVIRONMENT_IDENTIFIER}-gw-ecr-repo"
+dest_ecr_repo_name="${TG_ENVIRONMENT_IDENTIFIER}-spgw-ecr-repo"
 
 temp_role=$(aws sts assume-role --role-arn ${TERRAGRUNT_IAM_ROLE} --role-session-name testing --duration-seconds 900)
 

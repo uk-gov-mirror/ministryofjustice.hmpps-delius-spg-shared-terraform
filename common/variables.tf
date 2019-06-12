@@ -13,6 +13,15 @@ variable "short_environment_identifier" {
   description = "short resource label or name"
 }
 
+variable "short_environment_name" {
+  type = "string"
+}
+
+variable "project_name_abbreviated" {
+  type="string"
+}
+
+
 variable "region" {
   description = "The AWS region."
 }

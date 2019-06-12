@@ -9,35 +9,6 @@ provider "aws" {
 }
 
 ####################################################
-# DATA SOURCE MODULES FROM OTHER TERRAFORM BACKENDS
-####################################################
-#-------------------------------------------------------------
-### Getting the common details
-#-------------------------------------------------------------
-data "terraform_remote_state" "common" {
-  backend = "s3"
-
-  config {
-    bucket = "${var.remote_state_bucket_name}"
-    key    = "spg/common/terraform.tfstate"
-    region = "${var.region}"
-  }
-}
-
-#-------------------------------------------------------------
-### Getting the IAM details
-#-------------------------------------------------------------
-data "terraform_remote_state" "iam" {
-  backend = "s3"
-
-  config {
-    bucket = "${var.remote_state_bucket_name}"
-    key    = "spg/iam/terraform.tfstate"
-    region = "${var.region}"
-  }
-}
-
-####################################################
 # Locals
 ####################################################
 
@@ -47,17 +18,31 @@ locals {
   environment_identifier = "${data.terraform_remote_state.common.environment_identifier}"
   eng_root_arn           = "${data.terraform_remote_state.common.eng_root_arn}"
   ecr_policy             = "../policies/ecr_policy.json"
-  role_arn               = "${data.terraform_remote_state.iam.iam_policy_ext_app_role_arn}"
+  role_arns               = ["${data.terraform_remote_state.iam.iam_policy_int_app_role_arn}",
+                             "${data.terraform_remote_state.iam.iam_policy_ext_app_role_arn}"]
+
+  common_name  = "${local.environment_identifier}-${local.spg_app_name}"
+
 }
 
-####################################################
-# ECR - Application Specific
-####################################################
+
+
+############################################
+# CREATE ECR FOR APPS
+############################################
+data "template_file" "ecr_policy" {
+  template = "${file("${local.ecr_policy}")}"
+
+  vars {
+    role_arn     = "${jsonencode(local.role_arns)}"
+  }
+}
+
+
+
+
 module "ecr" {
-  source                 = "../modules/ecr"
-  app_name               = "${local.spg_app_name}"
-  environment_identifier = "${local.environment_identifier}"
-  ecr_policy             = "${local.ecr_policy}"
-  role_arn               = "${local.role_arn}"
-  eng_root_arn           = "${local.eng_root_arn}"
+  source   = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecr"
+  app_name = "${local.common_name}"
+  policy   = "${data.template_file.ecr_policy.rendered}"
 }

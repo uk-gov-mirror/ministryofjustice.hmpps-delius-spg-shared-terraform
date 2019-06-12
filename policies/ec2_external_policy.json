@@ -2,6 +2,32 @@
     "Version": "2012-10-17",
     "Statement": [
         {
+            "Sid": "ecrAuth",
+            "Effect": "Allow",
+            "Action": [
+                "ecr:GetAuthorizationToken"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Sid": "ecrInstanceRole",
+            "Effect": "Allow",
+            "Action": [
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:InitiateLayerUpload",
+                "ecr:DescribeRepositories",
+                "ecr:GetRepositoryPolicy",
+                "ecr:ListImages"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
             "Sid": "ecsInstanceRole",
             "Effect": "Allow",
             "Action": [
@@ -10,10 +36,7 @@
                 "ecs:Poll",
                 "ecs:RegisterContainerInstance",
                 "ecs:Submit*",
-                "ecs:StartTelemetrySession",
-                "ecr:GetAuthorizationToken",
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:GetDownloadUrlForLayer"
+                "ecs:StartTelemetrySession"
             ],
             "Resource": [
                 "*"
