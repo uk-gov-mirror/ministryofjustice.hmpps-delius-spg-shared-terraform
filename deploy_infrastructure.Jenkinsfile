@@ -148,7 +148,7 @@ pipeline {
         )
         string(
           name: 'spg_terraform_branch',
-          defaultValue: '19-create-crcstubs-as-seperate-asg',
+          defaultValue: 'master',
           description: 'Branch for hmpps-delius-spg-shared-terraform'
         )
     }
