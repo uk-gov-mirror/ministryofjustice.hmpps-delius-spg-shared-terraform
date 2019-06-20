@@ -10,8 +10,12 @@ provider "aws" {
 
 locals {
   sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
+
   int_lb_security_groups = ["${local.sg_map_ids["internal_lb_sg_id"]}",
                             "${local.sg_map_ids["bastion_in_sg_id"]}"]
+
+  int_amq_security_groups = ["sg-03dec5ca185c632f9"]
+
   private_subnet_ids = [
     "${data.terraform_remote_state.common.private_subnet_ids[0]}"]
 
@@ -28,7 +32,7 @@ resource "aws_mq_broker" "SPG" {
   engine_type        = "ActiveMQ"
   engine_version     = "5.15.0"
   host_instance_type = "mq.t2.micro"
-  security_groups    = ["${local.int_lb_security_groups}"]
+  security_groups    = ["${local.int_amq_security_groups}"]
   subnet_ids         = ["${local.private_subnet_ids}"]
 
   user {
