@@ -18,13 +18,29 @@ variable SPG_MPX_JAVA_MAX_MEM {
 }
 
 
-variable SPG_DELIUS_MQ_URL {
-}
+variable SPG_DELIUS_MQ_URL {}
+variable SPG_GATEWAY_MQ_URL {}
+
+variable SPG_DOCUMENT_REST_SERVICE_ADMIN_URL {}
+variable SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL {}
+
+variable SPG_ISO_FQDN {}
+variable SPG_MPX_FQDN {}
+variable SPG_CRC_FQDN {}
 
 
-variable SPG_GATEWAY_MQ_URL {
 
-}
+#typically these values are
+#https://alfresco.{{ environment_cn }}/alfresco/service/admin-spg
+#https://alfresco.{{ environment_cn }}/alfresco/service/noms-spg
+
+
+
+
+#spg_iso_fqdn: "spgw-ext.{{ environment_cn }}"
+#spg_crc_fqdn: "spgw-crc-int.{{ environment_cn }}"
+
+
 
 variable spg_mpx_ecs_memory {
   default="2048"

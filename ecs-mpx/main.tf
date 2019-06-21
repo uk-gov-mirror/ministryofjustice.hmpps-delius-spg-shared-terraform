@@ -190,9 +190,19 @@ locals {
 
   SPG_JAVA_MAX_MEM = "${var.SPG_MPX_JAVA_MAX_MEM}"
   SPG_ENVIRONMENT_CODE = "NOTUSED remove?"
-  SPG_ENVIRONMENT_CN = "${local.external_domain}"
-  SPG_DELIUS_MQ_URL = "${var.SPG_DELIUS_MQ_URL}"  //to be replaced with values from hmpps env configs
-  SPG_GATEWAY_MQ_URL = "${var.SPG_GATEWAY_MQ_URL}"  //to be replaced with values from hmpps env configs
+  SPG_ENVIRONMENT_CN = "${local.external_domain}" #not used yet
+  SPG_DELIUS_MQ_URL = "${var.SPG_DELIUS_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
+  SPG_GATEWAY_MQ_URL = "${var.SPG_GATEWAY_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
+
+
+
+  SPG_DOCUMENT_REST_SERVICE_ADMIN_URL = "${var.SPG_DOCUMENT_REST_SERVICE_ADMIN_URL}"
+  SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL = "${var.SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL}"
+  SPG_ISO_FQDN = "${var.SPG_ISO_FQDN}"
+  SPG_MPX_FQDN = "${var.SPG_MPX_FQDN}"
+  SPG_CRC_FQDN = "${var.SPG_CRC_FQDN}"
+
+
   ########################################################################################################
 
 ########################################################################################################

@@ -45,21 +45,37 @@
             "name": "SPG_DELIUS_MQ_URL",
             "value": "${SPG_DELIUS_MQ_URL}"
             }
+
             ,
-            {
-            "name": "SPG_DELIUS_MQ_USERNAME",  //NOTE THIS WILL BE OVERRIDEN IN CONTAINER START UP, PULLING VALUES FROM SSM  (waiting on values to be in SSM, so using default of no creds)
-            "value": ""
-            }
-            ,
-            {
-            "name": "SPG_DELIUS_MQ_PASSWORD",  //NOTE THIS WILL BE OVERRIDEN IN CONTAINER START UP, PULLING VALUES FROM SSM (waiting on values to be in SSM, so using default of no creds)
-            "value": ""
-            }
-            ,
-            {
-            "name": "SPG_GATEWAY_MQ_URL",
-            "value": "${SPG_GATEWAY_MQ_URL}"
-            }
+{
+"name": "SPG_GATEWAY_MQ_URL",
+"value": "${SPG_GATEWAY_MQ_URL}"
+}
+,
+{
+"name": "SPG_DOCUMENT_REST_SERVICE_ADMIN_URL",
+"value": "${SPG_DOCUMENT_REST_SERVICE_ADMIN_URL}"
+}
+,
+{
+"name": "SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL",
+"value": "${SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL}"
+}
+,
+{
+"name": "SPG_ISO_FQDN",
+"value": "${SPG_ISO_FQDN}"
+}
+,
+{
+"name": "SPG_MPX_FQDN",
+"value": "${SPG_MPX_FQDN}"
+}
+,
+{
+"name": "SPG_CRC_FQDN",
+"value": "${SPG_CRC_FQDN}"
+}
 
 
             ],
