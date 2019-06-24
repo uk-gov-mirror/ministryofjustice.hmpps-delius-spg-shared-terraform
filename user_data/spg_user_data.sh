@@ -142,4 +142,6 @@ ansible-playbook ~/bootstrap-users.yml
 
 cat << EOF >> ~/.bashrc
 alias attachtospgcontainer='docker container exec -it "`docker container ps | grep spg | egrep -o "^[[:alnum:]]*"`" /bin/bash'
+echo 'SPG Container - type attachtospgcontainer to attach to container as root.'
+echo 'once logged on, become spg user by typing "su spg"'
 EOF
