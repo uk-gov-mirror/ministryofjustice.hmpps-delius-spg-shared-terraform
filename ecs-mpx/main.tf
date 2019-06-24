@@ -173,7 +173,7 @@ locals {
 
   image_url             = "${data.terraform_remote_state.ecr.ecr_repository_url}"
   image_version         = "latest"
-  ecs_cpu_units = "256"
+  ecs_cpu_units = "${var.spg_mpx_ecs_cpu_units}" //NOTE using null for cpu units, which I think defaults to max
   ecs_memory    = "${var.spg_mpx_ecs_memory}"
   #regular config bucket - not sure what this is used for yet
   config-bucket         = "${data.terraform_remote_state.common.common_s3-config-bucket}"
@@ -186,6 +186,8 @@ locals {
   data_volume_host_path = "/opt/spg"
   data_volume_name      = "spg"
   user_data             = "../user_data/spg_user_data.sh"
+
+  SPG_GENERIC_BUILD_INV_DIR= "${var.SPG_GENERIC_BUILD_INV_DIR}"
 
 
   SPG_JAVA_MAX_MEM = "${var.SPG_MPX_JAVA_MAX_MEM}"

@@ -1,9 +1,9 @@
 [
     {
-        "cpu": ${ecs_cpu_units},
+        "requires_compatibilities": "EC2",
+        "memory": ${ecs_memory},
         "essential": true,
         "image": "${image_url}:${version}",
-        "memory": ${ecs_memory},
         "name": "${container_name}",
         "mountPoints": [
             {
@@ -22,13 +22,20 @@
             "name": "SPG_BUILD_INV_DIR",
             "value": "${spg_build_inv_dir}"
             },
+
+            {
+                "name": "SPG_GENERIC_BUILD_INV_DIR",
+                "value": "${SPG_GENERIC_BUILD_INV_DIR}"
+            },
+
+
             {
                 "name": "KIBANA_HOST",
                 "value": "${kibana_host}NOTUSEDYET"
             }
             ,
             {
-            "name": "SPG_ENVIRONMENT_CODE",    
+            "name": "SPG_ENVIRONMENT_CODE",
             "value": "${SPG_ENVIRONMENT_CODE}"
             }            ,
             {
