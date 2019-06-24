@@ -183,7 +183,7 @@ locals {
   spg_build_inv_dir     = "${var.spg_build_inv_dir}"
   #vars for docker container
   kibana_host           = "NOTUSED(yet)"
-  data_volume_host_path = "/opt/spg"
+  data_volume_host_path = "/opt/spg/servicemix/data"
   data_volume_name      = "spg"
   user_data             = "../user_data/spg_user_data.sh"
 
