@@ -187,17 +187,12 @@ locals {
   data_volume_name      = "spg"
   user_data             = "../user_data/spg_user_data.sh"
 
-  SPG_GENERIC_BUILD_INV_DIR= "${var.SPG_GENERIC_BUILD_INV_DIR}"
-
-
+  SPG_GENERIC_BUILD_INV_DIR = "${var.SPG_GENERIC_BUILD_INV_DIR}"
   SPG_JAVA_MAX_MEM = "${var.SPG_MPX_JAVA_MAX_MEM}"
   SPG_ENVIRONMENT_CODE = "NOTUSED remove?"
   SPG_ENVIRONMENT_CN = "${local.external_domain}" #not used yet
   SPG_DELIUS_MQ_URL = "${var.SPG_DELIUS_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
   SPG_GATEWAY_MQ_URL = "${var.SPG_GATEWAY_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
-
-
-
   SPG_DOCUMENT_REST_SERVICE_ADMIN_URL = "${var.SPG_DOCUMENT_REST_SERVICE_ADMIN_URL}"
   SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL = "${var.SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL}"
   SPG_ISO_FQDN = "${var.SPG_ISO_FQDN}"
