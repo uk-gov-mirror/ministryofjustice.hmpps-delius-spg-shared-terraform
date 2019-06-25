@@ -42,3 +42,7 @@ output "security_groups_sg_external_lb_id" {
 output "security_groups_sg_external_instance_id" {
   value = "${local.external_inst_sg_id}"
 }
+
+output "security_groups_sg_amazonmq_instance_id" {
+  value = "${local.amazonmq_inst_sg_id}"
+}

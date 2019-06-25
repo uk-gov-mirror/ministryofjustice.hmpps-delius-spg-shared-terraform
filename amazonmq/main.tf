@@ -14,7 +14,8 @@ locals {
   int_lb_security_groups = ["${local.sg_map_ids["internal_lb_sg_id"]}",
                             "${local.sg_map_ids["bastion_in_sg_id"]}"]
 
-  int_amq_security_groups = ["sg-03dec5ca185c632f9"]
+  //int_amq_security_groups = ["${local.sg_map_ids["amazonmq_inst_sg_id"]}"]
+  int_amq_security_groups = "${data.terraform_remote_state.common.amazonmq_inst_sg_id}"
 
   private_subnet_ids = [
     "${data.terraform_remote_state.common.private_subnet_ids[0]}"]

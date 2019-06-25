@@ -184,3 +184,8 @@ output "app_hostnames" {
 output "eng_root_arn" {
   value = "${local.eng_root_arn}"
 }
+
+#Temporarily moved out of the sg_map_ids list
+output "amazonmq_inst_sg_id" {
+  value = "${local.amazonmq_inst_sg_id}"
+}

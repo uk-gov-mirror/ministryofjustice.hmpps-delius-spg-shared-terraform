@@ -63,7 +63,7 @@ locals {
     outbound_sg_id      = "${aws_security_group.vpc-sg-outbound.id}"
   }
 
-
+  amazonmq_inst_sg_id = "${data.terraform_remote_state.security-groups.sg_amazonmq_in}"
 
   private_subnet_map = {
     az1 = "${data.terraform_remote_state.vpc.vpc_private-subnet-az1}"
