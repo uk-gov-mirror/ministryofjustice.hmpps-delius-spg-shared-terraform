@@ -9,7 +9,6 @@ project.spg             = 'hmpps-delius-spg-shared-terraform'
 
 def environments = [
 
-  '-- choose env --',
   'delius-auto-test',
   'delius-core-sandpit',
   'delius-core-dev',

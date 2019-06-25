@@ -30,28 +30,16 @@ variable SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL {}
 variable SPG_ISO_FQDN {}
 variable SPG_MPX_FQDN {}
 variable SPG_CRC_FQDN {}
-
-
-
-#typically these values are
-#https://alfresco.{{ environment_cn }}/alfresco/service/admin-spg
-#https://alfresco.{{ environment_cn }}/alfresco/service/noms-spg
-
-
-
-
-#spg_iso_fqdn: "spgw-ext.{{ environment_cn }}"
-#spg_crc_fqdn: "spgw-crc-int.{{ environment_cn }}"
-
+variable SPG_ENVIRONMENT_CODE {}
+variable SPG_MPX_HOST_TYPE {}
 
 
 variable spg_mpx_ecs_memory {
   default="2048"
 }
 
-variable spg_mpx_ecs_cpu_units {
-  default="256"
-}
+//variable spg_mpx_ecs_cpu_units {
+//}
 
 
 
