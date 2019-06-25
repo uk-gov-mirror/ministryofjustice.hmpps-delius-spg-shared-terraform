@@ -143,10 +143,10 @@ locals {
   s3_bucket_config = "${var.s3_bucket_config}"
   spg_build_inv_dir = "${var.spg_build_inv_dir}"
   #vars for docker container
-  kibana_host = "NOTUSED(yet)"
-  data_volume_host_path = "/opt/spg"
-  data_volume_name = "spg"
-  user_data = "../user_data/spg_user_data.sh"
+  kibana_host           = "NOTUSED(yet)"
+  data_volume_host_path = "/opt/spg/servicemix/data"
+  data_volume_name      = "spg"
+  user_data             = "../user_data/spg_user_data.sh"
 
   SPG_HOST_TYPE         = "${var.SPG_ISO_HOST_TYPE}"
   SPG_GENERIC_BUILD_INV_DIR = "${var.SPG_GENERIC_BUILD_INV_DIR}"
@@ -169,4 +169,5 @@ locals {
   #ecs service -  log group
   ########################################################################################################
   cloudwatch_log_retention = "${var.cloudwatch_log_retention}"
+
 }

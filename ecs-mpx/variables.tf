@@ -13,13 +13,15 @@ variable "asg_instance_type_mpx" {default = "t2.medium"}
 variable "cloudwatch_log_retention" {}
 
 
+
+
+
+variable SPG_MPX_HOST_TYPE {}
 variable SPG_GENERIC_BUILD_INV_DIR {}
-
-
 variable SPG_MPX_JAVA_MAX_MEM {
   default="1500"
 }
-
+variable SPG_ENVIRONMENT_CODE {}
 
 variable SPG_DELIUS_MQ_URL {}
 variable SPG_GATEWAY_MQ_URL {}
@@ -30,8 +32,6 @@ variable SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL {}
 variable SPG_ISO_FQDN {}
 variable SPG_MPX_FQDN {}
 variable SPG_CRC_FQDN {}
-variable SPG_ENVIRONMENT_CODE {}
-variable SPG_MPX_HOST_TYPE {}
 
 
 variable spg_mpx_ecs_memory {
