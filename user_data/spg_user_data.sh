@@ -146,10 +146,10 @@ alias dcontainerattachtospg='dcontainergetspgid;docker container exec -it "$SPG_
 alias dcontainerstopspg='dcontainergetspgid;docker container stop "$SPG_CONTAINER_ID"'
 alias dcontainerps='docker container ps'
 
-function dcontainerpull() {
+function dcontainerpulllatest() {
 region=$(curl http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
 repo=$(docker images | grep spg | egrep -o ^[^[:space:]]*)
-docker pull $repo
+docker pull $repo:latest
 }
 
 echo 'SPG Container - type dcontainerattachtospg to attach to container as root.'
