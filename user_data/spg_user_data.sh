@@ -141,7 +141,20 @@ ansible-galaxy install -f -r ~/requirements.yml
 ansible-playbook ~/bootstrap-users.yml
 
 cat << EOF >> ~/.bashrc
-alias attachtospgcontainer='docker container exec -it "\`docker container ps | grep spg | egrep -o "^[[:alnum:]]*"\`" /bin/bash'
-echo 'SPG Container - type attachtospgcontainer to attach to container as root.'
+alias dcontainergetspgid='export SPG_CONTAINER_ID=`docker container ps | grep spg | egrep -o ^[[:alnum:]]*`'
+alias dcontainerattachtospg='dcontainergetspgid;docker container exec -it "$SPG_CONTAINER_ID" /bin/bash'
+alias dcontainerstopspg='dcontainergetspgid;docker container stop "$SPG_CONTAINER_ID"'
+alias dcontainerps='docker container ps'
+
+function dcontainerpull() {
+region=$(curl http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
+repo=$(docker images | grep spg | egrep -o ^[^[:space:]]*)
+docker pull $repo
+}
+
+echo 'SPG Container - type dcontainerattachtospg to attach to container as root.'
 echo 'once logged on, become spg user by typing "su spg"'
+echo 'other aliases'
+alias | grep dcont
+
 EOF
