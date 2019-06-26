@@ -142,8 +142,8 @@ ansible-playbook ~/bootstrap-users.yml
 
 cat << EOF >> ~/.bashrc
 alias dcontainergetspgid='export SPG_CONTAINER_ID=`docker container ps | grep spg | egrep -o ^[[:alnum:]]*`'
-alias dcontainerattachtospg='dcontainergetspgid;docker container exec -it "$SPG_CONTAINER_ID" /bin/bash'
-alias dcontainerstopspg='dcontainergetspgid;docker container stop "$SPG_CONTAINER_ID"'
+alias dcontainerattachtospg='dcontainergetspgid;docker container exec -it $SPG_CONTAINER_ID /bin/bash'
+alias dcontainerstopspg='dcontainergetspgid;docker container stop $SPG_CONTAINER_ID'
 alias dcontainerps='docker container ps'
 
 function dcontainerpulllatest() {
