@@ -140,15 +140,16 @@ echo 'creating users'
 ansible-galaxy install -f -r ~/requirements.yml
 ansible-playbook ~/bootstrap-users.yml
 
-cat << EOF >> ~/.bashrc
-alias dcontainergetspgid='export SPG_CONTAINER_ID=`docker container ps | grep spg | egrep -o ^[[:alnum:]]*`'
+cat << 'EOF' >> ~/.bashrc
+alias dcontainergetspgid='SPG_CONTAINER_ID="$(docker container ps | grep spg | egrep -o ^[[:alnum:]]*)"'
 alias dcontainerattachtospg='dcontainergetspgid;docker container exec -it $SPG_CONTAINER_ID /bin/bash'
 alias dcontainerstopspg='dcontainergetspgid;docker container stop $SPG_CONTAINER_ID'
 alias dcontainerps='docker container ps'
 
 function dcontainerpulllatest() {
 region=$(curl http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
-repo=$(docker images | grep spg | egrep -o ^[^[:space:]]*)
+repo=$(docker images | grep spg | grep latest| egrep -o ^[^[:space:]]*)
+eval $(aws ecr get-login --no-include-email --region $region)
 docker pull $repo:latest
 }
 
