@@ -2,23 +2,8 @@ def project = [:]
 project.network_branch  = 'master'
 project.config          = 'hmpps-env-configs'
 project.network         = 'hmpps-delius-network-terraform'
-project.dcore           = 'hmpps-delius-core-terraform'
-project.alfresco        = 'hmpps-delius-alfresco-shared-terraform'
 project.spg             = 'hmpps-delius-spg-shared-terraform'
 
-
-def environments = [
-
-  'delius-auto-test',
-  'delius-core-sandpit',
-  'delius-core-dev',
-  'delius-test',
-  'delius-po-test1',
-  'delius-po-test2',
-  'delius-training-test',
-  'delius-training',
-
-]
 
 def prepare_env() {
     sh '''
@@ -131,27 +116,6 @@ def debug_env() {
 }
 
 
-//usage
-//run_custom_script ("${project.config}", "${environment_name}",project.spg, "./scripts/image_push.sh ${config_branch} ${environment_name}")
-
-//def run_custom_script(config_dir, env_name, git_project_dir, script_path) {
-//    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
-//        sh """
-//        #!/usr/env/bin bash
-//        echo "RUN SCRIPT for ${env_name} | ${script_path} - script from git project ${git_project_dir}"
-//        set +e
-//        cp -R -n "${config_dir}" "${git_project_dir}/env_configs"
-//        cd "${git_project_dir}"
-//        docker run --rm \
-//        -v `pwd`:/home/tools/data \
-//        -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
-//        bash -c "\
-//            source env_configs/${env_name}/${env_name}.properties; \
-//           $script_path;"
-//        set -e
-//        """
-//    }
-//}
 
 
 pipeline {
@@ -159,9 +123,9 @@ pipeline {
     agent { label "jenkins_slave" }
 
     parameters {
-        choice(
+        string(
           name: 'environment_name',
-          choices: environments,
+          defaultValue: 'master',
           description: 'Select environment for creation or updating.'
         )
         string(
@@ -219,15 +183,6 @@ pipeline {
                   sh "NON_CONTAINER_WORKING_DIR=${project.spg};sh ./${project.spg}/scripts/image_push.sh ${params.config_branch} ${environment_name}"
             }
         }
-
-
-// PC - I may have used this because of ecs not refreshing docker images as expected
-// the prune script wipes all images, not just spg so should be filtered accordingly if it is used
-//        stage('Delius | SPG | prune-docker-fs') {
-//            steps {
-//                   sh "sh ./${project.spg}/scripts/prune_docker_fs.sh"
-//            }
-//       }
     }
 
     post {
