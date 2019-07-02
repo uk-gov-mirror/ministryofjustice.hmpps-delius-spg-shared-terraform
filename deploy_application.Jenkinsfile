@@ -1,7 +1,5 @@
 def project = [:]
-project.network_branch  = 'master'
 project.config          = 'hmpps-env-configs'
-project.network         = 'hmpps-delius-network-terraform'
 project.spg             = 'hmpps-delius-spg-shared-terraform'
 
 
@@ -125,7 +123,7 @@ pipeline {
     parameters {
         string(
           name: 'environment_name',
-          defaultValue: 'master',
+          defaultValue: 'delius-auto-test',
           description: 'Select environment for creation or updating.'
         )
         string(
@@ -148,15 +146,6 @@ pipeline {
     stages {
 
 
-  stage ('Validate Environment') {
-            when {
-                expression { params.environment_name == '-- choose env --' }
-            }
-            steps {
-                 error('no environment chosen')
-            }
-        }
-
         stage('setup') {
             steps {
 
@@ -164,9 +153,6 @@ pipeline {
 
                 dir( project.config ) {
                   git url: 'git@github.com:ministryofjustice/' + project.config, branch: params.config_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
-                }
-                dir( project.network ) {
-                  git url: 'git@github.com:ministryofjustice/' + project.network, branch: project.network_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
                 }
                 dir( project.spg ) {
                   git url: 'git@github.com:ministryofjustice/' + project.spg, branch: params.spg_terraform_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
