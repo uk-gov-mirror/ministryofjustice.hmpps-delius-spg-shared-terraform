@@ -10,6 +10,26 @@ pipeline {
 
     agent { label "jenkins_slave" }
 
+
+    parameters {
+        string(
+                name: 'environment_name',
+                defaultValue: 'delius-auto-test',
+                description: 'Select environment for creation or updating.'
+        )
+        string(
+                name: 'config_branch',
+                defaultValue: 'master',
+                description: 'Branch for hmpps-env-configs'
+        )
+        string(
+                name: 'spg_terraform_branch',
+                defaultValue: 'master',
+                description: 'Branch for hmpps-delius-spg-shared-terraform'
+        )
+    }
+
+
     stages {
 
         stage ('Notify build started') {
