@@ -51,7 +51,7 @@ pipeline {
     parameters {
         string(
                 name: 'environment_name',
-                defaultValue: 'master',
+                defaultValue: 'delius-auto-test',
                 description: 'Select environment for creation or updating.'
         )
         string(
@@ -61,6 +61,11 @@ pipeline {
         )
         string(
                 name: 'spg_terraform_branch',
+                defaultValue: 'master',
+                description: 'Branch for hmpps-delius-spg-shared-terraform'
+        )
+        string(
+                name: 'jenkins_pipeline_branch',
                 defaultValue: 'master',
                 description: 'Branch for hmpps-delius-spg-shared-terraform'
         )

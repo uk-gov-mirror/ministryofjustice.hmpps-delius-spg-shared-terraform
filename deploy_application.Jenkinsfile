@@ -136,6 +136,11 @@ pipeline {
           defaultValue: 'master',
           description: 'Branch for hmpps-delius-spg-shared-terraform'
         )
+        string(
+                name: 'jenkins_pipeline_branch',
+                defaultValue: 'master',
+                description: 'Branch for hmpps-delius-spg-shared-terraform'
+        )
     }
 
     tools {
