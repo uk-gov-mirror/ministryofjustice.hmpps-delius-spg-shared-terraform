@@ -38,23 +38,44 @@ resource "aws_security_group_rule" "external_inst_egress_httpunsigned" {
 ### port 9001 (soap/rest mutual TLS)
 #-------------------------------------------------------------
 
-resource "aws_security_group_rule" "external_inst_ingress_https" {
-  description              = "from-vpcCIDR-to-iso-for-crc-9001"
+resource "aws_security_group_rule" "external_inst_ingress_https_crc_nataz1" {
+  description              = "from-vpcNAT-to-iso-for-crc-9001"
   type                     = "ingress"
-  cidr_blocks              = ["${local.private_cidr_block}"]  #from crc
+  cidr_blocks              = ["${local.natgateway_common-nat-public-ip-az1}/32"]  #from crc via NAT
   security_group_id        = "${local.external_inst_sg_id}"
   from_port                = 9001
   to_port                  = 9001
   protocol                 = "tcp"
 }
 
-resource "aws_security_group_rule" "external_inst_egress_https" {
-  description              = "from-iso-to-vpcCIDR-for-crc-9001"
-  type                     = "egress"
+resource "aws_security_group_rule" "external_inst_ingress_https_crc_nataz2" {
+  description              = "from-vpcNAT-to-iso-for-crc-9001"
+  type                     = "ingress"
+  cidr_blocks              = ["${local.natgateway_common-nat-public-ip-az2}/32"]  #from crc via NAT
   security_group_id        = "${local.external_inst_sg_id}"
-  cidr_blocks              = ["${local.private_cidr_block}"] #from crc
   from_port                = 9001
   to_port                  = 9001
   protocol                 = "tcp"
 }
+
+resource "aws_security_group_rule" "external_inst_ingress_https_crc_nataz3" {
+  description              = "from-vpcNAT-to-iso-for-crc-9001"
+  type                     = "ingress"
+  cidr_blocks              = ["${local.natgateway_common-nat-public-ip-az3}/32"]  #from crc via NAT
+  security_group_id        = "${local.external_inst_sg_id}"
+  from_port                = 9001
+  to_port                  = 9001
+  protocol                 = "tcp"
+}
+
+//all servers can talk on all ports, so not yet required
+//resource "aws_security_group_rule" "external_inst_egress_https" {
+//  description              = "from-iso-to-vpcCIDR-for-crc-9001"
+//  type                     = "egress"
+//  security_group_id        = "${local.external_inst_sg_id}"
+//  cidr_blocks              = ["${local.private_cidr_block}"] #from crc
+//  from_port                = 9001
+//  to_port                  = 9001
+//  protocol                 = "tcp"
+//}
 

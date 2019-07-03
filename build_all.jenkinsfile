@@ -35,44 +35,48 @@ pipeline {
     }
 
 
-    stages {
-
-        stage ('Notify build started') {
-            steps {
-                slackSend(message: "${env.JOB_NAME} ${env.BUILD_NUMBER} - Build Started (<${env.BUILD_URL.replace(':8080','')}|Open>)")
-            }
-        }
-
-
-
-        stage('Components') {
-            parallel {
-                stage('SPG Infrastructure')      { steps { build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Deploy_Infrastructure")}}
-                stage('SPG Application')      { steps { build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Deploy_Application")}}
-            }
-        }
-
-        stage('Cycle Instances') {
-            steps {
-                build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Cycle_Instances")
-            }
-        }
-
-        stage('Smoke test') {
-            steps {
-                // NEEDS TO WAIT FOR INSTANCES TO BE UP!!!
-                build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Smoke_Test")
-            }
-        }
-
-    }
 
     post {
+        stages {
+
+            stage('Notify build started') {
+                steps {
+                    slackSend(message: "${env.JOB_NAME} ${env.BUILD_NUMBER} - Build Started (<${env.BUILD_URL.replace(':8080', '')}|Open>)")
+                }
+            }
+
+
+
+            stage('Components') {
+                parallel {
+                    stage('SPG Infrastructure') {
+                        steps { build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Deploy_Infrastructure") }
+                    }
+                    stage('SPG Application') {
+                        steps { build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Deploy_Application") }
+                    }
+                }
+            }
+
+            stage('Cycle Instances') {
+                steps {
+                    build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Cycle_Instances")
+                }
+            }
+
+            stage('Smoke test') {
+                steps {
+                    // NEEDS TO WAIT FOR INSTANCES TO BE UP!!!
+                    build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Smoke_Test")
+                }
+            }
+
+        }
         success {
-            slackSend(message: "${env.JOB_NAME} ${env.BUILD_NUMBER} - Build completed (<${env.BUILD_URL.replace(':8080','')}|Open>)", color: 'good')
+            slackSend(message: "${env.JOB_NAME} ${env.BUILD_NUMBER} - Build completed (<${env.BUILD_URL.replace(':8080', '')}|Open>)", color: 'good')
         }
         failure {
-            slackSend(message: "${env.JOB_NAME} ${env.BUILD_NUMBER} - Build failed (<${env.BUILD_URL.replace(':8080','')}|Open>)", color: 'danger')
+            slackSend(message: "${env.JOB_NAME} ${env.BUILD_NUMBER} - Build failed (<${env.BUILD_URL.replace(':8080', '')}|Open>)", color: 'danger')
         }
         always {
             deleteDir()
