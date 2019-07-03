@@ -5,106 +5,139 @@
 
 
 
-//8181 for cxf signed soap listener and hawtio from external loadbalancer
 
+#-------------------------------------------------------------
+### port 8181 (soap/rest/hawtio)
+#-------------------------------------------------------------
 resource "aws_security_group_rule" "internal_lb_ingress_http_8181" {
-  security_group_id        = "${local.internal_lb_sg_id}"
+  description              = "from-iso-to-mpxLB-8181"
   type                     = "ingress"
+  source_security_group_id = "${local.external_inst_sg_id}"
+  security_group_id        = "${local.internal_lb_sg_id}"
   from_port                = 8181
   to_port                  = 8181
   protocol                 = "tcp"
-  source_security_group_id = "${local.external_inst_sg_id}"
-  description              = "from-ext-inst-ingress-http-8181"
 }
 
 
-//8181 for internal loadbalancer to innstance
 resource "aws_security_group_rule" "internal_lb_egress_http_8181" {
-  security_group_id        = "${local.internal_lb_sg_id}"
+  description              = "from-mpxLB-to-mpx-8181"
   type                     = "egress"
+  security_group_id        = "${local.internal_lb_sg_id}"
+  source_security_group_id = "${local.internal_inst_sg_id}"
   from_port                = 8181
   to_port                  = 8181
   protocol                 = "tcp"
-  source_security_group_id = "${local.internal_inst_sg_id}"
-  description              = "to-int-inst-engress-http-8181"
 }
 
 
 
-//8989 for iso to mpx soap proxy (no haproxy)
+#-------------------------------------------------------------
+### port 8989 (soap from iso to mpx)
+#-------------------------------------------------------------
 resource "aws_security_group_rule" "internal_lb_ingress_http_8989" {
-  security_group_id        = "${local.internal_lb_sg_id}"
+  description              = "from-iso-to-mpxLB-8989"
   type                     = "ingress"
-  from_port                = 8989
-  to_port                  = 8989
-  protocol                 = "tcp"
   source_security_group_id = "${local.external_inst_sg_id}"
-  description              = "from-ext-inst-ingress-http-8989"
-}
-
-
-//8989 from internal lb to instance
-resource "aws_security_group_rule" "internal_lb_egress_http_8989" {
   security_group_id        = "${local.internal_lb_sg_id}"
-  type                     = "egress"
   from_port                = 8989
   to_port                  = 8989
   protocol                 = "tcp"
-  source_security_group_id = "${local.internal_inst_sg_id}"
-  description              = "to-int-inst-ingress-http-8989"
 }
 
 
 
+resource "aws_security_group_rule" "internal_lb_egress_http_8989" {
+  description              = "from-mpxLB-to-mpx-8181"
+  type                     = "egress"
+  security_group_id        = "${local.internal_lb_sg_id}"
+  source_security_group_id = "${local.internal_inst_sg_id}"
+  from_port                = 8989
+  to_port                  = 8989
+  protocol                 = "tcp"
+}
 
+
+
+#-------------------------------------------------------------
+### port 2222 (ssh as used by MTS tests with virtuoso user)
+#-------------------------------------------------------------
 resource "aws_security_group_rule" "internal_lb_ingress_ssh_2222" {
-  security_group_id        = "${local.internal_lb_sg_id}"
+  description              = "from-engineeringCIDR-to-mpxLB-2222"
   type                     = "ingress"
-  from_port                = 2222
-  to_port                  = 2222
-  protocol                 = "tcp"
   cidr_blocks              = ["${data.terraform_remote_state.vpc.eng_vpc_cidr}"]
-  description              = "from-engineering-ssh-2222"
-}
-
-
-//8989 from internal lb to instance
-resource "aws_security_group_rule" "internal_lb_egress_ssh_2222" {
   security_group_id        = "${local.internal_lb_sg_id}"
-  type                     = "egress"
   from_port                = 2222
   to_port                  = 2222
   protocol                 = "tcp"
+}
+
+
+resource "aws_security_group_rule" "internal_lb_egress_ssh_2222" {
+  description              = "from-mpxLB-to-mpx-2222"
+  type                     = "egress"
+  security_group_id        = "${local.internal_lb_sg_id}"
   source_security_group_id = "${local.internal_inst_sg_id}"
-  description              = "to-int-inst-ingress-ssh-2222"
+  from_port                = 2222
+  to_port                  = 2222
+  protocol                 = "tcp"
 }
 
 
 
-
-
-
-## Allow JMS access to SPG GW to from any server in private CIDR block with the port range specified by SPG domain
+#-------------------------------------------------------------
+### port 61616-61617 (JMS  nDelius & Alfresco)
+### MPX / HYBRID ONLY
+#-------------------------------------------------------------
 resource "aws_security_group_rule" "internal_lb_ingress_jms_private" {
-  security_group_id        = "${local.internal_lb_sg_id}"
+  description              = "from-vpcCIDR-to-mpxLB-JMS"
   type                     = "ingress"
+  cidr_blocks              = ["${local.private_cidr_block}"]
+  security_group_id        = "${local.internal_lb_sg_id}"
   protocol                 = "tcp"
   from_port                = "${var.spg_partnergateway_domain_ports["jms_broker"]}"
   to_port                  = "${var.spg_partnergateway_domain_ports["jms_broker_ssl"]}"
-  cidr_blocks              = ["${local.private_cidr_block}"]
-  description              = "in"
 }
 
 
 
 
-//jms from internal loadbalancer to instance
 resource "aws_security_group_rule" "internal_lb_egress_jms_61616_7" {
+  description              = "from-mpxLB-to-mpx-JMS"
+  source_security_group_id = "${local.internal_inst_sg_id}"
   security_group_id        = "${local.internal_lb_sg_id}"
   type                     = "egress"
   from_port                = "${var.spg_partnergateway_domain_ports["jms_broker"]}"
   to_port                  = "${var.spg_partnergateway_domain_ports["jms_broker_ssl"]}"
   protocol                 = "tcp"
-  source_security_group_id = "${local.internal_inst_sg_id}"
-  description              = "to-int-inst-ingress-jms-61616"
+}
+
+
+
+
+
+
+#-------------------------------------------------------------
+### port 9001 (soap/rest mutual TLS)
+### CRC ONLY
+#-------------------------------------------------------------
+resource "aws_security_group_rule" "internal_lb_ingress_https" {
+  description              = "from-iso-to-crcLB-9001"
+  type                     = "ingress"
+  cidr_blocks              = ["${local.private_cidr_block}"]  #for iso servers
+  security_group_id        = "${local.internal_lb_sg_id}"
+  from_port                = 9001
+  to_port                  = 9001
+  protocol                 = "tcp"
+}
+
+
+resource "aws_security_group_rule" "internal_lb_egress_https" {
+  description              = "from-crcLB-to-crc-9001"
+  type                     = "egress"
+  security_group_id        = "${local.internal_lb_sg_id}"
+  cidr_blocks              = ["${local.private_cidr_block}"]  # for crc servers
+  from_port                = 9001
+  to_port                  = 9001
+  protocol                 = "tcp"
 }

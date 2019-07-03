@@ -12,7 +12,7 @@ data "template_file" "app_task_definition" {
 
   vars {
     container_name = "${local.app_name}-${local.app_submodule}"
-    ecs_cpu_units = "${local.ecs_cpu_units}"
+//    ecs_cpu_units = "${local.ecs_cpu_units}"
     ecs_memory = "${local.ecs_memory}"
 
     image_url = "${local.image_url}"
@@ -29,6 +29,7 @@ data "template_file" "app_task_definition" {
     s3_bucket_config = "${local.s3_bucket_config}"
     spg_build_inv_dir = "${local.spg_build_inv_dir}"
 
+    SPG_HOST_TYPE = "${local.SPG_HOST_TYPE}"
     SPG_GENERIC_BUILD_INV_DIR = "${local.SPG_GENERIC_BUILD_INV_DIR}"
     SPG_JAVA_MAX_MEM = "${local.SPG_JAVA_MAX_MEM}"
     SPG_ENVIRONMENT_CODE = "${local.SPG_ENVIRONMENT_CODE}"

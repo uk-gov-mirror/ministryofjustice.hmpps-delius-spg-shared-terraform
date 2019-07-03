@@ -2,14 +2,7 @@ def project = [:]
 project.config    = 'hmpps-env-configs'
 project.terraform     = 'hmpps-delius-spg-shared-terraform'
 
-// Parameters required for job
-// parameters:
-//     choice:
-//       name: 'environment_name'
-//       description: 'Environment name.'
-//     booleanParam:
-//       name: 'confirmation'
-//       description: 'Whether to require manual confirmation of terraform plans.'
+
 
 def prepare_env() {
     sh '''
@@ -55,15 +48,39 @@ pipeline {
 
     agent { label "jenkins_slave" }
 
+    parameters {
+        string(
+                name: 'environment_name',
+                defaultValue: 'delius-auto-test',
+                description: 'Select environment for creation or updating.'
+        )
+        string(
+                name: 'config_branch',
+                defaultValue: 'master',
+                description: 'Branch for hmpps-env-configs'
+        )
+        string(
+                name: 'spg_terraform_branch',
+                defaultValue: 'master',
+                description: 'Branch for hmpps-delius-spg-shared-terraform'
+        )
+        string(
+                name: 'jenkins_pipeline_branch',
+                defaultValue: 'master',
+                description: 'Branch for hmpps-delius-spg-shared-terraform'
+        )
+    }
+
+
     stages {
 
         stage('setup') {
             steps {
                 dir( project.config ) {
-                  git url: 'git@github.com:ministryofjustice/' + project.config, branch: 'master', credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
+                  git url: 'git@github.com:ministryofjustice/' + project.config, branch: params.config_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
                 }
                 dir( project.terraform ) {
-                  git url: 'git@github.com:ministryofjustice/' + project.terraform, branch: 'master', credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
+                  git url: 'git@github.com:ministryofjustice/' + project.terraform, branch: params.spg_terraform_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
                 }
 
                 prepare_env()
