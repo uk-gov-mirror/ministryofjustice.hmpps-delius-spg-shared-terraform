@@ -1,6 +1,10 @@
 def build_job_if_exists(job) {
     if (jenkins.model.Jenkins.instance.getItemByFullName(job) != null) {
-        build job: job, parameters: [[$class: 'BooleanParameterValue', name: 'confirmation', value: false]]
+        build job: job, parameters: [[$class: 'BooleanParameterValue', name: 'confirmation', value: false],
+                                     string(name: 'environment_name', value: 'prefix-' + String.valueOf(environment_name)),
+                                     string(name: 'config_branch', value: 'prefix-' + String.valueOf(config_branch)),
+                                     string(name: 'spg_terraform_branch', value: 'prefix-' + String.valueOf(spg_terraform_branch))
+                ]
     } else {
         println("Skipping ${job} as it doesn't exist in this environment")
     }
