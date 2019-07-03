@@ -1,3 +1,11 @@
+/* The following parameters are required from Jenkins GUI or other upstream jobs
+        environment_name
+        config_branch
+        spg_terraform_branch
+        jenkins_pipeline_branch
+        confirm (boolean)
+*/
+
 def project = [:]
 project.config    = 'hmpps-env-configs'
 project.terraform     = 'hmpps-delius-spg-shared-terraform'
