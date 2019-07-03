@@ -120,24 +120,6 @@ pipeline {
 
     agent { label "jenkins_slave" }
 
-//    parameters {
-//        string(
-//          name: 'config_branch',
-//          defaultValue: 'master',
-//          description: 'Branch for hmpps-env-configs'
-//        )
-//        string(
-//          name: 'spg_terraform_branch',
-//          defaultValue: 'master',
-//          description: 'Branch for hmpps-delius-spg-shared-terraform'
-//        )
-//        string(
-//                name: 'jenkins_pipeline_branch',
-//                defaultValue: 'master',
-//                description: 'Branch for hmpps-delius-spg-shared-terraform'
-//        )
-//    }
-
     tools {
             maven 'Maven 3.3.9'
             jdk 'jdk8'
