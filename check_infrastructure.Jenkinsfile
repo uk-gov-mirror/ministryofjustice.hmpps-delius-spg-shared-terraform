@@ -50,11 +50,6 @@ pipeline {
 
     parameters {
         string(
-                name: 'environment_name',
-                defaultValue: 'delius-auto-test',
-                description: 'Select environment for creation or updating.'
-        )
-        string(
                 name: 'config_branch',
                 defaultValue: 'master',
                 description: 'Branch for hmpps-env-configs'
