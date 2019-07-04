@@ -58,11 +58,6 @@ pipeline {
                 }
             }
 
-            stage('Cycle Instances') {
-                steps {
-                    build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Cycle_Instances")
-                }
-            }
 
             stage('Smoke test') {
                 steps {
