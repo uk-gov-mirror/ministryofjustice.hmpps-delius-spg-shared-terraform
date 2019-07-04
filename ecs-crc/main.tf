@@ -175,8 +175,8 @@ locals {
   #ecs task definition
   ########################################################################################################
 
-  image_url             = "${data.terraform_remote_state.ecr.ecr_repository_url}"
-  image_version         = "latest"
+  image_url             = "${var.image_url}"
+  image_version         = "${var.image_version}"
   //ecs_cpu_units = "${var.spg_crc_ecs_cpu_units}" //NOTE using null for cpu units, which I think defaults to max
   ecs_memory    = "${var.spg_crc_ecs_memory}"
   #regular config bucket - not sure what this is used for yet
