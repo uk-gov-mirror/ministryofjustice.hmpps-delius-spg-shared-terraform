@@ -9,10 +9,11 @@
 def build_job_if_exists(job) {
     if (jenkins.model.Jenkins.instance.getItemByFullName(job) != null) {
         build job: job, parameters: [[$class: 'BooleanParameterValue', name: 'confirmation', value: false],
-                                     string(name: 'environment_name', value:  String.valueOf(environment_name)),
+                                     string(name: 'environment_name', value: String.valueOf(environment_name)),
                                      string(name: 'config_branch', value: String.valueOf(config_branch)),
+                                     string(name: 'jenkins_pipeline_branch', value: String.valueOf(jenkins_pipeline_branch)),
                                      string(name: 'spg_terraform_branch', value: String.valueOf(spg_terraform_branch))
-                ]
+        ]
     } else {
         println("Skipping ${job} as it doesn't exist in this environment")
     }
@@ -32,22 +33,13 @@ pipeline {
 
 
 
-        stage('Components') {
-            parallel {
-                stage('SPG Infrastructure') {
-                    steps { build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Deploy_Infrastructure") }
-                }
-                stage('SPG Application') {
-                    steps { build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Deploy_Application") }
-                }
-            }
+        stage('SPG Infrastructure') {
+            steps { build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Deploy_Infrastructure") }
+        }
+        stage('SPG Application') {
+            steps { build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Deploy_Application") }
         }
 
-        stage('Cycle Instances') {
-            steps {
-                build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Cycle_Instances")
-            }
-        }
 
         stage('Smoke test') {
             steps {

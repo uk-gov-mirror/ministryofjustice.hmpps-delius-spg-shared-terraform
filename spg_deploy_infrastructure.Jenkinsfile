@@ -165,14 +165,6 @@ pipeline {
             }
         }
 
-        stage('Delius | SPG | ECR') {
-            steps {
-                script {
-                    do_terraform(project.config, environment_name, project.terraform, 'ecr')
-                }
-            }
-        }
-
         stage('Delius | SPG | Security Groups') {
             steps {
                 script {

@@ -77,7 +77,6 @@ pipeline {
             stage('Plan SPG monitoring')       { steps { script {plan_submodule(project.config, environment_name, project.terraform, 'monitoring')}}}
             stage('Plan SPG iam')              { steps { script {plan_submodule(project.config, environment_name, project.terraform, 'iam')}}}
             stage('Plan SPG security-groups')  { steps { script {plan_submodule(project.config, environment_name, project.terraform, 'security-groups')}}}
-            stage('Plan SPG ecr')              { steps { script {plan_submodule(project.config, environment_name, project.terraform, 'ecr')}}}
             stage('Plan SPG ecs-crc')          { steps { script {plan_submodule(project.config, environment_name, project.terraform, 'ecs-crc')}}}
             stage('Plan SPG ecs-mpx')          { steps { script {plan_submodule(project.config, environment_name, project.terraform, 'ecs-mpx')}}}
             stage('Plan SPG ecs-iso')          { steps { script {plan_submodule(project.config, environment_name, project.terraform, 'ecs-iso')}}}

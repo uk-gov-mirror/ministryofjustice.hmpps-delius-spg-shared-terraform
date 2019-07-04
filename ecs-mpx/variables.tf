@@ -42,6 +42,13 @@ variable spg_mpx_ecs_memory {
 //}
 
 
+variable image_url {
+  default = "895523100917.dkr.ecr.eu-west-2.amazonaws.com/hmpps/spg"
+}
+
+variable image_version {
+  default = "latest"
+}
 
 
 variable "tags" {
