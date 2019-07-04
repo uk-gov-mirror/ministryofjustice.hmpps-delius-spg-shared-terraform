@@ -48,13 +48,11 @@ pipeline {
 
 
             stage('Components') {
-                parallel {
-                    stage('SPG Infrastructure') {
-                        steps { build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Deploy_Infrastructure") }
-                    }
-                    stage('SPG Application') {
-                        steps { build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Deploy_Application") }
-                    }
+                stage('SPG Infrastructure') {
+                    steps { build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Deploy_Infrastructure") }
+                }
+                stage('SPG Application') {
+                    steps { build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Deploy_Application") }
                 }
             }
 
