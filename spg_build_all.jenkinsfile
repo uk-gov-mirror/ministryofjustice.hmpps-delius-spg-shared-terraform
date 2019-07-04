@@ -11,6 +11,7 @@ def build_job_if_exists(job) {
         build job: job, parameters: [[$class: 'BooleanParameterValue', name: 'confirmation', value: false],
                                      string(name: 'environment_name', value: String.valueOf(environment_name)),
                                      string(name: 'config_branch', value: String.valueOf(config_branch)),
+                                     string(name: 'jenkins_pipeline_branch', value: String.valueOf(jenkins_pipeline_branch)),
                                      string(name: 'spg_terraform_branch', value: String.valueOf(spg_terraform_branch))
         ]
     } else {
