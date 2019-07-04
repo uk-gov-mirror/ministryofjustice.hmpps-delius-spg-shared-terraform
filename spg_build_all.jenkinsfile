@@ -1,0 +1,72 @@
+/* The following parameters are required from Jenkins GUI or other upstream jobs
+        environment_name
+        config_branch
+        spg_terraform_branch
+        jenkins_pipeline_branch
+        confirm (boolean)
+*/
+
+def build_job_if_exists(job) {
+    if (jenkins.model.Jenkins.instance.getItemByFullName(job) != null) {
+        build job: job, parameters: [[$class: 'BooleanParameterValue', name: 'confirmation', value: false],
+                                     string(name: 'environment_name', value:  String.valueOf(environment_name)),
+                                     string(name: 'config_branch', value: String.valueOf(config_branch)),
+                                     string(name: 'spg_terraform_branch', value: String.valueOf(spg_terraform_branch))
+                ]
+    } else {
+        println("Skipping ${job} as it doesn't exist in this environment")
+    }
+}
+
+pipeline {
+
+    agent { label "jenkins_slave" }
+
+    stages {
+
+        stage('Notify build started') {
+            steps {
+                slackSend(message: "${env.JOB_NAME} ${env.BUILD_NUMBER} - Build Started (<${env.BUILD_URL.replace(':8080', '')}|Open>)")
+            }
+        }
+
+
+
+        stage('Components') {
+            parallel {
+                stage('SPG Infrastructure') {
+                    steps { build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Deploy_Infrastructure") }
+                }
+                stage('SPG Application') {
+                    steps { build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Deploy_Application") }
+                }
+            }
+        }
+
+        stage('Cycle Instances') {
+            steps {
+                build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Cycle_Instances")
+            }
+        }
+
+        stage('Smoke test') {
+            steps {
+                // NEEDS TO WAIT FOR INSTANCES TO BE UP!!!
+                build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Smoke_Test")
+            }
+        }
+
+    }
+
+    post {
+        success {
+            slackSend(message: "${env.JOB_NAME} ${env.BUILD_NUMBER} - Build completed (<${env.BUILD_URL.replace(':8080', '')}|Open>)", color: 'good')
+        }
+        failure {
+            slackSend(message: "${env.JOB_NAME} ${env.BUILD_NUMBER} - Build failed (<${env.BUILD_URL.replace(':8080', '')}|Open>)", color: 'danger')
+        }
+        always {
+            deleteDir()
+        }
+    }
+}

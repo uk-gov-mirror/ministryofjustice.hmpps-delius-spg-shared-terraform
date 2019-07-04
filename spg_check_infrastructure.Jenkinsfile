@@ -1,3 +1,11 @@
+/* The following parameters are required from Jenkins GUI or other upstream jobs
+        environment_name
+        config_branch
+        spg_terraform_branch
+        jenkins_pipeline_branch
+        confirm (boolean)
+*/
+
 def project = [:]
 project.config    = 'hmpps-env-configs'
 project.terraform     = 'hmpps-delius-spg-shared-terraform'
@@ -47,30 +55,6 @@ def plan_submodule(config_dir, env_name, git_project_dir, submodule_name) {
 pipeline {
 
     agent { label "jenkins_slave" }
-
-    parameters {
-        string(
-                name: 'environment_name',
-                defaultValue: 'delius-auto-test',
-                description: 'Select environment for creation or updating.'
-        )
-        string(
-                name: 'config_branch',
-                defaultValue: 'master',
-                description: 'Branch for hmpps-env-configs'
-        )
-        string(
-                name: 'spg_terraform_branch',
-                defaultValue: 'master',
-                description: 'Branch for hmpps-delius-spg-shared-terraform'
-        )
-        string(
-                name: 'jenkins_pipeline_branch',
-                defaultValue: 'master',
-                description: 'Branch for hmpps-delius-spg-shared-terraform'
-        )
-    }
-
 
     stages {
 
