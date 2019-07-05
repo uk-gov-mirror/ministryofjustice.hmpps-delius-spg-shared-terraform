@@ -3,7 +3,6 @@ variable "eng-remote_state_bucket_name" {
   description = "Terraform remote state bucket name"
 }
 
-variable "eng_role_arn" {}
 
 variable "environment_identifier" {
   description = "resource label or name"
@@ -40,7 +39,6 @@ variable "spg_app_name" {}
 
 variable "cloudwatch_log_retention" {}
 
-variable "eng_root_arn" {}
 
 variable "tags" {
   type = "map"
