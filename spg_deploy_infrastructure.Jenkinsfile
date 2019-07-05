@@ -1,3 +1,11 @@
+/* The following parameters are required from Jenkins GUI or other upstream jobs
+        environment_name
+        config_branch
+        spg_terraform_branch
+        jenkins_pipeline_branch
+        confirm (boolean)
+*/
+
 def project = [:]
 project.config = 'hmpps-env-configs'
 project.terraform = 'hmpps-delius-spg-shared-terraform'
@@ -52,12 +60,22 @@ def apply_submodule(config_dir, env_name, git_project_dir, submodule_name) {
         cp -R -n "${config_dir}" "${git_project_dir}/env_configs"
         cd "${git_project_dir}"
         docker run --rm \
-        -v `pwd`:/home/tools/data \
-        -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
-        bash -c "\
-            source env_configs/${env_name}/${env_name}.properties; \
-            cd ${submodule_name}; \
-            terragrunt apply ${env_name}.plan"
+          -v `pwd`:/home/tools/data \
+          -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
+          bash -c " \
+              source env_configs/${env_name}/${env_name}.properties; \
+              cd ${submodule_name}; \
+              terragrunt apply ${env_name}.plan; \
+              tgexitcode=\\\$?; \
+              echo \\\"TG exited with code \\\$tgexitcode\\\"; \
+              if [ \\\$tgexitcode -ne 0 ]; then \
+                exit  \\\$tgexitcode; \
+              else \
+                exit 0; \
+              fi;"; \
+        dockerexitcode=\$?; \
+        echo "Docker step exited with code \$dockerexitcode"; \
+        if [ \$dockerexitcode -ne 0 ]; then exit \$dockerexitcode; else exit 0; fi;
         set -e
         """
     }
@@ -115,18 +133,13 @@ pipeline {
 
     agent { label "jenkins_slave" }
 
-    tools {
-        maven 'Maven 3.3.9'
-        jdk 'jdk8'
-    }
 
     stages {
 
 
         stage('setup') {
             steps {
-
-                slackSend(message: "Build started on \"${environment_name}\" - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL.replace(':8080', '')}|Open>)")
+                slackSend(message: "\"Apply\" started on \"${environment_name}\" - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL.replace(':8080', '')}|Open>)")
 
                 dir(project.config) {
                     git url: 'git@github.com:ministryofjustice/' + project.config, branch: params.config_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
@@ -205,10 +218,10 @@ pipeline {
             deleteDir()
         }
         success {
-            slackSend(message: "Build completed on \"${environment_name}\" - ${env.JOB_NAME} ${env.BUILD_NUMBER} ", color: 'good')
+            slackSend(message: "\"Apply\" completed on \"${environment_name}\" - ${env.JOB_NAME} ${env.BUILD_NUMBER} ", color: 'good')
         }
         failure {
-            slackSend(message: "Build failed on \"${environment_name}\" - ${env.JOB_NAME} ${env.BUILD_NUMBER} ", color: 'danger')
+            slackSend(message: "\"Apply\" failed on \"${environment_name}\" - ${env.JOB_NAME} ${env.BUILD_NUMBER} ", color: 'danger')
         }
     }
 
