@@ -27,7 +27,7 @@ pipeline {
 
         stage('Notify build started') {
             steps {
-                slackSend(message: "${env.JOB_NAME} ${env.BUILD_NUMBER} - Build Started (<${env.BUILD_URL.replace(':8080', '')}|Open>)")
+                slackSend(message: "${env.JOB_NAME} ${env.BUILD_NUMBER} - Build ALL Started (<${env.BUILD_URL.replace(':8080', '')}|Open>)")
             }
         }
 
@@ -52,10 +52,10 @@ pipeline {
 
     post {
         success {
-            slackSend(message: "${env.JOB_NAME} ${env.BUILD_NUMBER} - Build completed (<${env.BUILD_URL.replace(':8080', '')}|Open>)", color: 'good')
+            slackSend(message: "${env.JOB_NAME} ${env.BUILD_NUMBER} - Build ALL completed (<${env.BUILD_URL.replace(':8080', '')}|Open>)", color: 'good')
         }
         failure {
-            slackSend(message: "${env.JOB_NAME} ${env.BUILD_NUMBER} - Build failed (<${env.BUILD_URL.replace(':8080', '')}|Open>)", color: 'danger')
+            slackSend(message: "${env.JOB_NAME} ${env.BUILD_NUMBER} - Build ALL failed (<${env.BUILD_URL.replace(':8080', '')}|Open>)", color: 'danger')
         }
         always {
             deleteDir()
