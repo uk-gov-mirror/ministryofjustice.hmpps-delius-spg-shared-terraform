@@ -173,7 +173,6 @@ locals {
 
   image_url             = "${var.image_url}"
   image_version         = "${var.image_version}"
-  //ecs_cpu_units = "${var.spg_mpx_ecs_cpu_units}" //NOTE using null for cpu units, which I think defaults to max
   ecs_memory    = "${var.spg_mpx_ecs_memory}"
   #regular config bucket - not sure what this is used for yet
   config-bucket         = "${data.terraform_remote_state.common.common_s3-config-bucket}"
