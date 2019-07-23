@@ -32,6 +32,10 @@ data "template_file" "iam_policy_app_ext" {
   vars {
     s3-config-bucket   = "${local.s3-config-bucket}"
     app_role_arn       = "${module.create-iam-app-role-ext.iamrole_arn}"
+    decryptable_certificate_keys  = "${jsonencode("[
+                                     ${data.terraform_remote_state.kms.certificates_spg_cert_kms_arn},
+                                     ${data.terraform_remote_state.kms.certificates_spg_crc_cert_kms_arn}]")}"
+
   }
 }
 
