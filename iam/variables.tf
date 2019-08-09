@@ -16,11 +16,8 @@ variable "environment_identifier" {}
 
 variable "spg_app_name" {}
 
-
-
-
 variable "backups-bucket-name" {
-  default="backups-s3-bucket"
+  default = "backups-s3-bucket"
 }
 
 variable "depends_on" {

@@ -30,11 +30,13 @@ data "template_file" "iam_policy_crc_app_int" {
   template = "${local.ec2_internal_crc_policy_file}"
 
   vars {
-    s3-config-bucket              = "${local.s3-config-bucket}"
-    app_role_arn                  = "${module.create-iam-crc-app-role-int.iamrole_arn}"
-    backups-bucket                = "${local.environment_identifier}-${local.backups-bucket-name}"
-//    decryptable_certificate_keys  = "${jsonencode("[
-//                                     ${data.terraform_remote_state.kms.certificates_spg_crc_cert_kms_arn}]")}"
+    s3-config-bucket       = "${local.s3-config-bucket}"
+    s3-certificates-bucket = "${local.s3-certificates-bucket}"
+    app_role_arn           = "${module.create-iam-crc-app-role-int.iamrole_arn}"
+    backups-bucket         = "${local.environment_identifier}-${local.backups-bucket-name}"
+
+    //    decryptable_certificate_keys  = "${jsonencode("[
+    //                                     ${data.terraform_remote_state.kms.certificates_spg_crc_cert_kms_arn}]")}"
   }
 }
 

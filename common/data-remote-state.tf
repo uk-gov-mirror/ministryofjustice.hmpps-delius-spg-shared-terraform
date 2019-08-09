@@ -39,4 +39,18 @@ data "terraform_remote_state" "security-groups" {
   }
 }
 
+#-------------------------------------------------------------
+### Getting the engineering platform vpc
+#-------------------------------------------------------------
+data "terraform_remote_state" "eng_remote_certificates_s3bucket" {
+  backend = "s3"
+
+  config {
+    bucket   = "${var.eng_remote_state_bucket_name}"
+    key      = "s3bucket-public-and-private-certificates/terraform.tfstate"
+    region   = "${var.region}"
+    role_arn = "${var.eng_role_arn}"
+  }
+}
+
 

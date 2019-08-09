@@ -25,9 +25,19 @@ variable "region" {
   description = "The AWS region."
 }
 
+## remote states
 variable "remote_state_bucket_name" {
   description = "Terraform remote state bucket name"
 }
+
+variable "eng_remote_state_bucket_name" {
+  description = "Terraform remote state bucket name for engineering (non prod) platform vpc"
+}
+
+variable "eng_role_arn" {
+  description = "arn to use for engineering platform terraform"
+}
+
 
 variable "lb_account_id" {}
 

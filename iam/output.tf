@@ -26,9 +26,6 @@ output "iam_policy_ext_app_instance_profile_name" {
   value = "${module.create-iam-instance-profile-ext.iam_instance_name}"
 }
 
-
-
-
 # INTERNAL
 
 # ECS
