@@ -42,7 +42,7 @@ data "template_file" "iam_policy_app_ext" {
 
 module "create-iam-app-role-ext" {
   source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//role"
-  rolename   = "${local.common_name}-iso-ext-ec2"
+  rolename   = "${local.common_name}-ext-ec2"
   policyfile = "${local.ec2_policy_file}"
 }
 
