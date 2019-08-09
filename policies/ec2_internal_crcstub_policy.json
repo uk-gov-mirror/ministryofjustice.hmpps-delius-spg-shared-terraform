@@ -110,15 +110,6 @@
                 "route53:ListHostedZonesByName"
             ],
             "Resource": "*"
-        },
-        {
-            "Sid": "decryptSpgCertificatePrivateKeys",
-            "Effect": "Allow",
-            "Action": [
-                "kms:Decrypt*"
-            ],
-            "Resource": ${decryptable_certificate_keys}
-
-    }
+        }
     ]
 }

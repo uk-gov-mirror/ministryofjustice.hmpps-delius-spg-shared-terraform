@@ -33,9 +33,9 @@ data "template_file" "iam_policy_app_int" {
     s3-config-bucket              = "${local.s3-config-bucket}"
     app_role_arn                  = "${module.create-iam-app-role-int.iamrole_arn}"
     backups-bucket                = "${local.environment_identifier}-${local.backups-bucket-name}"
-    decryptable_certificate_keys  = "${jsonencode("[
-                                     ${data.terraform_remote_state.kms.certificates_spg_cert_kms_arn},
-                                     ${data.terraform_remote_state.kms.certificates_spg_crc_cert_kms_arn}]")}"
+  //    decryptable_certificate_keys  = "${jsonencode("[
+  //                                     ${data.terraform_remote_state.kms.certificates_spg_cert_kms_arn},
+  //                                     ${data.terraform_remote_state.kms.certificates_spg_crc_cert_kms_arn}]")}"
 
   }
 }

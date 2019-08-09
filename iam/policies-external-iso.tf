@@ -12,7 +12,7 @@ data "template_file" "iam_policy_ecs_ext" {
 
 module "create-iam-ecs-role-ext" {
   source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//role"
-  rolename   = "${local.common_name}-ext-ecs-svc"
+  rolename   = "${local.common_name}-iso-ext-ecs-svc"
   policyfile = "${local.ecs_policy_file}"
 }
 
@@ -32,16 +32,16 @@ data "template_file" "iam_policy_app_ext" {
   vars {
     s3-config-bucket   = "${local.s3-config-bucket}"
     app_role_arn       = "${module.create-iam-app-role-ext.iamrole_arn}"
-    decryptable_certificate_keys  = "${jsonencode("[
-                                     ${data.terraform_remote_state.kms.certificates_spg_cert_kms_arn},
-                                     ${data.terraform_remote_state.kms.certificates_spg_crc_cert_kms_arn}]")}"
+//    decryptable_certificate_keys  = "${jsonencode("[
+//                                     ${data.terraform_remote_state.kms.certificates_spg_cert_kms_arn},
+//                                     ${data.terraform_remote_state.kms.certificates_spg_crc_cert_kms_arn}]")}"
 
   }
 }
 
 module "create-iam-app-role-ext" {
   source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//role"
-  rolename   = "${local.common_name}-ext-ec2"
+  rolename   = "${local.common_name}-iso-ext-ec2"
   policyfile = "${local.ec2_policy_file}"
 }
 
