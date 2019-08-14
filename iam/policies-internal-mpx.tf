@@ -3,7 +3,7 @@
 #-------------------------------------------------------------
 
 data "template_file" "iam_policy_ecs_int" {
-  template = "${local.ecs_role_policy_file}"
+  template = "${file(local.ecs_role_policy_file)}"
 
   vars {
     aws_lb_arn = "*"
@@ -13,7 +13,7 @@ data "template_file" "iam_policy_ecs_int" {
 module "create-iam-ecs-role-int" {
   source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//role"
   rolename   = "${local.common_name}-int-ecs-svc"
-  policyfile = "${local.ecs_policy_file}"
+  policyfile = "${local.ecs_module_default_assume_role_policy_file}"
 }
 
 module "create-iam-ecs-policy-int" {
@@ -27,7 +27,7 @@ module "create-iam-ecs-policy-int" {
 #-------------------------------------------------------------
 
 data "template_file" "iam_policy_app_int" {
-  template = "${local.ec2_internal_policy_file}"
+  template = "${file(local.ec2_internal_mpx_policy_file)}"
 
   vars {
     s3-config-bucket       = "${local.s3-config-bucket}"
@@ -44,7 +44,7 @@ data "template_file" "iam_policy_app_int" {
 module "create-iam-app-role-int" {
   source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//role"
   rolename   = "${local.common_name}-int-ec2"
-  policyfile = "${local.ec2_policy_file}"
+  policyfile = "${local.ec2_iam_module_default_assume_role_policy_file}"
 }
 
 module "create-iam-instance-profile-int" {
