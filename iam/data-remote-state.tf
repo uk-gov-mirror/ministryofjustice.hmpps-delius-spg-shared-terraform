@@ -32,7 +32,7 @@ data "terraform_remote_state" "kms" {
 
   config {
     bucket = "${var.remote_state_bucket_name}"
-    key    = "kms-public-and-private-certificates/terraform.tfstate"
+    key    = "kms-certificates-spg/terraform.tfstate"
     region = "${var.region}"
   }
 }

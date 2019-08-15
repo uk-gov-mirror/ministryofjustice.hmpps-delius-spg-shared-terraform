@@ -1,0 +1,69 @@
+{
+  "Version": "2012-10-17",
+  "Id": "certificate-administration-policy",
+  "Statement": [
+    {
+      "Sid": "Enable IAM User Permissions for key owner",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": [
+          "arn:aws:iam::${accountID}:root"
+        ]
+      },
+      "Action": "kms:*",
+      "Resource": "*"
+    },
+    {
+      "Sid": "Allow access for Key Administrators",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": [
+          "arn:aws:iam::895523100917:role/terraform",
+          "arn:aws:iam::895523100917:role/tf-eu-west-2-hmpps-eng-dev-jenkins-ec2-slave-role",
+          "arn:aws:iam::895523100917:role/admin"
+
+        ]
+      },
+      "Action": [
+        "kms:Create*",
+        "kms:Describe*",
+        "kms:Enable*",
+        "kms:List*",
+        "kms:Put*",
+        "kms:Revoke*",
+        "kms:Disable*",
+        "kms:Get*",
+        "kms:TagResource",
+        "kms:UntagResource",
+        "kms:ScheduleKeyDeletion",
+        "kms:CancelKeyDeletion"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "Allow encrypt / decrypt for Certificate Administrators",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": [
+          "arn:aws:iam::895523100917:role/tf-eu-west-2-hmpps-eng-dev-jenkins-ec2-slave-role"
+        ]
+      },
+      "Action": [
+        "kms:Encrypt*",
+        "kms:Decrypt*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "Allow decrypt for Certificate Consumers",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": [${roles_allowed_to_decrypt}]
+      },
+      "Action": [
+        "kms:Decrypt*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

@@ -10,16 +10,16 @@ data "template_file" "iam_policy_ecs_ext" {
   }
 }
 
-module "create-iam-ecs-role-ext" {
+module "create-iam-ecs-role-iso-ext" {
   source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//role"
   rolename   = "${local.common_name}-iso-ext-ecs-svc"
   policyfile = "${local.ecs_module_default_assume_role_policy_file}"
 }
 
-module "create-iam-ecs-policy-ext" {
+module "create-iam-ecs-policy-iso-ext" {
   source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//rolepolicy"
   policyfile = "${data.template_file.iam_policy_ecs_ext.rendered}"
-  rolename   = "${module.create-iam-ecs-role-ext.iamrole_name}"
+  rolename   = "${module.create-iam-ecs-role-iso-ext.iamrole_name}"
 }
 
 #-------------------------------------------------------------
@@ -32,27 +32,34 @@ data "template_file" "iam_policy_app_ext" {
   vars {
     s3-config-bucket       = "${local.s3-config-bucket}"
     s3-certificates-bucket = "${local.s3-certificates-bucket}"
-    app_role_arn           = "${module.create-iam-app-role-ext.iamrole_arn}"
+    app_role_arn           = "${module.create-iam-app-role-iso-ext.iamrole_arn}"
 
-    //    decryptable_certificate_keys  = "${jsonencode("[
-    //                                     ${data.terraform_remote_state.kms.certificates_spg_cert_kms_arn},
-    //                                     ${data.terraform_remote_state.kms.certificates_spg_crc_cert_kms_arn}]")}"
+    //so we could either specify the environment kms keys (seperate keys per enviro)
+    //or just use the engineering one for all and rely on s3 policy - which is limited in size
+
+    decryptable_certificate_keys  = ["${data.terraform_remote_state.kms.certificates_spg_iso_cert_kms_id}"]
+
+
+          //"${jsonencode("[
+          //                                         ${data.terraform_remote_state.kms.certificates_spg_cert_kms_arn},
+          //                                         ${data.terraform_remote_state.kms.certificates_spg_crc_cert_kms_arn}]")}"
+
   }
 }
 
-module "create-iam-app-role-ext" {
+module "create-iam-app-role-iso-ext" {
   source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//role"
-  rolename   = "${local.common_name}-ext-ec2"
+  rolename   = "${local.common_name}-iso-ext-ec2"
   policyfile = "${local.ec2_iam_module_default_assume_role_policy_file}"
 }
 
-module "create-iam-instance-profile-ext" {
+module "create-iam-instance-profile-iso-ext" {
   source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//instance_profile"
-  role   = "${module.create-iam-app-role-ext.iamrole_name}"
+  role   = "${module.create-iam-app-role-iso-ext.iamrole_name}"
 }
 
 module "create-iam-app-policy-ext" {
   source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//rolepolicy"
   policyfile = "${data.template_file.iam_policy_app_ext.rendered}"
-  rolename   = "${module.create-iam-app-role-ext.iamrole_name}"
+  rolename   = "${module.create-iam-app-role-iso-ext.iamrole_name}"
 }

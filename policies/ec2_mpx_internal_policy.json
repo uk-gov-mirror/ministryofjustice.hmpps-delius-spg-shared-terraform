@@ -79,13 +79,17 @@
             "Sid": "allowAccessToS3Buckets",
             "Effect": "Allow",
             "Action": [
-                "s3:*"
+                "s3:GetObject",
+                "s3:ListBucket"
             ],
             "Resource": [
                 "arn:aws:s3:::${s3-config-bucket}",
                 "arn:aws:s3:::${s3-config-bucket}/*",
                 "arn:aws:s3:::${s3-certificates-bucket}",
-                "arn:aws:s3:::${s3-certificates-bucket}/*"
+                "arn:aws:s3:::${s3-certificates-bucket}/*",
+                "arn:aws:s3:::${backups-bucket}",
+                "arn:aws:s3:::${backups-bucket}/*"
+
             ]
         },
         {
@@ -109,6 +113,16 @@
                 "route53:ListHostedZonesByName"
             ],
             "Resource": "*"
-        }
+        },
+        {
+            "Sid": "AllowAccessForCertificateKeyConsumers",
+            "Effect": "Allow",
+            "Action": [
+                "kms:Decrypt",
+                "kms:Describe*",
+                "kms:GenerateDataKey"
+            ],
+            "Resource": ${decryptable_certificate_keys}
+    }
     ]
 }
