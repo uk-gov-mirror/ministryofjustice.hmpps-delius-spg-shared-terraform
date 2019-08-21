@@ -100,7 +100,7 @@ locals {
   app_submodule            = "spg-perf-test"
   common_name              = "${local.hmpps_asset_name_prefix}-${local.app_hostnames["external"]}-${local.app_submodule}"
 
-  asg_desired             = "1"
+  asg_desired             = "0"
   asg_max                 = "1"
-  asg_min                 = "1"
+  asg_min                 = "0"
 }
