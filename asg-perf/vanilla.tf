@@ -6,7 +6,10 @@ resource "aws_launch_configuration" "launch_cfg" {
   instance_type               = "${var.instance_type}"
   iam_instance_profile        = "${data.terraform_remote_state.iam.iam_policy_ext_app_instance_profile_name}"
   key_name                    = "${data.terraform_remote_state.vpc.ssh_deployer_key}"
-  security_groups             = ["${local.instance_security_groups}"]
+  security_groups             = [
+                                  "${data.terraform_remote_state.vpc_security_groups.sg_ssh_bastion_in_id}",
+                                  "${aws_security_group.spg_perf.id}",
+                                ]
   associate_public_ip_address = "false"
   user_data                   = "${data.template_file.user_data.rendered}"
   enable_monitoring           = "true"
@@ -49,7 +52,7 @@ resource "aws_autoscaling_group" "perf_asg" {
     "${data.null_data_source.tags.*.outputs}",
     {
       key                 = "Name"
-      value               = "${data.terraform_remote_state.common.common_name}-asg"
+      value               = "${data.terraform_remote_state.common.common_name}-${local.app_name}-asg"
       propagate_at_launch = true
     }
   ]

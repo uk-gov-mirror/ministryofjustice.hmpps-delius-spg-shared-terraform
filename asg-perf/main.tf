@@ -99,16 +99,6 @@ locals {
   app_hostnames            = "${data.terraform_remote_state.common.app_hostnames}"
   app_submodule            = "spg-perf-test"
   common_name              = "${local.hmpps_asset_name_prefix}-${local.app_hostnames["external"]}-${local.app_submodule}"
-  sg_map_ids               = "${data.terraform_remote_state.common.sg_map_ids}"
-  instance_security_groups = [
-    "${local.sg_map_ids["external_inst_sg_id"]}",
-    "${local.sg_map_ids["internal_inst_sg_id"]}",
-    "${local.sg_map_ids["bastion_in_sg_id"]}",
-    "${local.sg_map_ids["outbound_sg_id"]}",
-    "${aws_security_group.spg_perf.id}",
-  ]
-
-  #                                  "${data.terraform_remote_state.vpc_security_groups.sg_ssh_bastion_in_id}",
 
   asg_desired             = "1"
   asg_max                 = "1"

@@ -1,7 +1,5 @@
-# common-out.tf
-
 ################################################################################
-## common_out
+## spg_perf
 ################################################################################
 resource "aws_security_group" "spg_perf" {
   name        = "${var.environment_name}-spg-perf"
@@ -40,4 +38,15 @@ resource "aws_security_group_rule" "spg_perf_443" {
   to_port           = 443
   cidr_blocks       = ["0.0.0.0/0"]
   description       = "tmp s3"
+}
+
+# Allow access to SPG
+resource "aws_security_group_rule" "spg_perf_9001" {
+  security_group_id = "${aws_security_group.spg_perf.id}"
+  type              = "egress"
+  protocol          = "tcp"
+  from_port         = 9001
+  to_port           = 9001
+  cidr_blocks       = ["0.0.0.0/0"]
+  description       = "SPG port"
 }

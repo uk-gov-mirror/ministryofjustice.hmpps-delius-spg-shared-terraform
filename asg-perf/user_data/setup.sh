@@ -6,6 +6,9 @@ sudo -i
 
 yum install -y java-1.8.0-openjdk-devel
 
+cat << EOF >> /etc/environment
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0
+EOF
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0
 
 yum install -y \
