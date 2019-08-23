@@ -96,3 +96,21 @@ resource "aws_security_group_rule" "internal_inst_egress_jms_private" {
   from_port                = "${local.weblogic_domain_ports["spg_jms_broker"]}"
   to_port                  = "${local.weblogic_domain_ports["spg_jms_broker_ssl"]}"
 }
+
+
+
+
+#-------------------------------------------------------------
+### port 9001 (soap/rest mutual TLS)
+### CRC ONLY
+#-------------------------------------------------------------
+resource "aws_security_group_rule" "internal_instance_ingress_https9001" {
+  description              = "from-crcLB-to-crc-9001"
+  type                     = "ingress"
+  source_security_group_id = "${local.internal_lb_sg_id}"
+  security_group_id        = "${local.internal_inst_sg_id}"
+  from_port                = 9001
+  to_port                  = 9001
+  protocol                 = "tcp"
+}
+

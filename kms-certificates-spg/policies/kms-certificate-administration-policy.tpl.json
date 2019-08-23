@@ -19,9 +19,7 @@
       "Principal": {
         "AWS": [
           "arn:aws:iam::895523100917:role/terraform",
-          "arn:aws:iam::895523100917:role/tf-eu-west-2-hmpps-eng-dev-jenkins-ec2-slave-role",
           "arn:aws:iam::895523100917:role/admin"
-
         ]
       },
       "Action": [
@@ -45,7 +43,7 @@
       "Effect": "Allow",
       "Principal": {
         "AWS": [
-          "arn:aws:iam::895523100917:role/tf-eu-west-2-hmpps-eng-dev-jenkins-ec2-slave-role"
+          "arn:aws:iam::895523100917:role/terraform"
         ]
       },
       "Action": [
@@ -58,7 +56,7 @@
       "Sid": "Allow decrypt for Certificate Consumers",
       "Effect": "Allow",
       "Principal": {
-        "AWS": [${roles_allowed_to_decrypt}]
+        "AWS": ${roles_allowed_to_decrypt}
       },
       "Action": [
         "kms:Decrypt*"

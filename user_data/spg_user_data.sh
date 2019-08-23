@@ -121,7 +121,7 @@ cat << EOF > ~/requirements.yml
 - name: users
   src: singleplatform-eng.users
 EOF
-cat << EOF > ~/bootstrap-users.yml
+ cat << EOF > ~/bootstrap-users.yml
 ---
 
 - hosts: localhost

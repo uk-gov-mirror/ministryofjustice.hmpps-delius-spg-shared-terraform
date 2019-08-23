@@ -22,30 +22,7 @@ module "create-iam-ecs-policy-iso-ext" {
   rolename   = "${module.create-iam-ecs-role-iso-ext.iamrole_name}"
 }
 
-#-------------------------------------------------------------
-### EXTERNAL IAM POLICES FOR EC2 RUNNING ECS SERVICES
-#-------------------------------------------------------------
 
-data "template_file" "iam_policy_app_ext" {
-  template = "${file(local.ec2_external_iso_policy_file)}"
-
-  vars {
-    s3-config-bucket       = "${local.s3-config-bucket}"
-    s3-certificates-bucket = "${local.s3-certificates-bucket}"
-    app_role_arn           = "${module.create-iam-app-role-iso-ext.iamrole_arn}"
-
-    //so we could either specify the environment kms keys (seperate keys per enviro)
-    //or just use the engineering one for all and rely on s3 policy - which is limited in size
-
-    decryptable_certificate_keys  = ["${data.terraform_remote_state.kms.certificates_spg_iso_cert_kms_id}"]
-
-
-          //"${jsonencode("[
-          //                                         ${data.terraform_remote_state.kms.certificates_spg_cert_kms_arn},
-          //                                         ${data.terraform_remote_state.kms.certificates_spg_crc_cert_kms_arn}]")}"
-
-  }
-}
 
 module "create-iam-app-role-iso-ext" {
   source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//role"
@@ -56,10 +33,4 @@ module "create-iam-app-role-iso-ext" {
 module "create-iam-instance-profile-iso-ext" {
   source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//instance_profile"
   role   = "${module.create-iam-app-role-iso-ext.iamrole_name}"
-}
-
-module "create-iam-app-policy-ext" {
-  source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//rolepolicy"
-  policyfile = "${data.template_file.iam_policy_app_ext.rendered}"
-  rolename   = "${module.create-iam-app-role-iso-ext.iamrole_name}"
 }

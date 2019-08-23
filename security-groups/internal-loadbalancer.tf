@@ -124,7 +124,7 @@ resource "aws_security_group_rule" "internal_lb_egress_jms_61616_7" {
 resource "aws_security_group_rule" "internal_lb_ingress_https" {
   description              = "from-iso-to-crcLB-9001"
   type                     = "ingress"
-  cidr_blocks              = ["${local.private_cidr_block}"]  #for iso servers
+  cidr_blocks              = ["${local.private_cidr_block}"]  #for iso & mpx-hybrid servers (actually all servers in private all)
   security_group_id        = "${local.internal_lb_sg_id}"
   from_port                = 9001
   to_port                  = 9001

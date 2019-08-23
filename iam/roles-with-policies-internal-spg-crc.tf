@@ -22,22 +22,6 @@ module "create-iam-ecs-policy-crc-int" {
   rolename   = "${module.create-iam-ecs-role-crc-int.iamrole_name}"
 }
 
-#-------------------------------------------------------------
-### INTERNAL IAM POLICES FOR EC2 RUNNING ECS SERVICES
-#-------------------------------------------------------------
-
-data "template_file" "iam_policy_app_crc_int" {
-  template = "${file(local.ec2_internal_crc_policy_file)}"
-
-  vars {
-    s3-config-bucket       = "${local.s3-config-bucket}"
-    s3-certificates-bucket = "${local.s3-certificates-bucket}"
-    app_role_arn           = "${module.create-iam-app-role-crc-int.iamrole_arn}"
-    backups-bucket         = "${local.environment_identifier}-${local.backups-bucket-name}"
-
-    decryptable_certificate_keys  = ["${data.terraform_remote_state.kms.certificates_spg_crc_cert_kms_id}"]
-  }
-}
 
 module "create-iam-app-role-crc-int" {
   source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//role"
@@ -48,10 +32,4 @@ module "create-iam-app-role-crc-int" {
 module "create-iam-instance-profile-crc-int" {
   source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//instance_profile"
   role   = "${module.create-iam-app-role-crc-int.iamrole_name}"
-}
-
-module "create-iam-app-policy-crc-int" {
-  source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//rolepolicy"
-  policyfile = "${data.template_file.iam_policy_app_crc_int.rendered}"
-  rolename   = "${module.create-iam-app-role-crc-int.iamrole_name}"
 }

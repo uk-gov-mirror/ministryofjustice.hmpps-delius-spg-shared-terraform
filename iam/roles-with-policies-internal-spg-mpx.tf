@@ -22,31 +22,6 @@ module "create-iam-ecs-policy-mpx-int" {
   rolename   = "${module.create-iam-ecs-role-mpx-int.iamrole_name}"
 }
 
-#-------------------------------------------------------------
-### INTERNAL IAM POLICES FOR EC2 RUNNING ECS SERVICES
-#-------------------------------------------------------------
-
-data "template_file" "iam_policy_app_mpx_int" {
-  template = "${file(local.ec2_internal_mpx_policy_file)}"
-
-  vars {
-    s3-config-bucket       = "${local.s3-config-bucket}"
-    s3-certificates-bucket = "${local.s3-certificates-bucket}"
-    app_role_arn           = "${module.create-iam-app-role-mpx-int.iamrole_arn}"
-    backups-bucket         = "${local.environment_identifier}-${local.backups-bucket-name}"
-
-    decryptable_certificate_keys  = [
-      "${data.terraform_remote_state.kms.certificates_spg_iso_cert_kms_id}",
-      "${data.terraform_remote_state.kms.certificates_spg_mpx_cert_kms_id}",
-
-    ]
-
-
-    //    decryptable_certificate_keys  = "${jsonencode("[
-    //                                     ${data.terraform_remote_state.kms.certificates_spg_cert_kms_arn},
-    //                                     ${data.terraform_remote_state.kms.certificates_spg_crc_cert_kms_arn}]")}"
-  }
-}
 
 module "create-iam-app-role-mpx-int" {
   source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//role"
@@ -59,8 +34,3 @@ module "create-iam-instance-profile-mpx-int" {
   role   = "${module.create-iam-app-role-mpx-int.iamrole_name}"
 }
 
-module "create-iam-app-policy-mpx-int" {
-  source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//rolepolicy"
-  policyfile = "${data.template_file.iam_policy_app_mpx_int.rendered}"
-  rolename   = "${module.create-iam-app-role-mpx-int.iamrole_name}"
-}

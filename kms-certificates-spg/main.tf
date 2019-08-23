@@ -4,7 +4,7 @@ terraform {
 }
 
 provider "aws" {
-  region  = "${var.region}"
+  region = "${var.region}"
   version = "~> 1.16"
 }
 
@@ -17,7 +17,17 @@ provider "aws" {
 ####################################################
 
 locals {
-  tags        = "${var.tags}"
+  tags = "${var.tags}"
+
+  roles_allowed_to_decrypt_iso = [
+    "${data.terraform_remote_state.iam.iam_policy_iso_ext_app_role_arn}",
+    "${data.terraform_remote_state.iam.iam_policy_mpx_int_app_role_arn}"]
+
+  roles_allowed_to_decrypt_crc = [
+    "${data.terraform_remote_state.iam.iam_policy_iso_ext_app_role_arn}",//for when using all in one
+    "${data.terraform_remote_state.iam.iam_policy_mpx_int_app_role_arn}",//for when using all in one
+    "${data.terraform_remote_state.iam.iam_policy_crc_int_app_role_arn}"]
+
 }
 
 #################################################################
@@ -29,11 +39,8 @@ data "template_file" "kms_spg_iso_policy" {
   template = "${file("policies/kms-certificate-administration-policy.tpl.json")}"
 
   vars {
-    accountID = "${data.aws_caller_identity}"
-    roles_allowed_to_decrypt = [
-      "${data.terraform_remote_state.iam.iam_policy_iso_ext_app_role_arn}",
-      "${data.terraform_remote_state.iam.iam_policy_mpx_int_app_role_arn}"  //for all in one / hybrid
-      ]
+    accountID = "${data.aws_caller_identity.current.account_id}"
+    roles_allowed_to_decrypt = "${jsonencode(local.roles_allowed_to_decrypt_iso)}"
   }
 }
 
@@ -42,26 +49,22 @@ data "template_file" "kms_spg_crc_policy" {
 
   vars {
     accountID = "${data.aws_caller_identity.current.account_id}"
-    //cant remember if its arn or name
-    roles_allowed_to_decrypt = [
-      "${data.terraform_remote_state.iam.iam_policy_iso_ext_app_role_arn}",  //for all in one
-      "${data.terraform_remote_state.iam.iam_policy_mpx_int_app_role_arn}",  //for all in one
-      "${data.terraform_remote_state.iam.iam_policy_crc_int_app_role_arn}"
-    ]
+    roles_allowed_to_decrypt = "${jsonencode(local.roles_allowed_to_decrypt_crc)}"
+
   }
 }
 
 
 module "certificates_spg_iso_cert_kms_key" {
-  source       = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//kms_custom_policy"
+  source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//kms_custom_policy"
   kms_key_name = "${var.short_environment_identifier}-certificates-spg-iso-cert"
-  kms_policy   =  "${data.template_file.kms_spg_iso_policy.rendered}"
-  tags         = "${local.tags}"
+  policy = "${data.template_file.kms_spg_iso_policy.rendered}"
+  tags = "${local.tags}"
 }
 
 module "certificates_spg_crc_cert_kms_key" {
-  source       = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//kms_custom_policy"
+  source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//kms_custom_policy"
   kms_key_name = "${var.short_environment_identifier}-certificates-spg-crc-cert"
-  kms_policy   =  "${data.template_file.kms_spg_crc_policy.rendered}"
-  tags         = "${local.tags}"
+  policy = "${data.template_file.kms_spg_crc_policy.rendered}"
+  tags = "${local.tags}"
 }

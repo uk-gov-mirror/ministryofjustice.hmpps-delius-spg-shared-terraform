@@ -7,8 +7,6 @@ output "certificates_spg_iso_cert_kms_id" {
 }
 
 
-
-
 output "certificates_spg_crc_cert_kms_arn" {
   value = "${module.certificates_spg_crc_cert_kms_key.kms_arn}"
 }
