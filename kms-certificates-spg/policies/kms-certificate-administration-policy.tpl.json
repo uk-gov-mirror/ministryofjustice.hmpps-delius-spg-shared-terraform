@@ -3,10 +3,11 @@
   "Id": "certificate-administration-policy",
   "Statement": [
     {
-      "Sid": "Enable IAM User Permissions for key owner",
+      "Sid": "Enable IAM User Permissions for key owner, and engineering",
       "Effect": "Allow",
       "Principal": {
         "AWS": [
+          "arn:aws:iam::${895523100917}:root",
           "arn:aws:iam::${accountID}:root"
         ]
       },
@@ -19,7 +20,9 @@
       "Principal": {
         "AWS": [
           "arn:aws:iam::895523100917:role/terraform",
-          "arn:aws:iam::895523100917:role/admin"
+          "arn:aws:iam::895523100917:role/admin",
+          "arn:aws:iam::${accountID}:role/terraform",
+          "arn:aws:iam::${accountID}:role/admin"
         ]
       },
       "Action": [
@@ -43,7 +46,10 @@
       "Effect": "Allow",
       "Principal": {
         "AWS": [
-          "arn:aws:iam::895523100917:role/terraform"
+          "arn:aws:iam::895523100917:role/terraform",
+          "arn:aws:iam::895523100917:role/admin",
+          "arn:aws:iam::${accountID}:role/terraform",
+          "arn:aws:iam::${accountID}:role/admin"
         ]
       },
       "Action": [

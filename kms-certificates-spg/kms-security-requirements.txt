@@ -1,11 +1,14 @@
 see https://dsdmoj.atlassian.net/browse/DAM-72
 
-                                    jenkins webops	    spg ec2 iso/mpx	    spg ec2 crc
-certificates_rootca_kms_key	        Both	Both	    None	            None
-certificates_spg_iso_cert_kms_key	Both	Both	    Decrypt	            None
-certificates_spg_crc_cert_kms_key	Both	Both	    Decrypt*            Decrypt
+                                        jenkins webops	    iso         haproxy   mpx       	 mpx-hybrid/all-in-one
+certificates_rootca_kms_key	            Both	Both	    None	    None      None           None
+certificates_spg_tls_cert_kms_key	    Both	Both	    Decrypt	    Decrypt   None           Decrypt
+certificates_spg_signing_cert_kms_key	Both	Both	    Decrypt	    None      None           Decrypt
+certificates_spg_crc_cert_kms_key	    Both	Both	    None        None      None           Decrypt*
 
 
 * for all in one deployments
 
-Note WebOps is not allowed as a group, however the group has full admin access by default anyway (and assume role for terraform)
+
+Note WebOps is not allowed, as groups can't be specified for kms
+however the group has full admin access by default anyway (and assume role for terraform)
