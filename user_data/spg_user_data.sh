@@ -145,11 +145,12 @@ alias dcontainergetspgid='SPG_CONTAINER_ID="$(docker container ps | grep spg | e
 alias dcontainerattachtospg='dcontainergetspgid;docker container exec -it $SPG_CONTAINER_ID /bin/bash'
 alias dcontainerstopspg='dcontainergetspgid;docker container stop $SPG_CONTAINER_ID'
 alias dcontainerps='docker container ps'
+alias dcontainerpulllatest='dcontainerpulllatest_function'
 
-function dcontainerpulllatest() {
+function dcontainerpulllatest_function() {
 region=$(curl http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
 repo=$(docker images | grep spg | grep latest| egrep -o ^[^[:space:]]*)
-eval $(aws ecr get-login --no-include-email --region $region)
+eval $(aws ecr get-login --no-include-email --region $region  --registry-ids 895523100917)
 docker pull $repo:latest
 }
 
