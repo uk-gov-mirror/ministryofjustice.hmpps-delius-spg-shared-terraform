@@ -103,7 +103,7 @@ locals {
   ########################################################################################################
   #ecs service - app service
   ########################################################################################################
-  ecs_service_role = "${data.terraform_remote_state.iam.iam_role_ext_ecs_role_arn}"
+  ecs_service_role = "${data.terraform_remote_state.iam.iam_role_iso_ext_ecs_role_arn}"
   service_desired_count = "1"
   sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
@@ -123,7 +123,7 @@ locals {
   #ecs launch config
   ########################################################################################################
   ami_id = "${data.aws_ami.amazon_ami.id}"
-  instance_profile = "${data.terraform_remote_state.iam.iam_policy_ext_app_instance_profile_name}"
+  instance_profile = "${data.terraform_remote_state.iam.iam_policy_iso_ext_app_instance_profile_name}"
   instance_type = "${var.asg_instance_type_iso}"
   ssh_deployer_key = "${data.terraform_remote_state.common.common_ssh_deployer_key}"
   associate_public_ip_address = true
