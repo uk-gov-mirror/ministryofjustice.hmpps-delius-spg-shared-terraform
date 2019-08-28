@@ -36,12 +36,14 @@ locals {
 
 
   keys_decrytable_by_iso = [
-    "${data.terraform_remote_state.kms.certificates_spg_iso_cert_kms_arn}",
+    "${data.terraform_remote_state.kms.certificates_spg_tls_cert_kms_arn}", //iso always needs tls
+    "${data.terraform_remote_state.kms.certificates_spg_signing_cert_kms_arn}", //iso needs signing certs when acting as signing proxy for mpx (deprecated server-configuration)
   ]
 
   keys_decrytable_by_mpx = [
-    "${data.terraform_remote_state.kms.certificates_spg_iso_cert_kms_arn}",
-    "${data.terraform_remote_state.kms.certificates_spg_crc_cert_kms_arn}"
+    "${data.terraform_remote_state.kms.certificates_spg_tls_cert_kms_arn}", //mpx needs tls when sending directly to POs in hybrid / all in one mode
+    "${data.terraform_remote_state.kms.certificates_spg_signing_cert_kms_arn}", //mpx needs signing when sending to POs in hybrid / all in one mode
+    "${data.terraform_remote_state.kms.certificates_spg_crc_cert_kms_arn}" //mpx needs crc certs when in all in one mode
     //for all in one
   ]
 
