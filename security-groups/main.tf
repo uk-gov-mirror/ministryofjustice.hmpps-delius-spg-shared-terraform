@@ -76,22 +76,9 @@ locals {
 
   tags               = "${var.tags}"
 
-//  internal_lb_sg_id   = "${local.sg_map_ids["internal_lb_sg_id"]}"
-//  internal_inst_sg_id = "${local.sg_map_ids["internal_inst_sg_id"]}"
-//  external_lb_sg_id   = "${local.sg_map_ids["external_lb_sg_id"]}"
-//  external_inst_sg_id = "${local.sg_map_ids["external_inst_sg_id"]}"
+  internal_lb_sg_id   = "${local.sg_map_ids["internal_lb_sg_id"]}"
+  internal_inst_sg_id = "${local.sg_map_ids["internal_inst_sg_id"]}"
+  external_lb_sg_id   = "${local.sg_map_ids["external_lb_sg_id"]}"
+  external_inst_sg_id = "${local.sg_map_ids["external_inst_sg_id"]}"
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

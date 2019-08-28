@@ -83,13 +83,21 @@ pipeline {
                 stage('Plan SPG iam') {
                     steps { script { plan_submodule(project.config, environment_name, project.terraform, 'iam') } }
                 }
-                stage('Plan SPG security-groups') {
+                stage('Plan SPG security-groups--deprecated') {
                     steps {
                         script {
                             plan_submodule(project.config, environment_name, project.terraform, 'security-groups')
                         }
                     }
                 }
+                stage('Plan SPG security-groups-and-rules') {
+                    steps {
+                        script {
+                            plan_submodule(project.config, environment_name, project.terraform, 'security-groups-and-rules')
+                        }
+                    }
+                }
+
                 stage('Plan SPG ecs-crc') {
                     steps { script { plan_submodule(project.config, environment_name, project.terraform, 'ecs-crc') } }
                 }
