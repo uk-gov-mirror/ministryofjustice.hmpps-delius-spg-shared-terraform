@@ -83,17 +83,7 @@ locals {
     "${data.terraform_remote_state.vpc.vpc_private-subnet-az3-cidr_block}",
   ]
 
-  db_cidr_block = [
-    "${data.terraform_remote_state.vpc.vpc_db-subnet-az1-cidr_block}",
-    "${data.terraform_remote_state.vpc.vpc_db-subnet-az2-cidr_block}",
-    "${data.terraform_remote_state.vpc.vpc_db-subnet-az3-cidr_block}",
-  ]
 
-  db_subnet_ids = [
-    "${data.terraform_remote_state.vpc.vpc_db-subnet-az1}",
-    "${data.terraform_remote_state.vpc.vpc_db-subnet-az2}",
-    "${data.terraform_remote_state.vpc.vpc_db-subnet-az3}",
-  ]
 
 
   tags            = "${var.tags}"
