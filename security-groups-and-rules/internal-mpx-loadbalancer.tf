@@ -15,11 +15,6 @@ resource "aws_security_group" "internal_mpx_loadbalancer" {
 }
 
 
-output "mpx_internal_loadbalancer_sg_id" {
-  value = "${aws_security_group.internal_mpx_loadbalancer.id}"
-}
-
-
 
 #INGRESS / EGRESS PAIRS
 

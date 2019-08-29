@@ -28,10 +28,6 @@ resource "aws_security_group" "external_iso_instance" {
   }
 }
 
-output "iso_external_instance_sg_id" {
-  value = "${aws_security_group.external_iso_instance.id}"
-}
-
 
 
 ###################

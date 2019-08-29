@@ -64,7 +64,7 @@ locals {
   short_environment_name = "${data.terraform_remote_state.common.short_environment_name}"
   spg_app_name           = "${data.terraform_remote_state.common.spg_app_name}"
   common_name            = "${local.short_environment_name}-${local.spg_app_name}"
-  public_cidr_block      = ["${data.terraform_remote_state.common.db_cidr_block}"]
+//  public_cidr_block      = ["${data.terraform_remote_state.common.db_cidr_block}"]
   private_cidr_block     = ["${data.terraform_remote_state.common.private_cidr_block}"]
   sg_map_ids             = "${data.terraform_remote_state.common.sg_map_ids}"
   weblogic_domain_ports  = "${var.weblogic_domain_ports}"

@@ -1,7 +1,7 @@
 #######################################
 # SECURITY GROUPS
 #######################################
-resource "aws_security_group" "common_outbound" {
+resource "aws_security_group" "spg_common_outbound" {
   name        = "${local.common_name}-common-outbound-sg"
   description = "common egress for ${local.common_name} appliances"
   vpc_id      = "${local.vpc_id}"
@@ -13,7 +13,7 @@ resource "aws_security_group" "common_outbound" {
 }
 
 resource "aws_security_group_rule" "http" {
-  security_group_id = "${aws_security_group.common_outbound.id}"
+  security_group_id = "${aws_security_group.spg_common_outbound.id}"
   type              = "egress"
   from_port         = "80"
   to_port           = "80"
@@ -23,7 +23,7 @@ resource "aws_security_group_rule" "http" {
 }
 
 resource "aws_security_group_rule" "all" {
-  security_group_id = "${aws_security_group.common_outbound.id}"
+  security_group_id = "${aws_security_group.spg_common_outbound.id}"
   type              = "egress"
   from_port         = "0"
   to_port           = "65535"

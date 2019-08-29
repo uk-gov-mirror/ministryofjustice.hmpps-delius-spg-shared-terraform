@@ -15,9 +15,6 @@ resource "aws_security_group" "internal_crc_loadbalancer" {
 }
 
 
-output "crc_internal_loadbalancer_sg_id" {
-  value = "${aws_security_group.internal_crc_loadbalancer.id}"
-}
 
 
 

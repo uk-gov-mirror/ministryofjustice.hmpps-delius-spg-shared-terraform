@@ -117,7 +117,7 @@ data "aws_network_interface" "from_nlb_arn_suffix_per_subnet" {
 ### port 9001
 #-------------------------------------------------------------
 resource "aws_security_group_rule" "iso_instance_allports_ingress" {
-  security_group_id        = "${local.sg_map_ids["external_inst_sg_id"]}"
+  security_group_id        = "${data.terraform_remote_state.security-groups-and-rules.iso_external_instance_sg_id}"
   type                     = "ingress"
   from_port                = 0
   to_port                  = 65535

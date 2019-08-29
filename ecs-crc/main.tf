@@ -147,12 +147,9 @@ locals {
   service_desired_count = "1"
   sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
-    "${local.sg_map_ids["external_inst_sg_id"]}",
-    //for iso and all in one and crc stub
-    "${local.sg_map_ids["internal_inst_sg_id"]}",
-    //for mpx and all in one (and crc stub maybe)
     "${local.sg_map_ids["bastion_in_sg_id"]}",
-    "${local.sg_map_ids["outbound_sg_id"]}",
+    "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",
+    "${data.terraform_remote_state.security-groups-and-rules.crc_internal_instance_sg_id}"
   ]
   ########################################################################################################
   #ecs service block device

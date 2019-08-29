@@ -138,6 +138,13 @@ output "private_cidr_block" {
   ]
 }
 
+output "public_subnet_ids" {
+  value = [
+    "${data.terraform_remote_state.vpc.vpc_public-subnet-az1}",
+    "${data.terraform_remote_state.vpc.vpc_public-subnet-az2}",
+    "${data.terraform_remote_state.vpc.vpc_public-subnet-az3}",
+  ]
+}
 
 output "private_subnet_ids" {
   value = [

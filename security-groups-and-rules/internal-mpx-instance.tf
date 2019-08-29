@@ -16,10 +16,6 @@ resource "aws_security_group" "internal_mpx_instance" {
   }
 }
 
-# spg_api_in
-output "mpx_internal_instance_sg_id" {
-  value = "${aws_security_group.internal_mpx_instance.id}"
-}
 
 
 #-------------------------------------------------------------

@@ -1,18 +1,32 @@
 # SECURITY GROUPS
-//
-//output "security_groups_sg_internal_lb_id" {
-//  value = "${local.internal_lb_sg_id}"
-//}
-//
-//output "security_groups_sg_internal_instance_id" {
-//  value = "${local.internal_inst_sg_id}"
-//}
-//
-//
-//output "security_groups_sg_external_lb_id" {
-//  value = "${local.external_lb_sg_id}"
-//}
-//
-//output "security_groups_sg_external_instance_id" {
-//  value = "${local.external_inst_sg_id}"
-//}
+
+
+output "spg_common_outbound_sg_id" {
+  value = "${aws_security_group.spg_common_outbound.id}"
+}
+
+
+
+output "iso_external_instance_sg_id" {
+  value = "${aws_security_group.external_iso_instance.id}"
+}
+
+
+
+output "mpx_internal_loadbalancer_sg_id" {
+  value = "${aws_security_group.internal_mpx_loadbalancer.id}"
+}
+
+output "mpx_internal_instance_sg_id" {
+  value = "${aws_security_group.internal_mpx_instance.id}"
+}
+
+
+
+output "crc_internal_loadbalancer_sg_id" {
+  value = "${aws_security_group.internal_crc_loadbalancer.id}"
+}
+
+output "crc_internal_instance_sg_id" {
+  value = "${aws_security_group.internal_crc_instance.id}"
+}
