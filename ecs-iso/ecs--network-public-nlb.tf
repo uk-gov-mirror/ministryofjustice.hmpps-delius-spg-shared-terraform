@@ -82,6 +82,15 @@ module "create_app_nlb_ext_listener_9001" {
 
 
 
+
+########################################################
+# CREATE SECUIRTY RULE FOR ISO instance to listen to NLB
+########################################################
+
+
+
+
+
 ###################################################################
 
 
@@ -107,7 +116,7 @@ data "aws_network_interface" "from_nlb_arn_suffix_per_subnet" {
 #-------------------------------------------------------------
 ### port 9001
 #-------------------------------------------------------------
-resource "aws_security_group_rule" "external_inst_ingress_mutualtls" {
+resource "aws_security_group_rule" "iso_instance_allports_ingress" {
   security_group_id        = "${local.sg_map_ids["external_inst_sg_id"]}"
   type                     = "ingress"
   from_port                = 0
@@ -115,5 +124,5 @@ resource "aws_security_group_rule" "external_inst_ingress_mutualtls" {
   protocol                 = "tcp"
   #  protocol          = -1
   cidr_blocks              = ["${formatlist("%s/32",flatten(data.aws_network_interface.from_nlb_arn_suffix_per_subnet.*.private_ips))}"]
-  description              = "${local.common_name}-external-ingress-mutualtls-from-lbs-and-paul"
+  description              = "from NLB"
 }
