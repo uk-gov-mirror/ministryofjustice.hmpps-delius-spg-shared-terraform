@@ -64,8 +64,9 @@ locals {
   backend_timeout        = "60"
   external_domain        = "${data.terraform_remote_state.common.external_domain}"
   public_zone_id         = "${data.terraform_remote_state.common.public_zone_id}"
-  int_lb_security_groups = ["${local.sg_map_ids["internal_lb_sg_id"]}",
-                            "${local.sg_map_ids["bastion_in_sg_id"]}"]
+  int_lb_security_groups = ["${data.terraform_remote_state.security-groups-and-rules.crc_internal_loadbalancer_sg_id}"
+//TODO remove if LBs do not require ssh access  "${local.sg_map_ids["bastion_in_sg_id"]}"]
+    ]
 
   listener = [
     {
@@ -149,7 +150,7 @@ locals {
   instance_security_groups = [
     "${local.sg_map_ids["bastion_in_sg_id"]}",
     "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",
-    "${data.terraform_remote_state.security-groups-and-rules.crc_internal_instance_sg_id}"
+    "${data.terraform_remote_state.security-groups-and-rules.crc_internal_instance_sg_id}",
   ]
   ########################################################################################################
   #ecs service block device

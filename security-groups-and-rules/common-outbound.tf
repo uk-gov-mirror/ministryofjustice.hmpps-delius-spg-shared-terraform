@@ -2,10 +2,10 @@
 # SECURITY GROUPS
 #######################################
 resource "aws_security_group" "spg_common_outbound" {
-  name        = "${local.common_name}-common-outbound-sg"
+  name        = "${local.common_name}-spg-common-outbound-sg"
   description = "common egress for ${local.common_name} appliances"
   vpc_id      = "${local.vpc_id}"
-  tags        = "${merge(local.tags, map("Name", "${local.common_name}-common-outbound-traffic"))}"
+  tags        = "${merge(local.tags, map("Name", "${local.common_name}-spg-common-outbound-traffic"))}"
 
   lifecycle {
     create_before_destroy = true
