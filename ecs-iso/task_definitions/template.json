@@ -15,6 +15,12 @@
         "environment": [
 
             {
+                "name": "SPG_IMAGE_VERSION",
+                "value": "${version}"
+            },
+
+
+            {
             "name": "KIBANA_HOST",
             "value": "${kibana_host}NOTUSEDYET"
             },
