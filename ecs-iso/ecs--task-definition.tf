@@ -7,10 +7,24 @@ data "aws_ecs_task_definition" "app_task_definition" {
   depends_on      = ["module.app_task_definition"]
 }
 
+
+data "template_file" "po_configuration" {
+  template = "${file("task_definitions/key_value_pair.tpl.json")}"
+  count = "${length(var.SPG_POCONFIGURATION)}"
+
+
+  vars {
+    name = "${element(keys(var.SPG_POCONFIGURATION),count.index)}"
+    value = "${element(values(var.SPG_POCONFIGURATION),count.index)}"
+  }
+}
+
 data "template_file" "app_task_definition" {
   template = "${file("task_definitions/template.json")}"
 
   vars {
+    po_configuration = "${join(",", data.template_file.po_configuration.*.rendered)}"
+
     container_name = "${local.app_name}-${local.app_submodule}"
     ecs_memory = "${local.ecs_memory}"
 
