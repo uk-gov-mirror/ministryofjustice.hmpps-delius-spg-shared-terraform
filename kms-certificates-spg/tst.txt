@@ -1,0 +1,6 @@
+certificates_spg_crc_cert_kms_arn = arn:aws:kms:eu-west-2:723123699647:key/9b057547-93a9-43f8-843d-e7238c8d0023
+certificates_spg_crc_cert_kms_key_id = 9b057547-93a9-43f8-843d-e7238c8d0023
+certificates_spg_signing_cert_kms_arn = arn:aws:kms:eu-west-2:723123699647:key/f5710834-7779-465a-85f9-d15f98c3d539
+certificates_spg_signing_cert_kms_id = f5710834-7779-465a-85f9-d15f98c3d539
+certificates_spg_tls_cert_kms_arn = arn:aws:kms:eu-west-2:723123699647:key/248b985b-8470-43ae-9282-f1170c25aeaa
+certificates_spg_tls_cert_kms_id = 248b985b-8470-43ae-9282-f1170c25aeaa
