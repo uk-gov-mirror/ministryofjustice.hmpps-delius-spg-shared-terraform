@@ -1,15 +1,15 @@
-def project = [:]
-project.config    = 'hmpps-env-configs'
-project.terraform     = 'hmpps-delius-spg-shared-terraform'
+/* The following parameters are required from Jenkins GUI or other upstream jobs
+        environment_name
+        config_branch
+        spg_terraform_branch
+        jenkins_pipeline_branch
+        confirm (boolean)
+*/
 
-// Parameters required for job
-// parameters:
-//     choice:
-//       name: 'environment_name'
-//       description: 'Environment name.'
-//     booleanParam:
-//       name: 'confirmation'
-//       description: 'Whether to require manual confirmation of terraform plans.'
+def project = [:]
+project.config = 'hmpps-env-configs'
+project.terraform = 'hmpps-delius-spg-shared-terraform'
+
 
 def prepare_env() {
     sh '''
@@ -59,11 +59,11 @@ pipeline {
 
         stage('setup') {
             steps {
-                dir( project.config ) {
-                  git url: 'git@github.com:ministryofjustice/' + project.config, branch: 'Add-spg-props-to-delius-auto', credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
+                dir(project.config) {
+                    git url: 'git@github.com:ministryofjustice/' + project.config, branch: params.config_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
                 }
-                dir( project.terraform ) {
-                  git url: 'git@github.com:ministryofjustice/' + project.terraform, branch: '19-create-crcstubs-as-seperate-asg', credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
+                dir(project.terraform) {
+                    git url: 'git@github.com:ministryofjustice/' + project.terraform, branch: params.spg_terraform_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
                 }
 
                 prepare_env()
@@ -71,23 +71,41 @@ pipeline {
         }
 
         stage('SPG Terraform') {
-          stages {
-            stage('Plan SPG common')           { steps { script {plan_submodule(project.config, environment_name, project.terraform, 'common')}}}
-            stage('Plan SPG monitoring')       { steps { script {plan_submodule(project.config, environment_name, project.terraform, 'monitoring')}}}
-            stage('Plan SPG iam')              { steps { script {plan_submodule(project.config, environment_name, project.terraform, 'iam')}}}
-            stage('Plan SPG security-groups')  { steps { script {plan_submodule(project.config, environment_name, project.terraform, 'security-groups')}}}
-            stage('Plan SPG ecr')              { steps { script {plan_submodule(project.config, environment_name, project.terraform, 'ecr')}}}
-            stage('Plan SPG ecs-crc')          { steps { script {plan_submodule(project.config, environment_name, project.terraform, 'ecs-crc')}}}
-            stage('Plan SPG ecs-mpx')          { steps { script {plan_submodule(project.config, environment_name, project.terraform, 'ecs-mpx')}}}
-            stage('Plan SPG ecs-iso')          { steps { script {plan_submodule(project.config, environment_name, project.terraform, 'ecs-iso')}}}
-          }
+            stages {
+                stage('Plan SPG common') {
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'common') } }
+                }
+                stage('Plan SPG monitoring') {
+                    steps {
+                        script { plan_submodule(project.config, environment_name, project.terraform, 'monitoring') }
+                    }
+                }
+                stage('Plan SPG iam') {
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'iam') } }
+                }
+                stage('Plan SPG security-groups') {
+                    steps {
+                        script {
+                            plan_submodule(project.config, environment_name, project.terraform, 'security-groups')
+                        }
+                    }
+                }
+                stage('Plan SPG ecs-crc') {
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'ecs-crc') } }
+                }
+                stage('Plan SPG ecs-mpx') {
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'ecs-mpx') } }
+                }
+                stage('Plan SPG ecs-iso') {
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'ecs-iso') } }
+                }
+            }
         }
     }
 
     post {
         always {
             deleteDir()
-
         }
     }
 

@@ -38,6 +38,19 @@ data "terraform_remote_state" "vpc" {
 }
 
 
+
+### Getting the natdetails
+#-------------------------------------------------------------
+data "terraform_remote_state" "nat" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.remote_state_bucket_name}"
+    key    = "natgateway/terraform.tfstate"
+    region = "${var.region}"
+  }
+}
+
 ####################################################
 # Locals
 ####################################################
@@ -57,6 +70,9 @@ locals {
   weblogic_domain_ports  = "${var.weblogic_domain_ports}"
   spg_partnergateway_domain_ports  = "${var.spg_partnergateway_domain_ports}"
 
+  natgateway_common-nat-public-ip-az1 = "${data.terraform_remote_state.nat.natgateway_common-nat-public-ip-az1}"
+  natgateway_common-nat-public-ip-az2 = "${data.terraform_remote_state.nat.natgateway_common-nat-public-ip-az2}"
+  natgateway_common-nat-public-ip-az3 = "${data.terraform_remote_state.nat.natgateway_common-nat-public-ip-az3}"
 
   tags               = "${var.tags}"
 

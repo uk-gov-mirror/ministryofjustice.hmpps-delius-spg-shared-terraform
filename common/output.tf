@@ -180,10 +180,7 @@ output "app_hostnames" {
   value = "${local.app_hostnames}"
 }
 
-# enginnering root account arn
-output "eng_root_arn" {
-  value = "${local.eng_root_arn}"
-}
+
 
 #Temporarily moved out of the sg_map_ids list
 output "amazonmq_inst_sg_id" {
