@@ -27,7 +27,7 @@ data "terraform_remote_state" "monitor" {
 }
 
 #-------------------------------------------------------------
-### Getting the sg details
+### Getting the sg details (deprecated)
 #-------------------------------------------------------------
 data "terraform_remote_state" "security-groups" {
   backend = "s3"
@@ -52,5 +52,6 @@ data "terraform_remote_state" "eng_remote_certificates_s3bucket" {
     role_arn = "${var.eng_role_arn}"
   }
 }
+
 
 

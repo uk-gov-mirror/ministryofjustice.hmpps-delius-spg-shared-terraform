@@ -12,7 +12,6 @@ data "template_file" "app_task_definition" {
 
   vars {
     container_name = "${local.app_name}-${local.app_submodule}"
-//    ecs_cpu_units = "${local.ecs_cpu_units}"
     ecs_memory = "${local.ecs_memory}"
 
     image_url = "${local.image_url}"

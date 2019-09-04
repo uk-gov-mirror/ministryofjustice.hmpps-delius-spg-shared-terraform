@@ -35,11 +35,6 @@ variable SPG_ISO_HOST_TYPE {}
 
 variable spg_iso_ecs_memory {}
 
-//variable spg_iso_ecs_cpu_units {
-//  default="256"
-//}
-
-
 variable image_url {
   default = "895523100917.dkr.ecr.eu-west-2.amazonaws.com/hmpps/spg"
 }

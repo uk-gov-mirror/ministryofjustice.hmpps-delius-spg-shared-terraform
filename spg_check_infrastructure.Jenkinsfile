@@ -84,13 +84,21 @@ pipeline {
                 stage('Plan SPG iam polices for app roles') {
                     steps { script { plan_submodule(project.config, environment_name, project.terraform, 'iam-spg-app-policies') } }
                 }
-                stage('Plan SPG security-groups') {
+                stage('Plan SPG security-groups--deprecated') {
                     steps {
                         script {
                             plan_submodule(project.config, environment_name, project.terraform, 'security-groups')
                         }
                     }
                 }
+                stage('Plan SPG security-groups-and-rules') {
+                    steps {
+                        script {
+                            plan_submodule(project.config, environment_name, project.terraform, 'security-groups-and-rules')
+                        }
+                    }
+                }
+
                 stage('Plan SPG ecs-crc') {
                     steps { script { plan_submodule(project.config, environment_name, project.terraform, 'ecs-crc') } }
                 }
@@ -100,13 +108,6 @@ pipeline {
                 stage('Plan SPG ecs-iso') {
                     steps { script { plan_submodule(project.config, environment_name, project.terraform, 'ecs-iso') } }
                 }
-
-                stage('Plan SPG monitoring') {
-                    steps {
-                        script { plan_submodule(project.config, environment_name, project.terraform, 'monitoring') }
-                    }
-                }
-
             }
         }
     }
