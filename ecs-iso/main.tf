@@ -34,6 +34,8 @@ locals {
   application_endpoint = "${local.app_hostnames["external"]}"
   environment_identifier = "${data.terraform_remote_state.common.environment_identifier}"
 
+  external_domain        = "${data.terraform_remote_state.common.external_domain}"
+
   ########################################################################################################
   #Network common (protocol needs to match between front end and back end)
   ########################################################################################################
@@ -105,9 +107,9 @@ locals {
   service_desired_count = "1"
   sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
-    "${local.sg_map_ids["external_inst_sg_id"]}",
     "${local.sg_map_ids["bastion_in_sg_id"]}",
-    "${local.sg_map_ids["outbound_sg_id"]}",
+    "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",
+    "${data.terraform_remote_state.security-groups-and-rules.iso_external_instance_sg_id}"
   ]
   ########################################################################################################
   #ecs service block device
@@ -122,7 +124,7 @@ locals {
   ########################################################################################################
   ami_id = "${data.aws_ami.amazon_ami.id}"
   instance_profile = "${data.terraform_remote_state.iam.iam_policy_ext_app_instance_profile_name}"
-  instance_type = "t2.medium"
+  instance_type = "${var.asg_instance_type_iso}"
   ssh_deployer_key = "${data.terraform_remote_state.common.common_ssh_deployer_key}"
   associate_public_ip_address = true
 
@@ -130,10 +132,9 @@ locals {
   #ecs task definition
   ########################################################################################################
 
-  image_url = "${data.terraform_remote_state.ecr.ecr_repository_url}"
-  image_version = "latest"
-  backend_ecs_cpu_units = "256"
-  backend_ecs_memory = "2048"
+  image_url             = "${var.image_url}"
+  image_version         = "${var.image_version}"
+  ecs_memory    = "${var.spg_iso_ecs_memory}"
   #regular config bucket - not sure what this is used for yet
   config-bucket = "${data.terraform_remote_state.common.common_s3-config-bucket}"
   #vars for docker app
@@ -141,10 +142,25 @@ locals {
   s3_bucket_config = "${var.s3_bucket_config}"
   spg_build_inv_dir = "${var.spg_build_inv_dir}"
   #vars for docker container
-  kibana_host = "NOTUSED(yet)"
-  data_volume_host_path = "/opt/spg"
-  data_volume_name = "spg"
-  user_data = "../user_data/spg_user_data.sh"
+  kibana_host           = "NOTUSED(yet)"
+  data_volume_host_path = "/opt/spg/servicemix/data"
+  data_volume_name      = "spg"
+  user_data             = "../user_data/spg_user_data.sh"
+
+  SPG_HOST_TYPE         = "${var.SPG_ISO_HOST_TYPE}"
+  SPG_GENERIC_BUILD_INV_DIR = "${var.SPG_GENERIC_BUILD_INV_DIR}"
+  SPG_JAVA_MAX_MEM = "${var.SPG_ISO_JAVA_MAX_MEM}"
+  SPG_ENVIRONMENT_CODE = "${var.SPG_ENVIRONMENT_CODE}"
+  SPG_ENVIRONMENT_CN = "${local.external_domain}"
+  SPG_DELIUS_MQ_URL = "${var.SPG_DELIUS_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
+  SPG_GATEWAY_MQ_URL = "${var.SPG_GATEWAY_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
+  SPG_DOCUMENT_REST_SERVICE_ADMIN_URL = "${var.SPG_DOCUMENT_REST_SERVICE_ADMIN_URL}"
+  SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL = "${var.SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL}"
+  SPG_ISO_FQDN = "${var.SPG_ISO_FQDN}"
+  SPG_MPX_FQDN = "${var.SPG_MPX_FQDN}"
+  SPG_CRC_FQDN = "${var.SPG_CRC_FQDN}"
+
+
   ########################################################################################################
 
 
@@ -152,4 +168,5 @@ locals {
   #ecs service -  log group
   ########################################################################################################
   cloudwatch_log_retention = "${var.cloudwatch_log_retention}"
+
 }

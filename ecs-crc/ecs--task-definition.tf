@@ -11,9 +11,8 @@ data "template_file" "app_task_definition" {
   template = "${file("task_definitions/template.json")}"
 
   vars {
-    container_name        = "${local.app_name}-${local.app_submodule}"
-    cpu_units             = "${local.backend_ecs_cpu_units}"
-    memory                = "${local.backend_ecs_memory}"
+    container_name = "${local.app_name}-${local.app_submodule}"
+    ecs_memory = "${local.ecs_memory}"
 
     image_url             = "${local.image_url}"
     version               = "${local.image_version}"
@@ -28,6 +27,19 @@ data "template_file" "app_task_definition" {
     kibana_host           = "${local.kibana_host}"
     s3_bucket_config = "${local.s3_bucket_config}"
     spg_build_inv_dir = "${local.spg_build_inv_dir}"
+
+    SPG_HOST_TYPE = "${local.SPG_HOST_TYPE}"
+    SPG_GENERIC_BUILD_INV_DIR = "${local.SPG_GENERIC_BUILD_INV_DIR}"
+    SPG_JAVA_MAX_MEM = "${local.SPG_JAVA_MAX_MEM}"
+    SPG_ENVIRONMENT_CODE = "${local.SPG_ENVIRONMENT_CODE}"
+    SPG_ENVIRONMENT_CN = "${local.SPG_ENVIRONMENT_CN}"
+    SPG_DELIUS_MQ_URL = "${local.SPG_DELIUS_MQ_URL}"
+    SPG_GATEWAY_MQ_URL = "${local.SPG_GATEWAY_MQ_URL}"
+    SPG_DOCUMENT_REST_SERVICE_ADMIN_URL = "${local.SPG_DOCUMENT_REST_SERVICE_ADMIN_URL}"
+    SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL = "${local.SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL}"
+    SPG_ISO_FQDN = "${local.SPG_ISO_FQDN}"
+    SPG_MPX_FQDN = "${local.SPG_MPX_FQDN}"
+    SPG_CRC_FQDN = "${local.SPG_CRC_FQDN}"
 
 
   }

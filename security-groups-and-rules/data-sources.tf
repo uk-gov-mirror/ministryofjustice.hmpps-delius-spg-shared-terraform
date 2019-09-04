@@ -1,4 +1,3 @@
-
 ####################################################
 # DATA SOURCE MODULES FROM OTHER TERRAFORM BACKENDS
 ####################################################
@@ -15,15 +14,29 @@ data "terraform_remote_state" "common" {
   }
 }
 
+
+### Getting the vpc details
 #-------------------------------------------------------------
-### Getting the IAM details
-#-------------------------------------------------------------
-data "terraform_remote_state" "iam" {
+data "terraform_remote_state" "vpc" {
   backend = "s3"
 
   config {
     bucket = "${var.remote_state_bucket_name}"
-    key    = "spg/iam/terraform.tfstate"
+    key    = "vpc/terraform.tfstate"
+    region = "${var.region}"
+  }
+}
+
+
+
+### Getting the natdetails
+#-------------------------------------------------------------
+data "terraform_remote_state" "nat" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.remote_state_bucket_name}"
+    key    = "natgateway/terraform.tfstate"
     region = "${var.region}"
   }
 }

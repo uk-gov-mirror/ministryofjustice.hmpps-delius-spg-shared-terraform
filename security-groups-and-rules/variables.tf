@@ -21,3 +21,12 @@ variable "spg_partnergateway_domain_ports" {
 variable "tags" {
   type = "map"
 }
+
+# SPG vars
+variable "spg_app_name" {
+  description = "label for spg"
+}
+
+variable "environment_name" {
+  type = "string"
+}

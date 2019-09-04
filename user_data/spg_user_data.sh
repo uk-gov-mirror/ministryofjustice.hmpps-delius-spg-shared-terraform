@@ -112,7 +112,7 @@ PATH=/usr/local/bin:$PATH
 
 pip install ansible==2.6 virtualenv awscli boto botocore boto3
 
-echo 'downloading users'
+echo 'downloading users - may need to apply some other settings to ensure users are able to read and write to spg group, ie change config'
 /usr/bin/curl -o ~/users.yml https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/dev.yml
 sed -i '/users_deleted:/,$d' ~/users.yml
 cat << EOF > ~/requirements.yml
@@ -139,3 +139,24 @@ EOF
 echo 'creating users'
 ansible-galaxy install -f -r ~/requirements.yml
 ansible-playbook ~/bootstrap-users.yml
+
+cat << 'EOF' >> ~/.bashrc
+alias dcontainergetspgid='SPG_CONTAINER_ID="$(docker container ps | grep spg | egrep -o ^[[:alnum:]]*)"'
+alias dcontainerattachtospg='dcontainergetspgid;docker container exec -it $SPG_CONTAINER_ID /bin/bash'
+alias dcontainerstopspg='dcontainergetspgid;docker container stop $SPG_CONTAINER_ID'
+alias dcontainerps='docker container ps'
+alias dcontainerpulllatest='dcontainerpulllatest_function'
+
+function dcontainerpulllatest_function() {
+region=$(curl http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
+repo=$(docker images | grep spg | grep latest| egrep -o ^[^[:space:]]*)
+eval $(aws ecr get-login --no-include-email --region $region  --registry-ids 895523100917)
+docker pull $repo:latest
+}
+
+echo 'SPG Container - type dcontainerattachtospg to attach to container as root.'
+echo 'once logged on, become spg user by typing "su spg"'
+echo 'other aliases'
+alias | grep dcont
+
+EOF

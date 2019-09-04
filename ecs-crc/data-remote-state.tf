@@ -50,3 +50,17 @@ data "terraform_remote_state" "ecr" {
     region = "${var.region}"
   }
 }
+
+
+#-------------------------------------------------------------
+### Getting the sg details
+#-------------------------------------------------------------
+data "terraform_remote_state" "security-groups-and-rules" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.remote_state_bucket_name}"
+    key    = "spg/security-groups-and-rules/terraform.tfstate"
+    region = "${var.region}"
+  }
+}

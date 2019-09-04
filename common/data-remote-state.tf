@@ -27,7 +27,7 @@ data "terraform_remote_state" "monitor" {
 }
 
 #-------------------------------------------------------------
-### Getting the sg details
+### Getting the sg details (deprecated)
 #-------------------------------------------------------------
 data "terraform_remote_state" "security-groups" {
   backend = "s3"
@@ -38,5 +38,6 @@ data "terraform_remote_state" "security-groups" {
     region = "${var.region}"
   }
 }
+
 
 
