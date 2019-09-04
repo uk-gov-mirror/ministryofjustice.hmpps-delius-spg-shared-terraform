@@ -161,16 +161,7 @@ pipeline {
         }
 
 
-        stage('Delius | SPG | Monitoring') {
-            steps {
-                script {
-                    do_terraform(project.config, environment_name, project.terraform, 'monitoring')
-                }
-            }
-        }
-
-
-        stage('Delius | SPG | IAM') {
+        stage('Delius | SPG | IAM Roles') {
             steps {
                 script {
                     do_terraform(project.config, environment_name, project.terraform, 'iam')
@@ -178,13 +169,39 @@ pipeline {
             }
         }
 
-        stage('Delius | SPG | Security Groups') {
+        stage('Delius | SPG | KMS') {
+            steps {
+                script {
+                    do_terraform(project.config, environment_name, project.terraform, 'kms-certificates-spg')
+                }
+            }
+        }
+
+        stage('Delius | SPG | IAM App Policies') {
+            steps {
+                script {
+                    do_terraform(project.config, environment_name, project.terraform, 'iam-spg-app-policies')
+                }
+            }
+        }
+
+        stage('Delius | SPG | Security Groups - Deprecated') {
             steps {
                 script {
                     do_terraform(project.config, environment_name, project.terraform, 'security-groups')
                 }
             }
         }
+
+
+        stage('Delius | SPG | Security Groups And Rules') {
+            steps {
+                script {
+                    do_terraform(project.config, environment_name, project.terraform, 'security-groups-and-rules')
+                }
+            }
+        }
+
 
         stage('Delius | SPG | ECS-SPG-CRC') {
             steps {
@@ -208,6 +225,15 @@ pipeline {
             steps {
                 script {
                     do_terraform(project.config, environment_name, project.terraform, 'ecs-iso')
+                }
+            }
+        }
+
+
+        stage('Delius | SPG | Monitoring') {
+            steps {
+                script {
+                    do_terraform(project.config, environment_name, project.terraform, 'monitoring')
                 }
             }
         }

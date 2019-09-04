@@ -103,13 +103,13 @@ locals {
   ########################################################################################################
   #ecs service - app service
   ########################################################################################################
-  ecs_service_role = "${data.terraform_remote_state.iam.iam_role_ext_ecs_role_arn}"
+  ecs_service_role = "${data.terraform_remote_state.iam.iam_role_iso_ext_ecs_role_arn}"
   service_desired_count = "1"
   sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
-    "${local.sg_map_ids["external_inst_sg_id"]}",
     "${local.sg_map_ids["bastion_in_sg_id"]}",
-    "${local.sg_map_ids["outbound_sg_id"]}",
+    "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",
+    "${data.terraform_remote_state.security-groups-and-rules.iso_external_instance_sg_id}"
   ]
   ########################################################################################################
   #ecs service block device
@@ -123,7 +123,7 @@ locals {
   #ecs launch config
   ########################################################################################################
   ami_id = "${data.aws_ami.amazon_ami.id}"
-  instance_profile = "${data.terraform_remote_state.iam.iam_policy_ext_app_instance_profile_name}"
+  instance_profile = "${data.terraform_remote_state.iam.iam_policy_iso_ext_app_instance_profile_name}"
   instance_type = "${var.asg_instance_type_iso}"
   ssh_deployer_key = "${data.terraform_remote_state.common.common_ssh_deployer_key}"
   associate_public_ip_address = true
@@ -134,7 +134,6 @@ locals {
 
   image_url             = "${var.image_url}"
   image_version         = "${var.image_version}"
-  //ecs_cpu_units = "${var.spg_iso_ecs_cpu_units}" //NOTE using null for cpu units, which I think defaults to max
   ecs_memory    = "${var.spg_iso_ecs_memory}"
   #regular config bucket - not sure what this is used for yet
   config-bucket = "${data.terraform_remote_state.common.common_s3-config-bucket}"

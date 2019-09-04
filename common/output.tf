@@ -99,6 +99,10 @@ output "s3_lb_policy_file" {
   value = "policies/s3_alb_policy.json"
 }
 
+output "common_engineering_certificates_s3_bucket" {
+  value = "${data.terraform_remote_state.eng_remote_certificates_s3bucket.s3bucket_private}"
+}
+
 /*
 output "monitoring_server_external_url" {
   value = "${data.terraform_remote_state.monitor.monitoring_server_external_url}"
@@ -135,22 +139,6 @@ output "private_cidr_block" {
     "${data.terraform_remote_state.vpc.vpc_private-subnet-az1-cidr_block}",
     "${data.terraform_remote_state.vpc.vpc_private-subnet-az2-cidr_block}",
     "${data.terraform_remote_state.vpc.vpc_private-subnet-az3-cidr_block}",
-  ]
-}
-
-output "db_cidr_block" {
-  value = [
-    "${data.terraform_remote_state.vpc.vpc_db-subnet-az1-cidr_block}",
-    "${data.terraform_remote_state.vpc.vpc_db-subnet-az2-cidr_block}",
-    "${data.terraform_remote_state.vpc.vpc_db-subnet-az3-cidr_block}",
-  ]
-}
-
-output "db_subnet_ids" {
-  value = [
-    "${data.terraform_remote_state.vpc.vpc_db-subnet-az1}",
-    "${data.terraform_remote_state.vpc.vpc_db-subnet-az2}",
-    "${data.terraform_remote_state.vpc.vpc_db-subnet-az3}",
   ]
 }
 

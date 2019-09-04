@@ -62,8 +62,9 @@ locals {
   backend_timeout        = "60"
   external_domain        = "${data.terraform_remote_state.common.external_domain}"
   public_zone_id         = "${data.terraform_remote_state.common.public_zone_id}"
-  int_lb_security_groups = ["${local.sg_map_ids["internal_lb_sg_id"]}",
-                            "${local.sg_map_ids["bastion_in_sg_id"]}"]
+  int_lb_security_groups = ["${data.terraform_remote_state.security-groups-and-rules.mpx_internal_loadbalancer_sg_id}"
+//TODO remove if LBs do not require ssh access  "${local.sg_map_ids["bastion_in_sg_id"]}"]
+    ]
 
   listener = [
     {
@@ -141,13 +142,13 @@ locals {
   ########################################################################################################
   #ecs service - app service
   ########################################################################################################
-  ecs_service_role = "${data.terraform_remote_state.iam.iam_role_ext_ecs_role_arn}"
+  ecs_service_role = "${data.terraform_remote_state.iam.iam_role_mpx_int_ecs_role_arn}"
   service_desired_count = "1" # maxed out on the basis the serive count is decoupled from the ASG
   sg_map_ids            = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
-    "${local.sg_map_ids["internal_inst_sg_id"]}", //for mpx
     "${local.sg_map_ids["bastion_in_sg_id"]}",
-    "${local.sg_map_ids["outbound_sg_id"]}",
+    "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",
+    "${data.terraform_remote_state.security-groups-and-rules.mpx_internal_instance_sg_id}",
   ]
   ########################################################################################################
   #ecs service block device
@@ -161,7 +162,7 @@ locals {
   #ecs launch config
   ########################################################################################################
   ami_id = "${data.aws_ami.amazon_ami.id}"
-  instance_profile            = "${data.terraform_remote_state.iam.iam_policy_int_app_instance_profile_name}"
+  instance_profile            = "${data.terraform_remote_state.iam.iam_policy_mpx_int_app_instance_profile_name}"
 #  instance_profile            = "${data.terraform_remote_state.iam.iam_policy_ext_app_instance_profile_name}"
   instance_type               = "${var.asg_instance_type_mpx}"
   ssh_deployer_key            = "${data.terraform_remote_state.common.common_ssh_deployer_key}"
@@ -173,7 +174,6 @@ locals {
 
   image_url             = "${var.image_url}"
   image_version         = "${var.image_version}"
-  //ecs_cpu_units = "${var.spg_mpx_ecs_cpu_units}" //NOTE using null for cpu units, which I think defaults to max
   ecs_memory    = "${var.spg_mpx_ecs_memory}"
   #regular config bucket - not sure what this is used for yet
   config-bucket         = "${data.terraform_remote_state.common.common_s3-config-bucket}"
