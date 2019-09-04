@@ -161,19 +161,26 @@ pipeline {
         }
 
 
-        stage('Delius | SPG | Monitoring') {
+        stage('Delius | SPG | IAM Roles') {
             steps {
                 script {
-                    do_terraform(project.config, environment_name, project.terraform, 'monitoring')
+                    do_terraform(project.config, environment_name, project.terraform, 'iam')
                 }
             }
         }
 
-
-        stage('Delius | SPG | IAM') {
+        stage('Delius | SPG | KMS') {
             steps {
                 script {
-                    do_terraform(project.config, environment_name, project.terraform, 'iam')
+                    do_terraform(project.config, environment_name, project.terraform, 'kms-certificates-spg')
+                }
+            }
+        }
+
+        stage('Delius | SPG | IAM App Policies') {
+            steps {
+                script {
+                    do_terraform(project.config, environment_name, project.terraform, 'iam-spg-app-policies')
                 }
             }
         }
@@ -218,6 +225,15 @@ pipeline {
             steps {
                 script {
                     do_terraform(project.config, environment_name, project.terraform, 'ecs-iso')
+                }
+            }
+        }
+
+
+        stage('Delius | SPG | Monitoring') {
+            steps {
+                script {
+                    do_terraform(project.config, environment_name, project.terraform, 'monitoring')
                 }
             }
         }
