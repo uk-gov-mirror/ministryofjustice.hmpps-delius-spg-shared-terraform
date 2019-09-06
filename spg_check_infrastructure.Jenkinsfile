@@ -71,7 +71,7 @@ pipeline {
         }
 
         stage('SPG Terraform') {
-            stages {
+            parallel {
                 stage('Plan SPG common') {
                     steps { script { plan_submodule(project.config, environment_name, project.terraform, 'common') } }
                 }
