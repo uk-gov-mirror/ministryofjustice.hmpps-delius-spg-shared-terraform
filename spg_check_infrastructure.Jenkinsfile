@@ -99,6 +99,9 @@ pipeline {
                     }
                 }
 
+                stage('Plan SPG amazonmq') {
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'amazonmq') } }
+                }
                 stage('Plan SPG ecs-crc') {
                     steps { script { plan_submodule(project.config, environment_name, project.terraform, 'ecs-crc') } }
                 }
