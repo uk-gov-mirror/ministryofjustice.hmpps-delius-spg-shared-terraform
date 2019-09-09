@@ -14,12 +14,12 @@ locals {
   int_lb_security_groups = ["${local.sg_map_ids["internal_lb_sg_id"]}",
                             "${local.sg_map_ids["bastion_in_sg_id"]}"]
 
-  //int_amq_security_groups = ["${local.sg_map_ids["amazonmq_inst_sg_id"]}"]
   int_amq_security_groups = "${data.terraform_remote_state.common.amazonmq_inst_sg_id}"
 
   private_subnet_ids = [
-    "${data.terraform_remote_state.common.private_subnet_ids[0]}"]
-
+    "${data.terraform_remote_state.common.private_subnet_ids[0]}",
+    "${data.terraform_remote_state.common.private_subnet_ids[1]}"
+  ]
 }
 
 resource "aws_mq_broker" "SPG" {
@@ -32,7 +32,8 @@ resource "aws_mq_broker" "SPG" {
 
   engine_type        = "ActiveMQ"
   engine_version     = "5.15.0"
-  host_instance_type = "mq.t2.micro"
+  deployment_mode    = "${var.aws_broker_deployment_mode}"
+  host_instance_type = "${var.aws_broker_host_instance_type}"
   security_groups    = ["${local.int_amq_security_groups}"]
   subnet_ids         = ["${local.private_subnet_ids}"]
 
@@ -61,3 +62,28 @@ resource "aws_mq_configuration" "SPG" {
 DATA
 }
 
+
+resource "aws_route53_record" "dns_spg_amq_a_int_entry" {
+
+  # Use the ID of the Hosted Zone we retrieved earlier
+  zone_id = "${data.terraform_remote_state.common.private_zone_id}"
+  name = "amazonmq-broker-1"
+  type = "A"
+  ttl = "1800"
+  count = 1
+  records = ["${aws_mq_broker.SPG.instances.0.ip_address}"]
+  depends_on = ["aws_mq_broker.SPG"]
+}
+
+resource "aws_route53_record" "dns_spg_amq_b_int_entry" {
+
+  # Use the ID of the Hosted Zone we retrieved earlier
+  zone_id = "${data.terraform_remote_state.common.private_zone_id}"
+  name = "amazonmq-broker-2"
+  type = "A"
+  ttl = "1800"
+  #count = "${length(aws_mq_broker.SPG.instances) == 2 ? 1 : 0}"
+  count = "${(aws_mq_broker.SPG.deployment_mode) == "ACTIVE_STANDBY_MULTI_AZ" ? 1 : 0}"
+  records = ["${aws_mq_broker.SPG.instances.1.ip_address}"]
+  depends_on = ["aws_mq_broker.SPG"]
+}
