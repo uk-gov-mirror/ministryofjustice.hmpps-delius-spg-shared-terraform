@@ -49,8 +49,8 @@ resource "aws_mq_broker" "SPG" {
 }
 
 resource "aws_mq_configuration" "SPG" {
-  description    = "SPG AMQ Configuration"
-  name           = "SPG-Basic"
+  description    = "Amazon MQ Configuration for NDST AWS"
+  name           = "NDST Amazon MQ"
   engine_type    = "ActiveMQ"
   engine_version = "5.15.0"
 
@@ -66,7 +66,7 @@ resource "aws_mq_configuration" "SPG" {
 DATA
 }
 
-
+# Always created
 resource "aws_route53_record" "dns_spg_amq_a_int_entry" {
 
   # Use the ID of the Hosted Zone we retrieved earlier
@@ -79,6 +79,7 @@ resource "aws_route53_record" "dns_spg_amq_a_int_entry" {
   depends_on = ["aws_mq_broker.SPG"]
 }
 
+# Optionally created
 resource "aws_route53_record" "dns_spg_amq_b_int_entry" {
 
   # Use the ID of the Hosted Zone we retrieved earlier
@@ -86,13 +87,22 @@ resource "aws_route53_record" "dns_spg_amq_b_int_entry" {
   name = "amazonmq-broker-2"
   type = "A"
   ttl = "1800"
-  #count = "${length(aws_mq_broker.SPG.instances) == 2 ? 1 : 0}"
-  count = "${(local.broker_instances) == 2 ? 1 : 0}"
+  # The count will resolve to zero on a SINGLE_INSTANCE and this resource will therefore not get created
+  count = "${(local.broker_instances) == 1 ? 0 : 1}"
   records = ["${aws_mq_broker.SPG.instances.1.ip_address}"]
   depends_on = ["aws_mq_broker.SPG"]
 }
 
+# Construct the amazon MQ connection url from the dns names and depending on how many instances
+# This data source is then used as an output to update the remote state
+data "null_data_source" "broker_exports" {
 
-output "discovery" {
-  value = "${local.broker_subnet_ids}"
+  inputs = {
+
+    broker_connect_url =  "${local.broker_instances == 1 ?
+                                format("ssl://%s", aws_route53_record.dns_spg_amq_a_int_entry.fqdn) :
+                                format("failover(ssl://%s, ssl://%s)",
+                                        aws_route53_record.dns_spg_amq_a_int_entry.fqdn,
+                                        aws_route53_record.dns_spg_amq_b_int_entry.fqdn)}"
+  }
 }
