@@ -16,7 +16,6 @@ variable "aws_broker_host_instance_type" {
 
 variable "aws_broker_deployment_mode" {
   type        = "string"
-  #default     = "SINGLE_INSTANCE"
-  default     = "ACTIVE_STANDBY_MULTI_AZ"
+  default     = "SINGLE_INSTANCE"
   description = "Either SINGLE_INSTANCE or ACTIVE_STANDBY_MULTI_AZ for a master/slave standby cluster"
 }

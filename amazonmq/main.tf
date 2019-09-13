@@ -50,7 +50,7 @@ resource "aws_mq_broker" "SPG" {
 
 resource "aws_mq_configuration" "SPG" {
   description    = "Amazon MQ Configuration for NDST AWS"
-  name           = "NDST Amazon MQ"
+  name           = "NDST-Amazon-MQ"
   engine_type    = "ActiveMQ"
   engine_version = "5.15.0"
 
@@ -93,16 +93,28 @@ resource "aws_route53_record" "dns_spg_amq_b_int_entry" {
   depends_on = ["aws_mq_broker.SPG"]
 }
 
+# The ssl port should always be 61617, but calculate it from the broker endpoints (SSL always at endpoint offset zero)
+# Format is "ssl://[fqdn]:port"
+data "null_data_source" "broker_export_port" {
+  inputs = {
+        broker_ssl_port = "${element(slice(split(":", aws_mq_broker.SPG.instances.0.endpoints[0]), 2,3),0)}"
+  }
+}
+
 # Construct the amazon MQ connection url from the dns names and depending on how many instances
 # This data source is then used as an output to update the remote state
-data "null_data_source" "broker_exports" {
+data "null_data_source" "broker_export_url" {
 
   inputs = {
 
     broker_connect_url =  "${local.broker_instances == 1 ?
-                                format("ssl://%s", aws_route53_record.dns_spg_amq_a_int_entry.fqdn) :
-                                format("failover(ssl://%s, ssl://%s)",
+                                format("ssl://%s:%s",
                                         aws_route53_record.dns_spg_amq_a_int_entry.fqdn,
-                                        aws_route53_record.dns_spg_amq_b_int_entry.fqdn)}"
+                                        data.null_data_source.broker_export_port.outputs["broker_ssl_port"]):
+                                format("failover(ssl://%s:%s, ssl://%s:%s)",
+                                        aws_route53_record.dns_spg_amq_a_int_entry.fqdn,
+                                        data.null_data_source.broker_export_port.outputs["broker_ssl_port"],
+                                        aws_route53_record.dns_spg_amq_b_int_entry.fqdn,
+                                        data.null_data_source.broker_export_port.outputs["broker_ssl_port"])}"
   }
 }
