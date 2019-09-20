@@ -66,7 +66,7 @@ locals {
     bastion_in_sg_id    = "${data.terraform_remote_state.security-groups.sg_ssh_bastion_in_id}"
   }
 
-
+  amazonmq_inst_sg_id = "${data.terraform_remote_state.security-groups.sg_amazonmq_in}"
 
   private_subnet_map = {
     az1 = "${data.terraform_remote_state.vpc.vpc_private-subnet-az1}"
