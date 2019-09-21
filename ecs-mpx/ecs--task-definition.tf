@@ -10,12 +10,12 @@ data "aws_ecs_task_definition" "app_task_definition" {
 
 data "template_file" "po_configuration" {
   template = "${file("task_definitions/key_value_pair.tpl.json")}"
-  count = "${length(var.SPG_POCONFIGURATION)}"
+  count = "${length(var.PO_SPG_CONFIGURATION)}"
 
 
   vars {
-    name = "${element(keys(var.SPG_POCONFIGURATION),count.index)}"
-    value = "${element(values(var.SPG_POCONFIGURATION),count.index)}"
+    name = "${element(keys(var.PO_SPG_CONFIGURATION),count.index)}"
+    value = "${element(values(var.PO_SPG_CONFIGURATION),count.index)}"
   }
 }
 

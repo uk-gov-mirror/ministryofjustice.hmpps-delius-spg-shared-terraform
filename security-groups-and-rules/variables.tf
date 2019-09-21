@@ -30,3 +30,10 @@ variable "spg_app_name" {
 variable "environment_name" {
   type = "string"
 }
+
+
+variable PO_SPG_FIREWALL_INGRESS_PORT {}
+variable PO_SPG_FIREWALL_INGRESS_RULES {
+  description ="map of PO configs"
+  type="map"
+}

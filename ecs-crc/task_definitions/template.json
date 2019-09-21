@@ -93,8 +93,9 @@
             {
             "name": "SPG_CRC_FQDN",
             "value": "${SPG_CRC_FQDN}"
-            }
+            },
 
+            ${po_configuration}
 
             ],
         "portMappings": [
