@@ -40,7 +40,7 @@ resource "aws_security_group_rule" "parent_orgs_spg_ingress" {
 
 
   security_group_id        = "${aws_security_group.parent_orgs_spg_ingress.id}"
-  description              = "${element(keys(var.PO_SPG_FIREWALL_INGRESS_RULES),count.index)}"
+  description              = "TF_${element(keys(var.PO_SPG_FIREWALL_INGRESS_RULES),count.index)}"
   type                     = "ingress"
   cidr_blocks              = ["${element(values(var.PO_SPG_FIREWALL_INGRESS_RULES),count.index)}"]
   from_port                = "${var.PO_SPG_FIREWALL_INGRESS_PORT}"
