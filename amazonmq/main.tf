@@ -72,10 +72,10 @@ resource "aws_route53_record" "dns_spg_amq_a_int_entry" {
   # Use the ID of the Hosted Zone we retrieved earlier
   zone_id = "${data.terraform_remote_state.common.private_zone_id}"
   name = "amazonmq-broker-1"
-  type = "A"
+  type = "CNAME"
   ttl = "1800"
   count = 1
-  records = ["${aws_mq_broker.SPG.instances.0.ip_address}"]
+  records = ["${data.null_data_source.broker_a_export_fqdn.outputs["broker_fqdn"]}"]
   depends_on = ["aws_mq_broker.SPG"]
 }
 
@@ -85,7 +85,7 @@ resource "aws_route53_record" "dns_spg_amq_b_int_entry" {
   # Use the ID of the Hosted Zone we retrieved earlier
   zone_id = "${data.terraform_remote_state.common.private_zone_id}"
   name = "amazonmq-broker-2"
-  type = "A"
+  type = "CNAME"
   ttl = "1800"
   # The count will resolve to zero on a SINGLE_INSTANCE and this resource will therefore not get created
   count = "${(local.broker_instances) == 1 ? 0 : 1}"
@@ -97,9 +97,30 @@ resource "aws_route53_record" "dns_spg_amq_b_int_entry" {
 # Format is "ssl://[fqdn]:port"
 data "null_data_source" "broker_export_port" {
   inputs = {
-        broker_ssl_port = "${element(slice(split(":", aws_mq_broker.SPG.instances.0.endpoints[0]), 2,3),0)}"
+        broker_ssl_port = "${element(split(":", aws_mq_broker.SPG.instances.0.endpoints[0]),2)}"
   }
 }
+
+# The FQDN is only available as a substring of the exported endpoints in the format "[protocol]://fqdn:port"
+# Split the full url on the colon (:) which returns a list
+# Use element to take the second entry (//[fqdn])
+# Use substr to remove the //
+#
+data "null_data_source" "broker_a_export_fqdn" {
+  inputs = {
+      broker_fqdn = "${substr(element(split(":", aws_mq_broker.SPG.instances.0.endpoints.0),1), 2, -1)}"
+  }
+}
+
+resource "null_resource" "broker_b_export_fqdn" {
+  # Changes to any instance of the cluster requires re-provisioning
+  triggers = {
+    broker_fqdn = "${local.broker_instances == 1 ?
+                        substr(element(split(":", aws_mq_broker.SPG.instances.0.endpoints.0),1), 2, -1) :
+                        format("")}"
+  }
+}
+
 
 # Construct the amazon MQ connection url from the dns names and depending on how many instances
 # This data source is then used as an output to update the remote state
@@ -114,7 +135,7 @@ data "null_data_source" "broker_export_url" {
                                 format("failover(ssl://%s:%s, ssl://%s:%s)",
                                         aws_route53_record.dns_spg_amq_a_int_entry.fqdn,
                                         data.null_data_source.broker_export_port.outputs["broker_ssl_port"],
-                                        aws_route53_record.dns_spg_amq_b_int_entry.fqdn,
+                                        aws_route53_record.dns_spg_amq_a_int_entry.fqdn,
                                         data.null_data_source.broker_export_port.outputs["broker_ssl_port"])}"
   }
 }
