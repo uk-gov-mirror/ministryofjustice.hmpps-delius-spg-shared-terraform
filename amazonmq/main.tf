@@ -62,6 +62,12 @@ resource "aws_mq_broker" "SPG" {
     password = "${data.aws_ssm_parameter.remote_broker_password.value}"
     console_access = "true"
   }
+
+  #Cloudwath output
+  logs {
+    general = "true"
+    audit = "true"
+  }
 }
 
 resource "aws_mq_configuration" "SPG" {
@@ -115,11 +121,12 @@ data "null_data_source" "broker_export_port" {
   inputs = {
         broker_ssl_port = "${element(slice(split(":", aws_mq_broker.SPG.instances.0.endpoints[0]), 2,3),0)}"
   }
-  depends_on = ["aws_mq_broker.SPG"]
 }
 
 # Construct the amazon MQ connection url from the dns names and depending on how many instances
 # This data source is then used as an output to update the remote state
+# A bug in TF 0.11 means that the optional resource of dns_spg_amq_b_int_entry needs to be referenced using the
+# ugly element syntax to prevent a compile time error
 data "null_data_source" "broker_export_url" {
 
   inputs = {
@@ -133,8 +140,7 @@ data "null_data_source" "broker_export_url" {
                                 format("failover(ssl://%s:%s, ssl://%s:%s)",
                                         aws_route53_record.dns_spg_amq_a_int_entry.fqdn,
                                         data.null_data_source.broker_export_port.outputs["broker_ssl_port"],
-                                        aws_route53_record.dns_spg_amq_b_int_entry.fqdn,
+                                        element(concat(aws_route53_record.dns_spg_amq_b_int_entry.*.fqdn, list("")), 0),
                                         data.null_data_source.broker_export_port.outputs["broker_ssl_port"])}"
   }
-  depends_on = ["aws_mq_broker.SPG"]
 }
