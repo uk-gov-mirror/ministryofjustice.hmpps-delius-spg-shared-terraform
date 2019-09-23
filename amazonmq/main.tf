@@ -11,8 +11,9 @@ provider "aws" {
 locals {
   sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
 
-  int_lb_security_groups = ["${local.sg_map_ids["internal_lb_sg_id"]}",
-                            "${local.sg_map_ids["bastion_in_sg_id"]}"]
+  int_lb_security_groups = [
+    "${local.sg_map_ids["internal_lb_sg_id"]}",
+    "${local.sg_map_ids["bastion_in_sg_id"]}"]
 
   int_amq_security_groups = "${data.terraform_remote_state.common.amazonmq_inst_sg_id}"
 
@@ -23,7 +24,22 @@ locals {
 
   # Setup a broker instance count based on the broker deployment mode
   broker_instances = "${(var.aws_broker_deployment_mode) == "SINGLE_INSTANCE" ? 1 : 2}"
-  broker_subnet_ids  = ["${slice(local.private_subnet_ids, 0, local.broker_instances)}"]
+  broker_subnet_ids = [
+    "${slice(local.private_subnet_ids, 0, local.broker_instances)}"]
+
+  # Construct the credentials_ssm_path from the common remote state variables tags.application and tags.environment_name and the fixed string
+  credentials_ssm_path = "/${data.terraform_remote_state.vpc.environment_name}/${data.terraform_remote_state.vpc.tags.application}/weblogic/spg-domain"
+}
+
+#-------------------------------------------------------------
+## Getting the remote broker username/password from SSM
+#-------------------------------------------------------------
+data "aws_ssm_parameter" "remote_broker_username" {
+  name = "${local.credentials_ssm_path}/remote_broker_username"
+}
+
+data "aws_ssm_parameter" "remote_broker_password" {
+  name = "${local.credentials_ssm_path}/remote_broker_password"
 }
 
 resource "aws_mq_broker" "SPG" {
@@ -42,9 +58,15 @@ resource "aws_mq_broker" "SPG" {
   subnet_ids         = ["${local.broker_subnet_ids}"]
 
   user {
-    username = "spgsmx"
-    password = "spgsmx1000000"
+    username = "${data.aws_ssm_parameter.remote_broker_username.value}"
+    password = "${data.aws_ssm_parameter.remote_broker_password.value}"
     console_access = "true"
+  }
+
+  #Cloudwath output
+  logs {
+    general = "true"
+    audit = "true"
   }
 }
 
@@ -103,18 +125,22 @@ data "null_data_source" "broker_export_port" {
 
 # Construct the amazon MQ connection url from the dns names and depending on how many instances
 # This data source is then used as an output to update the remote state
+# A bug in TF 0.11 means that the optional resource of dns_spg_amq_b_int_entry needs to be referenced using the
+# ugly element syntax to prevent a compile time error
 data "null_data_source" "broker_export_url" {
 
   inputs = {
 
-    broker_connect_url =  "${local.broker_instances == 1 ?
+    broker_connect_url =  "${(local.broker_instances) == 1 ?
+
                                 format("ssl://%s:%s",
                                         aws_route53_record.dns_spg_amq_a_int_entry.fqdn,
-                                        data.null_data_source.broker_export_port.outputs["broker_ssl_port"]):
+                                        data.null_data_source.broker_export_port.outputs["broker_ssl_port"]) :
+
                                 format("failover(ssl://%s:%s, ssl://%s:%s)",
                                         aws_route53_record.dns_spg_amq_a_int_entry.fqdn,
                                         data.null_data_source.broker_export_port.outputs["broker_ssl_port"],
-                                        aws_route53_record.dns_spg_amq_b_int_entry.fqdn,
+                                        element(concat(aws_route53_record.dns_spg_amq_b_int_entry.*.fqdn, list("")), 0),
                                         data.null_data_source.broker_export_port.outputs["broker_ssl_port"])}"
   }
 }
