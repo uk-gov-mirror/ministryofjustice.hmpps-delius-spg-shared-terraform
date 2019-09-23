@@ -58,7 +58,7 @@ data "terraform_remote_state" "security" {
 
   config {
     bucket = "${var.remote_state_bucket_name}"
-    key    = "spg/security-group-and-rules/terraform.tfstate"
+    key    = "spg/security-groups-and-rules/terraform.tfstate"
     region = "${var.region}"
   }
 }
