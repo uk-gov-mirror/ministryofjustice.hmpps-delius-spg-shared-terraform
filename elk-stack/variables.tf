@@ -73,8 +73,7 @@ variable "elk-audit_conf" {
     es_ebs_enabled = true
     es_ebs_type    = "gp2"
     es_ebs_size    = 20
-    
-    es_snapshot_hour  = 01
+    es_snapshot_hour = 01
     # Logging
     es_logging_enabled = true
     # Valid values: INDEX_SLOW_LOGS, SEARCH_SLOW_LOGS, ES_APPLICATION_LOGS

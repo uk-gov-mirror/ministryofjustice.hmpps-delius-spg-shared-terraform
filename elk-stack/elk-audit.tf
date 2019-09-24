@@ -4,7 +4,8 @@ resource "aws_security_group" "elk-audit_sg" {
   name        = "${local.name_prefix}-elk-audit-pri-sg"
   description = "NDST ELK Audit Stack Security Group"
   vpc_id      = "${data.terraform_remote_state.vpc.vpc_id}"
-    tags = "${
+
+  tags = "${
       merge(
           var.tags, 
           map("Name", "${local.name_prefix}-elk-audit-pri-ecs")
@@ -95,6 +96,7 @@ resource "aws_elasticsearch_domain" "elk-audit_domain" {
   depends_on = [
     #"aws_iam_service_linked_role.elk-audit",
     "aws_iam_role.elk-audit_kibana_role",
+
     "aws_cloudwatch_log_resource_policy.elk-audit_log_access",
   ]
 

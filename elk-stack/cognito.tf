@@ -37,7 +37,7 @@ resource "aws_cognito_user_pool" "elk-audit_user_pool" {
   # Optionally add Lambda hooks to perform additional authz checks, e.g. check group membership
   #   lambda_config = {}
 
-  username_attributes = []
+  username_attributes      = []
   auto_verified_attributes = ["${var.elk-audit_cognito_conf["auto_verified_attributes"]}"]
   # Account verification message
   verification_message_template = {

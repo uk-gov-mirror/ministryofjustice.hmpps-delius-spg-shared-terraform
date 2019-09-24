@@ -9,15 +9,12 @@ resource "aws_iam_role" "elk-audit_kibana_role" {
   assume_role_policy = "${data.template_file.elk-audit_kibana_assume_policy_template.rendered}"
 }
 
-resource "aws_iam_policy_attachment" "elk-audit_kibana_cognito_access" {
-  name               = "${local.name_prefix_conflict}-kibanauser-pri-iam"
-  roles      = ["${aws_iam_role.elk-audit_kibana_role.name}"]
+resource "aws_iam_role_policy_attachment" "elk-audit_kibana_cognito_access" {
+  role       = "${aws_iam_role.elk-audit_kibana_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonESCognitoAccess"
 }
 
-resource "aws_iam_policy_attachment" "elk-audit_kibana_es_access" {
-  name               = "${local.name_prefix_conflict}-kibanauser-pri-iam"
-  roles      = ["${aws_iam_role.elk-audit_kibana_role.name}"]
+resource "aws_iam_role_policy_attachment" "elk-audit_kibana_es_access" {
+  role       = "${aws_iam_role.elk-audit_kibana_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonESFullAccess"
 }
-
