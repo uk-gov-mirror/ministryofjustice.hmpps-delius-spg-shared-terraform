@@ -1,0 +1,53 @@
+{
+  "widgets": [
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 0,
+      "width": 24,
+      "height": 3,
+      "properties": {
+        "metrics": [
+          [ { "expression": "SEARCH('{AWS/ECS,ClusterName,ServiceName} spgw MetricName=\"CPUUtilization\"', 'SampleCount', 60)", "id": "e1" } ]
+        ],
+        "view": "singleValue",
+        "region": "eu-west-2",
+        "title": "Number of RUNNING Tasks",
+        "period": 300
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 3,
+      "width": 12,
+      "height": 9,
+      "properties": {
+        "metrics": [
+          [ { "expression": "SEARCH('{AWS/ECS,ClusterName,ServiceName} spgw MetricName=\"CPUUtilization\"', 'Average', 300)", "id": "e1" } ]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "eu-west-2",
+        "title": "CPU Utilisation",
+        "period": 300
+      }
+    },
+    {
+      "type": "metric",
+      "x": 12,
+      "y": 3,
+      "width": 12,
+      "height": 9,
+      "properties": {
+        "metrics": [
+          [ { "expression": "SEARCH('{AWS/ECS,ClusterName,ServiceName} spgw MetricName=\"MemoryUtilization\"', 'Average', 300)", "id": "e1" } ]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "eu-west-2",
+        "title": "Memory Utilisation"
+      }
+    }
+  ]
+}

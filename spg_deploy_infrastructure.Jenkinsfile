@@ -203,6 +203,15 @@ pipeline {
         }
 
 
+        stage('Delius | SPG | Amazon MQ') {
+            steps {
+                script {
+                    do_terraform(project.config, environment_name, project.terraform, 'amazonmq')
+                }
+            }
+        }
+
+
         stage('Delius | SPG | ECS-SPG-CRC') {
             steps {
                 script {

@@ -178,3 +178,8 @@ output "app_hostnames" {
 }
 
 
+
+#Temporarily moved out of the sg_map_ids list
+output "amazonmq_inst_sg_id" {
+  value = "${local.amazonmq_inst_sg_id}"
+}
