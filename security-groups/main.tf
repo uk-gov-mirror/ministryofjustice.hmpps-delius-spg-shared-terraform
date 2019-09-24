@@ -51,6 +51,18 @@ data "terraform_remote_state" "nat" {
   }
 }
 
+### Extract the new security group rules
+#-------------------------------------------------------------
+data "terraform_remote_state" "security" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.remote_state_bucket_name}"
+    key    = "spg/security-groups-and-rules/terraform.tfstate"
+    region = "${var.region}"
+  }
+}
+
 ####################################################
 # Locals
 ####################################################
@@ -80,8 +92,7 @@ locals {
   internal_inst_sg_id = "${local.sg_map_ids["internal_inst_sg_id"]}"
   external_lb_sg_id   = "${local.sg_map_ids["external_lb_sg_id"]}"
   external_inst_sg_id = "${local.sg_map_ids["external_inst_sg_id"]}"
-  //amazonmq_inst_sg_id = "${local.sg_map_ids["amazonmq_inst_sg_id"]}"
   amazonmq_inst_sg_id = "${data.terraform_remote_state.common.amazonmq_inst_sg_id}"
-  spg_outbound_id     = "${local.sg_map_ids["outbound_sg_id"]}"
+  spg_outbound_id     = "${data.terraform_remote_state.security.spg_common_outbound_sg_id}"
 
 }
