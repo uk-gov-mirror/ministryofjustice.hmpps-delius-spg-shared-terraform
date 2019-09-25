@@ -34,7 +34,13 @@ locals {
   application_endpoint = "${local.app_hostnames["external"]}"
   environment_identifier = "${data.terraform_remote_state.common.environment_identifier}"
 
+  #for dns
+  public_zone_id = "${data.terraform_remote_state.common.public_zone_id}"
   external_domain        = "${data.terraform_remote_state.common.external_domain}"
+
+  strategic_external_domain        = "${data.terraform_remote_state.common.strategic_external_domain}"
+  strategic_public_zone_id         = "${data.terraform_remote_state.common.strategic_public_zone_id}"
+
 
   ########################################################################################################
   #Network common (protocol needs to match between front end and back end)
@@ -84,8 +90,6 @@ locals {
     "${data.terraform_remote_state.persistent_eip.spg_az3_lb_eip.allocation_id}",
   ]
 
-  #for dns
-  public_zone_id = "${data.terraform_remote_state.common.public_zone_id}"
 
   ########################################################################################################
   #                                   ECS service
@@ -109,7 +113,9 @@ locals {
   instance_security_groups = [
     "${local.sg_map_ids["bastion_in_sg_id"]}",
     "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",
-    "${data.terraform_remote_state.security-groups-and-rules.iso_external_instance_sg_id}"
+    "${data.terraform_remote_state.security-groups-and-rules.iso_external_instance_sg_id}",
+    "${data.terraform_remote_state.security-groups-and-rules.parent_orgs_spg_ingress_sg_id}"
+
   ]
   ########################################################################################################
   #ecs service block device

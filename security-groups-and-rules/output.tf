@@ -11,6 +11,11 @@ output "iso_external_instance_sg_id" {
   value = "${aws_security_group.external_iso_instance.id}"
 }
 
+output "parent_orgs_spg_ingress_sg_id" {
+  value = "${aws_security_group.parent_orgs_spg_ingress.id}"
+}
+
+
 
 
 output "mpx_internal_loadbalancer_sg_id" {

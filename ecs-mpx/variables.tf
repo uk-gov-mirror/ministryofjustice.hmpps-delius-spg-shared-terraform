@@ -55,3 +55,7 @@ variable "tags" {
   type = "map"
 }
 
+variable PO_SPG_CONFIGURATION {
+  description ="map of PO configs"
+  type="map"
+}

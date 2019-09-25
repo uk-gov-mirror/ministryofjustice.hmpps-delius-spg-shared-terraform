@@ -33,6 +33,8 @@ variable SPG_ENVIRONMENT_CODE {}
 variable SPG_ISO_HOST_TYPE {}
 
 
+
+
 variable spg_iso_ecs_memory {}
 
 variable image_url {
@@ -48,3 +50,7 @@ variable "tags" {
   type = "map"
 }
 
+variable PO_SPG_CONFIGURATION {
+  description ="map of PO configs"
+  type="map"
+}

@@ -39,9 +39,21 @@ resource "aws_route53_record" "dns_crc_int_entry" {
 
   alias {
     name                   = "${module.create_app_elb.environment_elb_dns_name}"
-    zone_id                = "${module.create_app_elb.environment_elb_zone_id}"
+    zone_id                 = "${module.create_app_elb.environment_elb_zone_id}"
     evaluate_target_health = false
   }
 }
 
+###strategic - only create if the primary zone id is different to the strategic one
+resource "aws_route53_record" "strategic_dns_crc_int_entry" {
+  count = "${(local.public_zone_id == local.strategic_public_zone_id) ? 0 : 1}"
+  zone_id = "${local.strategic_public_zone_id}"
+  name    = "${local.application_endpoint}-${local.app_submodule}-int.${local.strategic_external_domain}"
+  type    = "A"
 
+  alias {
+    name                   = "${module.create_app_elb.environment_elb_dns_name}"
+    zone_id                = "${module.create_app_elb.environment_elb_zone_id}"
+    evaluate_target_health = false
+  }
+}
