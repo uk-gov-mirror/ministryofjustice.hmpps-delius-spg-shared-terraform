@@ -88,7 +88,12 @@ resource "aws_mq_configuration" "SPG" {
 DATA
 }
 
-# Always created
+# Broker 1 DNS entry Always created
+# The FQDN for the "records" is only available as a substring of the exported endpoints in the format "[protocol]://fqdn:port"
+# Split the full url on the colon (:) which returns a list
+# Use element to take the second entry (//[fqdn])
+# Use substr to remove the //
+#
 resource "aws_route53_record" "dns_spg_amq_a_int_entry" {
 
   # Use the ID of the Hosted Zone we retrieved earlier
@@ -97,11 +102,14 @@ resource "aws_route53_record" "dns_spg_amq_a_int_entry" {
   type = "CNAME"
   ttl = "1800"
   count = 1
-  records = ["${data.null_data_source.broker_a_export_fqdn.outputs["broker_fqdn"]}"]
+  records = ["${substr(element(split(":", aws_mq_broker.SPG.instances.0.endpoints.0),1), 2, -1)}"]
   depends_on = ["aws_mq_broker.SPG"]
 }
 
-# Optionally created
+# Broker 2 DNS entry optionally created when there are 2 instances
+# In this instance the fqdn can be constructed by taking the broker_a entry and replacing the -1.mq
+# with -2.mq as this is the standard pattern. Trying to dynamically generate it from instances.1
+# causes more compilation grief
 resource "aws_route53_record" "dns_spg_amq_b_int_entry" {
 
   # Use the ID of the Hosted Zone we retrieved earlier
@@ -111,7 +119,7 @@ resource "aws_route53_record" "dns_spg_amq_b_int_entry" {
   ttl = "1800"
   # The count will resolve to zero on a SINGLE_INSTANCE and this resource will therefore not get created
   count = "${(local.broker_instances) == 1 ? 0 : 1}"
-  records = ["${aws_mq_broker.SPG.instances.1.ip_address}"]
+  records = ["${replace(aws_route53_record.dns_spg_amq_a_int_entry.records[0], "-1.mq", "-2.mq")}"]
   depends_on = ["aws_mq_broker.SPG"]
 }
 
@@ -122,27 +130,6 @@ data "null_data_source" "broker_export_port" {
         broker_ssl_port = "${element(split(":", aws_mq_broker.SPG.instances.0.endpoints[0]),2)}"
   }
 }
-
-# The FQDN is only available as a substring of the exported endpoints in the format "[protocol]://fqdn:port"
-# Split the full url on the colon (:) which returns a list
-# Use element to take the second entry (//[fqdn])
-# Use substr to remove the //
-#
-data "null_data_source" "broker_a_export_fqdn" {
-  inputs = {
-      broker_fqdn = "${substr(element(split(":", aws_mq_broker.SPG.instances.0.endpoints.0),1), 2, -1)}"
-  }
-}
-
-resource "null_resource" "broker_b_export_fqdn" {
-  # Changes to any instance of the cluster requires re-provisioning
-  triggers = {
-    broker_fqdn = "${local.broker_instances == 1 ?
-                        substr(element(split(":", aws_mq_broker.SPG.instances.0.endpoints.0),1), 2, -1) :
-                        format("")}"
-  }
-}
-
 
 # Construct the amazon MQ connection url from the dns names and depending on how many instances
 # This data source is then used as an output to update the remote state

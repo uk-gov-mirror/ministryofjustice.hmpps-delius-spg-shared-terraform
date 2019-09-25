@@ -10,10 +10,6 @@ output "broker_username" {
   value = "${data.aws_ssm_parameter.remote_broker_username.value}"
 }
 
-output "broker_password" {
-  value = "${data.aws_ssm_parameter.remote_broker_password.value}"
-}
-
 output "broker_instances" {
   value = "${local.broker_instances}"
 }
