@@ -37,7 +37,7 @@ locals {
   ########################################################################################################
   #Network common (protocol needs to match between front end and back end)
   ########################################################################################################
-  backend_app_port = "8181"
+  backend_app_port = "9001"
 
   backend_app_protocol = "HTTP"
 
@@ -188,7 +188,6 @@ locals {
   #vars for docker app
   #s3 bucket for ANISBLE jobs (derived from env properties
   s3_bucket_config = "${var.s3_bucket_config}"
-  spg_build_inv_dir = "${var.spg_build_inv_dir}"
   #vars for docker container
   kibana_host           = "NOTUSED(yet)"
   data_volume_host_path = "/opt/spg/servicemix/data"
