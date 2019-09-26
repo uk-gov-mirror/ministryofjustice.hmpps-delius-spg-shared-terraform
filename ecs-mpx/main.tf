@@ -193,7 +193,8 @@ locals {
   SPG_ENVIRONMENT_CODE = "${var.SPG_ENVIRONMENT_CODE}"
   SPG_ENVIRONMENT_CN = "${local.external_domain}"
   SPG_DELIUS_MQ_URL = "${var.SPG_DELIUS_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
-  SPG_GATEWAY_MQ_URL = "${data.terraform_remote_state.amazonmq.amazon_mq_broker_connect_url}"
+  SPG_GATEWAY_MQ_URL = "${data.terraform_remote_state.amazonmq.amazon_mq_broker_connect_url != "" ?
+                            data.terraform_remote_state.amazonmq.amazon_mq_broker_connect_url : var.SPG_GATEWAY_MQ_URL}"
   SPG_DOCUMENT_REST_SERVICE_ADMIN_URL = "${var.SPG_DOCUMENT_REST_SERVICE_ADMIN_URL}"
   SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL = "${var.SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL}"
   SPG_ISO_FQDN = "${var.SPG_ISO_FQDN}"
