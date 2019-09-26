@@ -207,6 +207,15 @@ pipeline {
         }
 
 
+        stage('Delius | SPG | PSN Proxy Ips - should move to VPC project') {
+            steps {
+                script {
+                    do_terraform(project.config, environment_name, project.terraform, 'psn-proxy-route-53')
+                }
+            }
+        }
+        
+
         stage('Delius | SPG | Amazon MQ') {
             steps {
                 script {
