@@ -166,7 +166,7 @@ locals {
 #  instance_profile            = "${data.terraform_remote_state.iam.iam_policy_ext_app_instance_profile_name}"
   instance_type               = "${var.asg_instance_type_mpx}"
   ssh_deployer_key            = "${data.terraform_remote_state.common.common_ssh_deployer_key}"
-  associate_public_ip_address = true
+  associate_public_ip_address = false
 
   ########################################################################################################
   #ecs task definition

@@ -115,6 +115,7 @@ locals {
     "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",
     "${data.terraform_remote_state.security-groups-and-rules.iso_external_instance_sg_id}",
     "${data.terraform_remote_state.security-groups-and-rules.parent_orgs_spg_ingress_sg_id}"
+  ,"${data.terraform_remote_state.security-groups-and-rules.external_9001_from_vpc_sg_id}"
 
   ]
   ########################################################################################################
@@ -132,7 +133,7 @@ locals {
   instance_profile = "${data.terraform_remote_state.iam.iam_policy_iso_ext_app_instance_profile_name}"
   instance_type = "${var.asg_instance_type_iso}"
   ssh_deployer_key = "${data.terraform_remote_state.common.common_ssh_deployer_key}"
-  associate_public_ip_address = true
+  associate_public_ip_address = false
 
   ########################################################################################################
   #ecs task definition
