@@ -32,7 +32,7 @@ variable SPG_GATEWAY_MQ_URL {
 
 variable SPG_GATEWAY_MQ_URL_SOURCE {
   default     = "data"
-  description = "variable.SPG_GATEWAY_MQ_URL | data.terraform.remote_state.amazonmq.amazon_mq_broker_connect_url"
+  description = "var -> variable.SPG_GATEWAY_MQ_URL | data -> data.terraform.remote_state.amazonmq.amazon_mq_broker_connect_url"
 }
 
 variable SPG_DOCUMENT_REST_SERVICE_ADMIN_URL {}
