@@ -8,18 +8,17 @@ variable "region" {
   description = "The AWS region."
 }
 
-variable is_production {
-  type=bool
+variable is_production {}
+
+variable psn_facing_ips {
+  type = "list"
+  default=[]
 }
 
-
-variable psn_facing_ips  {
-  type="list"
-}
 variable internet_facing_ips {
-  type="list"
+  type = "list"
+  default=[]
 }
-
 
 //
 //variable "eng-remote_state_bucket_name" {
@@ -70,3 +69,4 @@ variable internet_facing_ips {
 //variable "tags" {
 //  type = "map"
 //}
+
