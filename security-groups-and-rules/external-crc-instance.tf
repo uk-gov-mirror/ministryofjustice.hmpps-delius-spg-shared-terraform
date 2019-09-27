@@ -76,3 +76,6 @@ resource "aws_security_group_rule" "crc_instance_2222_ingress" {
   protocol                 = "tcp"
 }
 
+
+
+

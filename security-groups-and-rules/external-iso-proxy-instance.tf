@@ -82,44 +82,6 @@ resource "aws_security_group_rule" "external_instance_egress_httpunsigned" {
 
 
 
-
-
-#---------------------------------------------------------------------------------------
-### port 9001 (soap/rest mutual TLS) from VPC public address for calls from CRC stub
-#---------------------------------------------------------------------------------------
-
-resource "aws_security_group_rule" "external_instance_9001_nataz1" {
-  security_group_id        = "${aws_security_group.external_iso_instance.id}"
-  description              = "from vpcPublicIP AZ1 from crc stub"
-  type                     = "ingress"
-  cidr_blocks              = ["${local.natgateway_common-nat-public-ip-az1}/32"]  #from crc via public ip
-  from_port                = 9001
-  to_port                  = 9001
-  protocol                 = "tcp"
-}
-
-resource "aws_security_group_rule" "external_instance_9001_nataz2" {
-  security_group_id        = "${aws_security_group.external_iso_instance.id}"
-  description              = "from vpcPublicIP AZ2 from crc stub"
-  type                     = "ingress"
-  cidr_blocks              = ["${local.natgateway_common-nat-public-ip-az2}/32"]  #from crc via public ip
-  from_port                = 9001
-  to_port                  = 9001
-  protocol                 = "tcp"
-}
-
-resource "aws_security_group_rule" "external_instance_9001_nataz3" {
-  security_group_id        = "${aws_security_group.external_iso_instance.id}"
-  description              = "from vpcPublicIP AZ3 from crc stub"
-  type                     = "ingress"
-  cidr_blocks              = ["${local.natgateway_common-nat-public-ip-az3}/32"]  #from crc via public ip
-  from_port                = 9001
-  to_port                  = 9001
-  protocol                 = "tcp"
-}
-
-
-
 #--------------------------------------------------------------------------------------------
 # NOTE THERE IS AN ADDITIONAL SECURITY RULE IN ecs-iso/ecs-network-public-nlb.tf that allows
 # all traffic from the NLB to the ISO instance

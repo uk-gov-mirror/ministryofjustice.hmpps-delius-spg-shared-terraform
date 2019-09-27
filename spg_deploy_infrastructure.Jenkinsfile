@@ -169,6 +169,9 @@ pipeline {
             }
         }
 
+        /* disabled due to some terraform remote state issue complaining about
+        An alias with the name arn:aws:kms:eu-west-2:010587221707:alias/tf-del-pre-prod-certificates-spg-message-signing-certificate-kms-key already exists
+        see  https://jenkins.engineering-dev.probation.hmpps.dsd.io/job/DAMS/job/Environments/job/delius-pre-prod/job/SPG/job/Deploy_Infrastructure/17/console
         stage('Delius | SPG | KMS') {
             steps {
                 script {
@@ -176,6 +179,7 @@ pipeline {
                 }
             }
         }
+         */
 
         stage('Delius | SPG | IAM App Policies') {
             steps {
@@ -202,6 +206,15 @@ pipeline {
             }
         }
 
+
+        stage('Delius | SPG | PSN Proxy Ips - should move to VPC project') {
+            steps {
+                script {
+                    do_terraform(project.config, environment_name, project.terraform, 'psn-proxy-route-53')
+                }
+            }
+        }
+        
 
         stage('Delius | SPG | Amazon MQ') {
             steps {

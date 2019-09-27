@@ -5,6 +5,9 @@ output "spg_common_outbound_sg_id" {
   value = "${aws_security_group.spg_common_outbound.id}"
 }
 
+output "external_9001_from_vpc_sg_id" {
+  value = "${aws_security_group.external_9001_from_vpc.id}"
+}
 
 
 output "iso_external_instance_sg_id" {
