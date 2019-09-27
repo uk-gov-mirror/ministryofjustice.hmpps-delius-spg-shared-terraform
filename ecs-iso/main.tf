@@ -109,9 +109,9 @@ locals {
   ########################################################################################################
   ecs_service_role = "${data.terraform_remote_state.iam.iam_role_iso_ext_ecs_role_arn}"
   service_desired_count = "1"
-  sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
+//  sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
-    "${local.sg_map_ids["bastion_in_sg_id"]}",
+    "${data.terraform_remote_state.vpc-security-groups.sg_ssh_bastion_in_id}",
     "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",
     "${data.terraform_remote_state.security-groups-and-rules.iso_external_instance_sg_id}",
     "${data.terraform_remote_state.security-groups-and-rules.parent_orgs_spg_ingress_sg_id}"

@@ -167,10 +167,10 @@ output "private_subnet_ids" {
   ]
 }
 
-# Security groups
-output "sg_map_ids" {
-  value = "${local.sg_map_ids}"
-}
+//# Security groups
+//output "sg_map_ids" {
+//  value = "${local.sg_map_ids}"
+//}
 
 # spg hosts
 output "app_hostnames" {
@@ -179,7 +179,3 @@ output "app_hostnames" {
 
 
 
-#Temporarily moved out of the sg_map_ids list
-output "amazonmq_inst_sg_id" {
-  value = "${local.amazonmq_inst_sg_id}"
-}

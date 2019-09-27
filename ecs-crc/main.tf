@@ -72,7 +72,6 @@ locals {
 
   loadbalancer_security_groups = ["${data.terraform_remote_state.security-groups-and-rules.crc_internal_loadbalancer_sg_id}"
     ,"${data.terraform_remote_state.security-groups-and-rules.external_9001_from_vpc_sg_id}"
-//TODO remove if LBs do not require ssh access  "${local.sg_map_ids["bastion_in_sg_id"]}"]
     ]
 
   listener = [
@@ -153,9 +152,9 @@ locals {
   ########################################################################################################
   ecs_service_role = "${data.terraform_remote_state.iam.iam_role_crc_int_ecs_role_arn}"
   service_desired_count = "1"
-  sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
+//  sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
-    "${local.sg_map_ids["bastion_in_sg_id"]}",
+    "${data.terraform_remote_state.vpc-security-groups.sg_ssh_bastion_in_id}",
     "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",
     "${data.terraform_remote_state.security-groups-and-rules.crc_internal_instance_sg_id}",
   ]

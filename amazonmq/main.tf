@@ -9,13 +9,13 @@ provider "aws" {
 }
 
 locals {
-  sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
+//  sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
 
-  int_lb_security_groups = [
-    "${local.sg_map_ids["internal_lb_sg_id"]}",
-    "${local.sg_map_ids["bastion_in_sg_id"]}"]
+//  int_lb_security_groups = [
+//    "${local.sg_map_ids["internal_lb_sg_id"]}",
+//    "${local.sg_map_ids["bastion_in_sg_id"]}"]
 
-  int_amq_security_groups = "${data.terraform_remote_state.common.amazonmq_inst_sg_id}"
+  int_amq_security_groups = "${data.terraform_remote_state.vpc-security-groups.amazonmq_inst_sg_id}"
 
   private_subnet_ids = [
     "${data.terraform_remote_state.common.private_subnet_ids[0]}",
