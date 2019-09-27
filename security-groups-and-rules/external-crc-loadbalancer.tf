@@ -49,10 +49,11 @@ resource "aws_security_group_rule" "crc_lb_2222_egress" {
 
 
 resource "aws_security_group_rule" "crc_lb_9001_ingress" {
+  count                   = "${(length(var.PO_SPG_FIREWALL_INGRESS_RULES)>0) ? 1 : 0}"
   security_group_id        = "${aws_security_group.internal_crc_loadbalancer.id}"
   description              = "from iso"
   type                     = "ingress"
-    cidr_blocks              = ["${lookup(var.PO_SPG_FIREWALL_INGRESS_RULES,"PSNPROXY_A")}","${lookup(var.PO_SPG_FIREWALL_INGRESS_RULES,"PSNPROXY_B")}"]  #from iso / mpx-hybrid servers - TODO should this be a security group instead?
+    cidr_blocks              = ["${lookup(var.PO_SPG_FIREWALL_INGRESS_RULES,"PSNPROXY_A")}","${lookup(var.PO_SPG_FIREWALL_INGRESS_RULES,"PSNPROXY_B")}"]
   from_port                = 9001
   to_port                  = 9001
   protocol                 = "tcp"
