@@ -11,7 +11,10 @@ variable "region" {
 
 variable public_dns_child_zone {}
 variable public_dns_parent_zone {}
-variable route53_strategic_hosted_zone_id {}
+variable route53_strategic_hosted_zone_id {
+  default="zonenotimplementedyet"
+
+}
 
 variable is_production {}
 
