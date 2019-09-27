@@ -37,7 +37,7 @@ locals {
   ########################################################################################################
   #Network common (protocol needs to match between front end and back end)
   ########################################################################################################
-  backend_app_port = "8181"
+  backend_app_port = "9001"
 
   backend_app_protocol = "HTTP"
 
@@ -70,29 +70,29 @@ locals {
 
 
 
-  int_lb_security_groups = ["${data.terraform_remote_state.security-groups-and-rules.crc_internal_loadbalancer_sg_id}"
-//TODO remove if LBs do not require ssh access  "${local.sg_map_ids["bastion_in_sg_id"]}"]
+  loadbalancer_security_groups = ["${data.terraform_remote_state.security-groups-and-rules.crc_internal_loadbalancer_sg_id}"
+    ,"${data.terraform_remote_state.security-groups-and-rules.external_9001_from_vpc_sg_id}"
     ]
 
   listener = [
-    {
-      instance_port = "61616"
-      instance_protocol = "TCP"
-      lb_port = "61616"
-      lb_protocol = "TCP"
-    },
-    {
-      instance_port = "8181"
-      instance_protocol = "HTTP"
-      lb_port = "8181"
-      lb_protocol = "HTTP"
-    },
-    {
-      instance_port = "8989"
-      instance_protocol = "HTTP"
-      lb_port = "8989"
-      lb_protocol = "HTTP"
-    },
+//    {
+//      instance_port = "61616"
+//      instance_protocol = "TCP"
+//      lb_port = "61616"
+//      lb_protocol = "TCP"
+//    },
+//    {
+//      instance_port = "8181"
+//      instance_protocol = "HTTP"
+//      lb_port = "8181"
+//      lb_protocol = "HTTP"
+//    },
+//    {
+//      instance_port = "8989"
+//      instance_protocol = "HTTP"
+//      lb_port = "8989"
+//      lb_protocol = "HTTP"
+//    },
     {
       instance_port = "9001"
       instance_protocol = "TCP"
@@ -152,9 +152,9 @@ locals {
   ########################################################################################################
   ecs_service_role = "${data.terraform_remote_state.iam.iam_role_crc_int_ecs_role_arn}"
   service_desired_count = "1"
-  sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
+//  sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
-    "${local.sg_map_ids["bastion_in_sg_id"]}",
+    "${data.terraform_remote_state.vpc-security-groups.sg_ssh_bastion_in_id}",
     "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",
     "${data.terraform_remote_state.security-groups-and-rules.crc_internal_instance_sg_id}",
   ]
@@ -173,7 +173,7 @@ locals {
   instance_profile = "${data.terraform_remote_state.iam.iam_policy_crc_int_app_instance_profile_name}"
   instance_type = "${var.asg_instance_type_crc}"
   ssh_deployer_key = "${data.terraform_remote_state.common.common_ssh_deployer_key}"
-  associate_public_ip_address = true
+  associate_public_ip_address = false
 
   ########################################################################################################
   #ecs task definition
@@ -187,7 +187,6 @@ locals {
   #vars for docker app
   #s3 bucket for ANISBLE jobs (derived from env properties
   s3_bucket_config = "${var.s3_bucket_config}"
-  spg_build_inv_dir = "${var.spg_build_inv_dir}"
   #vars for docker container
   kibana_host           = "NOTUSED(yet)"
   data_volume_host_path = "/opt/spg/servicemix/data"

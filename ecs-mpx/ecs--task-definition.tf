@@ -40,7 +40,7 @@ data "template_file" "app_task_definition" {
 
     kibana_host = "${local.kibana_host}"
     s3_bucket_config = "${local.s3_bucket_config}"
-    spg_build_inv_dir = "${local.spg_build_inv_dir}"
+
 
     SPG_HOST_TYPE = "${local.SPG_HOST_TYPE}"
     SPG_GENERIC_BUILD_INV_DIR = "${local.SPG_GENERIC_BUILD_INV_DIR}"

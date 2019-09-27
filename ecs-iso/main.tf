@@ -109,12 +109,13 @@ locals {
   ########################################################################################################
   ecs_service_role = "${data.terraform_remote_state.iam.iam_role_iso_ext_ecs_role_arn}"
   service_desired_count = "1"
-  sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
+//  sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
-    "${local.sg_map_ids["bastion_in_sg_id"]}",
+    "${data.terraform_remote_state.vpc-security-groups.sg_ssh_bastion_in_id}",
     "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",
     "${data.terraform_remote_state.security-groups-and-rules.iso_external_instance_sg_id}",
     "${data.terraform_remote_state.security-groups-and-rules.parent_orgs_spg_ingress_sg_id}"
+  ,"${data.terraform_remote_state.security-groups-and-rules.external_9001_from_vpc_sg_id}"
 
   ]
   ########################################################################################################
@@ -132,7 +133,7 @@ locals {
   instance_profile = "${data.terraform_remote_state.iam.iam_policy_iso_ext_app_instance_profile_name}"
   instance_type = "${var.asg_instance_type_iso}"
   ssh_deployer_key = "${data.terraform_remote_state.common.common_ssh_deployer_key}"
-  associate_public_ip_address = true
+  associate_public_ip_address = false
 
   ########################################################################################################
   #ecs task definition
@@ -146,7 +147,6 @@ locals {
   #vars for docker app
   #s3 bucket for ANISBLE jobs (derived from env properties
   s3_bucket_config = "${var.s3_bucket_config}"
-  spg_build_inv_dir = "${var.spg_build_inv_dir}"
   #vars for docker container
   kibana_host           = "NOTUSED(yet)"
   data_volume_host_path = "/opt/spg/servicemix/data"

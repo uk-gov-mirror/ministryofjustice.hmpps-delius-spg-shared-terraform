@@ -64,3 +64,13 @@ data "terraform_remote_state" "vpc" {
     region = "${var.region}"
   }
 }
+
+data "terraform_remote_state" "vpc-security-groups" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.remote_state_bucket_name}"
+    key    = "security-groups/terraform.tfstate"
+    region = "${var.region}"
+  }
+}

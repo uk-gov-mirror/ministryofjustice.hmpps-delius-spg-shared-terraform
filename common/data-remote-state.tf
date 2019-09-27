@@ -26,18 +26,6 @@ data "terraform_remote_state" "monitor" {
   }
 }
 
-#-------------------------------------------------------------
-### Getting the sg details (deprecated)
-#-------------------------------------------------------------
-data "terraform_remote_state" "security-groups" {
-  backend = "s3"
-
-  config {
-    bucket = "${var.remote_state_bucket_name}"
-    key    = "security-groups/terraform.tfstate"
-    region = "${var.region}"
-  }
-}
 
 #-------------------------------------------------------------
 ### Getting the engineering platform vpc

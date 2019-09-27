@@ -65,6 +65,16 @@ data "terraform_remote_state" "security-groups-and-rules" {
   }
 }
 
+data "terraform_remote_state" "vpc-security-groups" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.remote_state_bucket_name}"
+    key    = "security-groups/terraform.tfstate"
+    region = "${var.region}"
+  }
+}
+
 #-------------------------------------------------------------
 ### Getting the Amazon broker url
 #-------------------------------------------------------------
@@ -77,4 +87,3 @@ data "terraform_remote_state" "amazonmq" {
     region = "${var.region}"
   }
 }
-
