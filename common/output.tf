@@ -51,12 +51,12 @@ output "public_zone_id" {
   value = "${data.terraform_remote_state.vpc.public_zone_id}"
 }
 
-output "strategic_external_domain" {
-  value = "${data.terraform_remote_state.vpc.strategic_public_zone_name}"
-}
+//output "strategic_external_domain" {
+//  value = "${data.terraform_remote_state.vpc.strategic_public_zone_name}"
+//}
 
 output "strategic_public_zone_id" {
-  value = "${data.terraform_remote_state.vpc.strategic_public_zone_id}"
+  value = "${var.route53_strategic_hosted_zone_id}"
 }
 
 

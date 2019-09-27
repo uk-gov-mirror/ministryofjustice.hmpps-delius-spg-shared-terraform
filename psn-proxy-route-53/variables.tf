@@ -8,6 +8,11 @@ variable "region" {
   description = "The AWS region."
 }
 
+
+variable public_dns_child_zone {}
+variable public_dns_parent_zone {}
+variable route53_strategic_hosted_zone_id {}
+
 variable is_production {}
 
 variable psn_facing_ips {

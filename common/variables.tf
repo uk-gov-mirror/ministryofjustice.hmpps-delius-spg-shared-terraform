@@ -45,6 +45,10 @@ variable "role_arn" {}
 
 variable "route53_hosted_zone_id" {}
 
+variable "route53_strategic_hosted_zone_id" {
+  default="notyetimplemented"
+}
+
 variable "spg_app_name" {}
 
 variable "cloudwatch_log_retention" {}
