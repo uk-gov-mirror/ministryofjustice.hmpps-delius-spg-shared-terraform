@@ -49,6 +49,10 @@ variable "route53_strategic_hosted_zone_id" {
   default="notyetimplemented"
 }
 
+
+variable public_dns_child_zone {}
+variable public_dns_parent_zone {}
+
 variable "spg_app_name" {}
 
 variable "cloudwatch_log_retention" {}

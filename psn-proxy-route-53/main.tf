@@ -20,11 +20,11 @@ locals {
 }
 
 output "strategic_external_domain" {
-  value = "${data.terraform_remote_state.vpc.strategic_public_zone_name}"
+  value = "${var.public_dns_child_zone}.${var.public_dns_parent_zone}"
 }
 
 output "strategic_public_zone_id" {
-  value = "${data.terraform_remote_state.vpc.strategic_public_zone_id}"
+  value = "${var.route53_strategic_hosted_zone_id}"
 }
 
 resource "aws_route53_record" "psn_facing" {
