@@ -31,6 +31,7 @@ variable SPG_ISO_FQDN {}
 variable SPG_MPX_FQDN {}
 variable SPG_CRC_FQDN {}
 
+variable bastion_inventory {}
 
 
 variable spg_crc_ecs_memory {}

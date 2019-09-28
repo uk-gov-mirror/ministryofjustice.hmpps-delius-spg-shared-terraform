@@ -44,6 +44,7 @@ variable image_version {
   default = "latest"
 }
 
+variable bastion_inventory {}
 
 variable "tags" {
   type = "map"
