@@ -116,7 +116,7 @@ locals {
     "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",
     "${data.terraform_remote_state.security-groups-and-rules.iso_external_instance_sg_id}",
     "${data.terraform_remote_state.security-groups-and-rules.parent_orgs_spg_ingress_sg_id}"
-  ,"${data.terraform_remote_state.security-groups-and-rules.external_9001_from_vpc_sg_id}"
+  ,"${data.terraform_remote_state.security-groups-and-rules.external_9001_from_vpc_public_ips_sg_id}"
 
   ]
   ########################################################################################################
