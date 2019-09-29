@@ -146,6 +146,7 @@ alias dcontainerattachtospg='dcontainergetspgid;docker container exec -it $SPG_C
 alias dcontainerstopspg='dcontainergetspgid;docker container stop $SPG_CONTAINER_ID'
 alias dcontainerps='docker container ps'
 alias dcontainerpulllatest='dcontainerpulllatest_function'
+alias dcontainernetworkinspect='dcontainergetspgid;docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" $SPG_CONTAINER_ID'
 
 function dcontainerpulllatest_function() {
 region=$(curl http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)

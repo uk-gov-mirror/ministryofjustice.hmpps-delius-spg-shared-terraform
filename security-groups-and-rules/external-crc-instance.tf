@@ -50,17 +50,17 @@ resource "aws_security_group_rule" "crc_instance_self_egress" {
 
 
 #-------------------------------------------------------------
-### port 8181 (soap/rest/hawtio) - needs to be port 443 or ssh tunnels only
+### port 8181 (healthcheck) - would be better as port 443
 #-------------------------------------------------------------
-//resource "aws_security_group_rule" "crc_instance_8181_ingress" {
-//  security_group_id        = "${aws_security_group.internal_crc_instance.id}"
-//  description              = "from crc LB"
-//  type                     = "ingress"
-//  source_security_group_id = "${aws_security_group.internal_crc_loadbalancer.id}"
-//  from_port                = "8181"
-//  to_port                  = "8181"
-//  protocol                 = "tcp"
-//}
+resource "aws_security_group_rule" "crc_instance_8181_ingress" {
+  security_group_id        = "${aws_security_group.internal_crc_instance.id}"
+  description              = "from crc LB"
+  type                     = "ingress"
+  source_security_group_id = "${aws_security_group.internal_crc_loadbalancer.id}"
+  from_port                = "8181"
+  to_port                  = "8181"
+  protocol                 = "tcp"
+}
 
 
 #-------------------------------------------------------------
