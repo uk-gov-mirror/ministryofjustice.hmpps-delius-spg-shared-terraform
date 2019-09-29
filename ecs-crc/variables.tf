@@ -20,6 +20,7 @@ variable SPG_GENERIC_BUILD_INV_DIR {}
 
 variable SPG_CRC_JAVA_MAX_MEM {}
 variable SPG_ENVIRONMENT_CODE {}
+variable SPG_ENVIRONMENT_CN {}
 
 variable SPG_DELIUS_MQ_URL {}
 variable SPG_GATEWAY_MQ_URL {}

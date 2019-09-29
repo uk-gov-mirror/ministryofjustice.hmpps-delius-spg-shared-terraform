@@ -22,6 +22,8 @@ variable SPG_MPX_JAVA_MAX_MEM {
   default="1500"
 }
 variable SPG_ENVIRONMENT_CODE {}
+variable SPG_ENVIRONMENT_CN {}
+
 
 variable SPG_DELIUS_MQ_URL {}
 variable SPG_GATEWAY_MQ_URL {}
