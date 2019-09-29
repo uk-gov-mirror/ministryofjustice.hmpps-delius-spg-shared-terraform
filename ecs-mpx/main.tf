@@ -143,7 +143,7 @@ locals {
   #ecs service - app service
   ########################################################################################################
   ecs_service_role = "${data.terraform_remote_state.iam.iam_role_mpx_int_ecs_role_arn}"
-  service_desired_count = "1" # maxed out on the basis the serive count is decoupled from the ASG
+  service_desired_count = "${var.spg_mpx_service_desired_count}"
 //  sg_map_ids            = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
     "${data.terraform_remote_state.vpc-security-groups.sg_ssh_bastion_in_id}",

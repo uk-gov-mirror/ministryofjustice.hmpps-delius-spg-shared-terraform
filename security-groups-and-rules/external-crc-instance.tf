@@ -50,21 +50,22 @@ resource "aws_security_group_rule" "crc_instance_self_egress" {
 
 
 #-------------------------------------------------------------
-### port 8181 (soap/rest/hawtio)
+### port 8181 (soap/rest/hawtio) - needs to be port 443 or ssh tunnels only
 #-------------------------------------------------------------
-resource "aws_security_group_rule" "crc_instance_8181_ingress" {
-  security_group_id        = "${aws_security_group.internal_crc_instance.id}"
-  description              = "from crc LB"
-  type                     = "ingress"
-  source_security_group_id = "${aws_security_group.internal_crc_loadbalancer.id}"
-  from_port                = "8181"
-  to_port                  = "8181"
-  protocol                 = "tcp"
-}
+//resource "aws_security_group_rule" "crc_instance_8181_ingress" {
+//  security_group_id        = "${aws_security_group.internal_crc_instance.id}"
+//  description              = "from crc LB"
+//  type                     = "ingress"
+//  source_security_group_id = "${aws_security_group.internal_crc_loadbalancer.id}"
+//  from_port                = "8181"
+//  to_port                  = "8181"
+//  protocol                 = "tcp"
+//}
 
 
 #-------------------------------------------------------------
 ### port 2222 (ssh as used by MTS tests with virtuoso user)
+# TODO should be disabled in non virtuoso envs
 #-------------------------------------------------------------
 resource "aws_security_group_rule" "crc_instance_2222_ingress" {
   security_group_id        = "${aws_security_group.internal_crc_instance.id}"

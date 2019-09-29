@@ -108,8 +108,9 @@ locals {
   #ecs service - app service
   ########################################################################################################
   ecs_service_role = "${data.terraform_remote_state.iam.iam_role_iso_ext_ecs_role_arn}"
-  service_desired_count = "1"
-//  sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
+  service_desired_count = "${var.spg_iso_service_desired_count}"
+
+  //  sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
     "${data.terraform_remote_state.vpc-security-groups.sg_ssh_bastion_in_id}",
     "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",

@@ -23,6 +23,7 @@ resource "aws_security_group" "internal_crc_loadbalancer" {
 
 #-------------------------------------------------------------
 ### port 2222 (ssh as used by MTS tests with virtuoso user)
+# TODO should be disabled in non virtuoso envs
 #-------------------------------------------------------------
 resource "aws_security_group_rule" "crc_lb_2222_ingress" {
   security_group_id        = "${aws_security_group.internal_crc_loadbalancer.id}"
@@ -48,7 +49,7 @@ resource "aws_security_group_rule" "crc_lb_2222_egress" {
 
 
 
-resource "aws_security_group_rule" "crc_lb_9001_ingress" {
+resource "aws_security_group_rule" "crc_lb_9001_psn_proxy_ingress" {
   count                   = "${(length(lookup(var.PO_SPG_FIREWALL_INGRESS_RULES, "PSNPROXY_A","") )>0) ? 1 : 0}"
   security_group_id        = "${aws_security_group.internal_crc_loadbalancer.id}"
   description              = "from iso"
@@ -61,7 +62,7 @@ resource "aws_security_group_rule" "crc_lb_9001_ingress" {
 
 
 
-resource "aws_security_group_rule" "crc_lb_9001_egress" {
+resource "aws_security_group_rule" "crc_lb_to_instance_9001_egress" {
   security_group_id = "${aws_security_group.internal_crc_loadbalancer.id}"
   description = "to crc"
   type = "egress"

@@ -33,6 +33,10 @@ variable SPG_CRC_FQDN {}
 
 variable bastion_inventory {}
 
+variable spg_crc_service_desired_count {
+  #1 = assumes desired ecs memory = max
+  default="1"
+}
 
 variable spg_crc_ecs_memory {}
 
