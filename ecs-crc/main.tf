@@ -157,6 +157,8 @@ locals {
     "${data.terraform_remote_state.vpc-security-groups.sg_ssh_bastion_in_id}",
     "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",
     "${data.terraform_remote_state.security-groups-and-rules.crc_internal_instance_sg_id}",
+    "${data.terraform_remote_state.security-groups-and-rules.crc_internal_loadbalancer_sg_id}",
+
   ]
   ########################################################################################################
   #ecs service block device
