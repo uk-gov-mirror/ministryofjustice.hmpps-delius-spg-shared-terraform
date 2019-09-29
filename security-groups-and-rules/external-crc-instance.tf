@@ -64,6 +64,21 @@ resource "aws_security_group_rule" "crc_instance_8181_ingress" {
 
 
 #-------------------------------------------------------------
+### port 9001
+#-------------------------------------------------------------
+resource "aws_security_group_rule" "crc_instance_9001_ingress" {
+  security_group_id        = "${aws_security_group.internal_crc_instance.id}"
+  description              = "from crc LB"
+  type                     = "ingress"
+  source_security_group_id = "${aws_security_group.internal_crc_loadbalancer.id}"
+  from_port                = "9001"
+  to_port                  = "9001"
+  protocol                 = "tcp"
+}
+
+
+
+#-------------------------------------------------------------
 ### port 2222 (ssh as used by MTS tests with virtuoso user)
 # TODO should be disabled in non virtuoso envs
 #-------------------------------------------------------------
