@@ -1,24 +1,17 @@
 #-------------------------------------------------------------
-### external instance sg aka sg_spg_nginx_in
+### generic rule for allowing port 9001 from vpc public nat
 #-------------------------------------------------------------
 
-//there are no SGs for NLBs so they need to be present here
-//resource "aws_security_group" "external_lb_in" {
-//  name        = "${local.common_name}-external_lb_in"
-//  vpc_id      = "${data.terraform_remote_state.vpc.vpc_id}"
-//  description = "External LB incoming"
-//  tags        = "${merge(var.tags, map("Name", "${var.environment_name}_${var.spg_app_name}_external-lb_in_in", "Type", "WEB"))}"
-//
-//  lifecycle {
-//    create_before_destroy = true
-//  }
-//}
+
+output "external_9001_from_vpc_public_ips_sg_id" {
+  value = "${aws_security_group.external_9001_from_vpc_public_ips.id}"
+}
 
 
 
 # 9001 rule group
-resource "aws_security_group" "external_9001_from_vpc" {
-  name        = "${local.common_name}-external-9001-from-vpc"
+resource "aws_security_group" "external_9001_from_vpc_public_ips" {
+  name        = "${local.common_name}-external-9001-from-vpc-public-ips"
   vpc_id      = "${data.terraform_remote_state.vpc.vpc_id}"
   description = "Port 9001 from vpc NAT"
   tags        = "${merge(var.tags, map("Name", "${var.environment_name}-${var.spg_app_name}-port-9001-from-vpc", "Type", "WEB"))}"
@@ -29,21 +22,16 @@ resource "aws_security_group" "external_9001_from_vpc" {
 }
 
 
-
 ###################
 # INGRESS
 ###################
-
-
-
-
 
 #---------------------------------------------------------------------------------------
 ### port 9001 (soap/rest mutual TLS) from VPC public address for calls from CRC stub
 #---------------------------------------------------------------------------------------
 
-resource "aws_security_group_rule" "external_from_vpc_9001_nataz1" {
-  security_group_id        = "${aws_security_group.external_iso_instance.id}"
+resource "aws_security_group_rule" "external_from_vpc_public_ips_9001_nataz1" {
+  security_group_id        = "${aws_security_group.external_9001_from_vpc_public_ips.id}"
   description              = "from vpcPublicIP AZ1 from crc stub"
   type                     = "ingress"
   cidr_blocks              = ["${local.natgateway_common-nat-public-ip-az1}/32"]  #from crc via public ip
@@ -52,8 +40,12 @@ resource "aws_security_group_rule" "external_from_vpc_9001_nataz1" {
   protocol                 = "tcp"
 }
 
-resource "aws_security_group_rule" "external_from_vpc_9001_nataz2" {
-  security_group_id        = "${aws_security_group.external_iso_instance.id}"
+
+
+
+
+resource "aws_security_group_rule" "external_from_vpc_public_ips_9001_nataz2" {
+  security_group_id        = "${aws_security_group.external_9001_from_vpc_public_ips.id}"
   description              = "from vpcPublicIP AZ2 from crc stub"
   type                     = "ingress"
   cidr_blocks              = ["${local.natgateway_common-nat-public-ip-az2}/32"]  #from crc via public ip
@@ -62,8 +54,8 @@ resource "aws_security_group_rule" "external_from_vpc_9001_nataz2" {
   protocol                 = "tcp"
 }
 
-resource "aws_security_group_rule" "external_from_vpc_9001_nataz3" {
-  security_group_id        = "${aws_security_group.external_iso_instance.id}"
+resource "aws_security_group_rule" "external_from_vpc_public_ips_9001_nataz3" {
+  security_group_id        = "${aws_security_group.external_9001_from_vpc_public_ips.id}"
   description              = "from vpcPublicIP AZ3 from crc stub"
   type                     = "ingress"
   cidr_blocks              = ["${local.natgateway_common-nat-public-ip-az3}/32"]  #from crc via public ip
