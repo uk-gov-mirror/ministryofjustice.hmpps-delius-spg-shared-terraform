@@ -137,7 +137,7 @@ data "null_data_source" "broker_export_url" {
                                         aws_route53_record.dns_spg_amq_a_int_entry.fqdn,
                                         data.null_data_source.broker_export_port.outputs["broker_ssl_port"]) :
 
-                                format("failover(ssl://%s:%s, ssl://%s:%s)",
+                                format("failover:(ssl://%s:%s,ssl://%s:%s)",
                                         aws_route53_record.dns_spg_amq_a_int_entry.fqdn,
                                         data.null_data_source.broker_export_port.outputs["broker_ssl_port"],
                                         element(concat(aws_route53_record.dns_spg_amq_b_int_entry.*.fqdn, list("")), 0),
