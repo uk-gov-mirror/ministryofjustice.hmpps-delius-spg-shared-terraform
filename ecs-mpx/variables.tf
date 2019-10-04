@@ -35,6 +35,18 @@ variable SPG_ISO_FQDN {}
 variable SPG_MPX_FQDN {}
 variable SPG_CRC_FQDN {}
 
+
+variable spg_mpx_asg_desired {
+  default="1"
+}
+
+variable spg_mpx_asg_max {
+  default="1"
+}
+variable spg_mpx_asg_min {
+  default="1"
+}
+
 variable spg_mpx_service_desired_count {
   #1 = assumes desired ecs memory = max
   default="1"
