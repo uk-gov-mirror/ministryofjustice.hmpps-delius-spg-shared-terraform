@@ -10,7 +10,7 @@ variable "remote_state_bucket_name" {
 
 variable "aws_broker_host_instance_type" {
   type        = "string"
-  default     = "mq.t2.micro"
+  default     = "mq.m5.large" #micro limited to 100 connections
   description = "The host_instance type of the Amazon MQ broker(s) options (mq.m5.large, mq.m5.xlarge, mq.m5.2xlarge, mq.m5.4xlarge)"
 }
 
