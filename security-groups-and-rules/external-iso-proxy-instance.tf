@@ -51,7 +51,7 @@ resource "aws_security_group_rule" "external_instance_8181_egress" {
 
 
 #-------------------------------------------------------------
-### port 8989 (unsigned soap from iso to mpx) (for when ISO is only doing TLS termination,  and mpx-hybrid is unsigning)
+### port 8989 (unsigned soap from iso to mpx) (for when ISO is doing TLS termination + unsigning)
 #-------------------------------------------------------------
 resource "aws_security_group_rule" "external_instance_egress_httpunsigned" {
   security_group_id        = "${aws_security_group.external_iso_instance.id}"

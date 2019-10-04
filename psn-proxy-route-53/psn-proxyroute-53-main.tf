@@ -8,20 +8,23 @@ provider "aws" {
   version = ">= 2.1.0"
 }
 
+//export TF_VAR_public_dns_parent_zone="service.justice.gov.uk"
+//export TF_VAR_public_dns_child_zone="${TG_ENVIRONMENT_TYPE}.probation"
+
 locals {
-  public_zone_id      = "${data.terraform_remote_state.vpc.strategic_public_zone_id}"
-  public_zone_name    = "${data.terraform_remote_state.vpc.strategic_public_zone_name}"
+  public_zone_id      = "${var.route53_strategic_hosted_zone_id}"
+  public_zone_name    = "${var.public_dns_child_zone}.${var.public_dns_parent_zone}"
   psn_facing_ips      = "${var.psn_facing_ips}"
   internet_facing_ips = "${var.internet_facing_ips}"
   is_production       = "${var.is_production}"
 }
 
 output "strategic_external_domain" {
-  value = "${data.terraform_remote_state.vpc.strategic_public_zone_name}"
+  value = "${var.public_dns_child_zone}.${var.public_dns_parent_zone}"
 }
 
 output "strategic_public_zone_id" {
-  value = "${data.terraform_remote_state.vpc.strategic_public_zone_id}"
+  value = "${var.route53_strategic_hosted_zone_id}"
 }
 
 resource "aws_route53_record" "psn_facing" {

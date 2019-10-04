@@ -143,7 +143,7 @@ locals {
   #ecs service - app service
   ########################################################################################################
   ecs_service_role = "${data.terraform_remote_state.iam.iam_role_mpx_int_ecs_role_arn}"
-  service_desired_count = "1" # maxed out on the basis the serive count is decoupled from the ASG
+  service_desired_count = "${var.spg_mpx_service_desired_count}"
 //  sg_map_ids            = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
     "${data.terraform_remote_state.vpc-security-groups.sg_ssh_bastion_in_id}",
@@ -190,9 +190,15 @@ locals {
   SPG_GENERIC_BUILD_INV_DIR = "${var.SPG_GENERIC_BUILD_INV_DIR}"
   SPG_JAVA_MAX_MEM = "${var.SPG_MPX_JAVA_MAX_MEM}"
   SPG_ENVIRONMENT_CODE = "${var.SPG_ENVIRONMENT_CODE}"
-  SPG_ENVIRONMENT_CN = "${local.external_domain}"
+  SPG_ENVIRONMENT_CN = "${var.SPG_ENVIRONMENT_CN}"
   SPG_DELIUS_MQ_URL = "${var.SPG_DELIUS_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
-  SPG_GATEWAY_MQ_URL = "${var.SPG_GATEWAY_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
+
+  # The final value of the GATEWAY url is calculated depending on the value of SPG_GATEWAY_MQ_URL_SOURCE in env-configs
+  # This defaults to "data" in this project, which will extrat the url from the amazonmq remote state
+  SPG_GATEWAY_MQ_URL = "${var.SPG_GATEWAY_MQ_URL_SOURCE == "data" ?
+                            data.terraform_remote_state.amazonmq.amazon_mq_broker_connect_url :
+                            var.SPG_GATEWAY_MQ_URL}"
+
   SPG_DOCUMENT_REST_SERVICE_ADMIN_URL = "${var.SPG_DOCUMENT_REST_SERVICE_ADMIN_URL}"
   SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL = "${var.SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL}"
   SPG_ISO_FQDN = "${var.SPG_ISO_FQDN}"

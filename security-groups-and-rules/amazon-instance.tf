@@ -19,7 +19,6 @@ resource "aws_security_group_rule" "amazonmq_inst_sg_ingress_jms_openwire" {
   from_port                = "61617"
   to_port                  = "61617"
   protocol                 = "tcp"
-  source_security_group_id = "${aws_security_group.spg_common_outbound.id}"
+  cidr_blocks              = ["${local.private_cidr_block}"]
   description              = "${local.common_name}-instance-amazonmq-sg"
 }
-

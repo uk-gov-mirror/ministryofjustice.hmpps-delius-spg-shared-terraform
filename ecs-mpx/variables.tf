@@ -22,9 +22,20 @@ variable SPG_MPX_JAVA_MAX_MEM {
   default="1500"
 }
 variable SPG_ENVIRONMENT_CODE {}
+variable SPG_ENVIRONMENT_CN {}
+
 
 variable SPG_DELIUS_MQ_URL {}
-variable SPG_GATEWAY_MQ_URL {}
+
+variable SPG_GATEWAY_MQ_URL {
+  default     = "localhost:61616"
+  description = "SPG messaging broker url"
+}
+
+variable SPG_GATEWAY_MQ_URL_SOURCE {
+  default     = "data"
+  description = "var -> variable.SPG_GATEWAY_MQ_URL | data -> data.terraform.remote_state.amazonmq.amazon_mq_broker_connect_url"
+}
 
 variable SPG_DOCUMENT_REST_SERVICE_ADMIN_URL {}
 variable SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL {}
@@ -33,6 +44,10 @@ variable SPG_ISO_FQDN {}
 variable SPG_MPX_FQDN {}
 variable SPG_CRC_FQDN {}
 
+variable spg_mpx_service_desired_count {
+  #1 = assumes desired ecs memory = max
+  default="1"
+}
 
 variable spg_mpx_ecs_memory {
   default="2048"
@@ -49,6 +64,8 @@ variable image_url {
 variable image_version {
   default = "latest"
 }
+
+variable bastion_inventory {}
 
 
 variable "tags" {

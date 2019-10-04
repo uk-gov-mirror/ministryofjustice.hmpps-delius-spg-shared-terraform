@@ -71,7 +71,7 @@ locals {
 
 
   loadbalancer_security_groups = ["${data.terraform_remote_state.security-groups-and-rules.crc_internal_loadbalancer_sg_id}"
-    ,"${data.terraform_remote_state.security-groups-and-rules.external_9001_from_vpc_sg_id}"
+    ,"${data.terraform_remote_state.security-groups-and-rules.external_9001_from_vpc_public_ips_sg_id}"
     ]
 
   listener = [
@@ -109,7 +109,8 @@ locals {
 
   health_check_elb = [
     {
-      target = "HTTP:8181/cxf/"
+#      target = "HTTP:8181/cxf/"
+      target = "TCP:9001"
       interval = 60
       healthy_threshold = 2
 
@@ -151,12 +152,14 @@ locals {
   #ecs service - app service
   ########################################################################################################
   ecs_service_role = "${data.terraform_remote_state.iam.iam_role_crc_int_ecs_role_arn}"
-  service_desired_count = "1"
+  service_desired_count = "${var.spg_crc_service_desired_count}"
 //  sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
     "${data.terraform_remote_state.vpc-security-groups.sg_ssh_bastion_in_id}",
     "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",
     "${data.terraform_remote_state.security-groups-and-rules.crc_internal_instance_sg_id}",
+    "${data.terraform_remote_state.security-groups-and-rules.crc_internal_loadbalancer_sg_id}",
+
   ]
   ########################################################################################################
   #ecs service block device
@@ -197,7 +200,7 @@ locals {
   SPG_GENERIC_BUILD_INV_DIR = "${var.SPG_GENERIC_BUILD_INV_DIR}"
   SPG_JAVA_MAX_MEM = "${var.SPG_CRC_JAVA_MAX_MEM}"
   SPG_ENVIRONMENT_CODE = "${var.SPG_ENVIRONMENT_CODE}"
-  SPG_ENVIRONMENT_CN = "${local.external_domain}"
+  SPG_ENVIRONMENT_CN = "${var.SPG_ENVIRONMENT_CN}"
   SPG_DELIUS_MQ_URL = "${var.SPG_DELIUS_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
   SPG_GATEWAY_MQ_URL = "${var.SPG_GATEWAY_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
   SPG_DOCUMENT_REST_SERVICE_ADMIN_URL = "${var.SPG_DOCUMENT_REST_SERVICE_ADMIN_URL}"
