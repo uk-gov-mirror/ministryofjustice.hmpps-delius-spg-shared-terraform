@@ -88,30 +88,38 @@ resource "aws_mq_configuration" "SPG" {
 DATA
 }
 
-# Always created
+# Broker 1 DNS entry Always created
+# The FQDN for the "records" is only available as a substring of the exported endpoints in the format "[protocol]://fqdn:port"
+# Split the full url on the colon (:) which returns a list
+# Use element to take the second entry (//[fqdn])
+# Use substr to remove the //
+#
 resource "aws_route53_record" "dns_spg_amq_a_int_entry" {
 
   # Use the ID of the Hosted Zone we retrieved earlier
   zone_id = "${data.terraform_remote_state.common.private_zone_id}"
   name = "amazonmq-broker-1"
-  type = "A"
+  type = "CNAME"
   ttl = "1800"
   count = 1
-  records = ["${aws_mq_broker.SPG.instances.0.ip_address}"]
+  records = ["${substr(element(split(":", aws_mq_broker.SPG.instances.0.endpoints.0),1), 2, -1)}"]
   depends_on = ["aws_mq_broker.SPG"]
 }
 
-# Optionally created
+# Broker 2 DNS entry optionally created when there are 2 instances
+# In this instance the fqdn can be constructed by taking the broker_a entry and replacing the -1.mq
+# with -2.mq as this is the standard pattern. Trying to dynamically generate it from instances.1
+# causes more compilation grief
 resource "aws_route53_record" "dns_spg_amq_b_int_entry" {
 
   # Use the ID of the Hosted Zone we retrieved earlier
   zone_id = "${data.terraform_remote_state.common.private_zone_id}"
   name = "amazonmq-broker-2"
-  type = "A"
+  type = "CNAME"
   ttl = "1800"
   # The count will resolve to zero on a SINGLE_INSTANCE and this resource will therefore not get created
   count = "${(local.broker_instances) == 1 ? 0 : 1}"
-  records = ["${aws_mq_broker.SPG.instances.1.ip_address}"]
+  records = ["${replace(aws_route53_record.dns_spg_amq_a_int_entry.records[0], "-1.mq", "-2.mq")}"]
   depends_on = ["aws_mq_broker.SPG"]
 }
 
@@ -119,7 +127,7 @@ resource "aws_route53_record" "dns_spg_amq_b_int_entry" {
 # Format is "ssl://[fqdn]:port"
 data "null_data_source" "broker_export_port" {
   inputs = {
-        broker_ssl_port = "${element(slice(split(":", aws_mq_broker.SPG.instances.0.endpoints[0]), 2,3),0)}"
+        broker_ssl_port = "${element(split(":", aws_mq_broker.SPG.instances.0.endpoints[0]),2)}"
   }
 }
 
