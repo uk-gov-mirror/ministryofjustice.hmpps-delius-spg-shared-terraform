@@ -26,7 +26,16 @@ variable SPG_ENVIRONMENT_CN {}
 
 
 variable SPG_DELIUS_MQ_URL {}
-variable SPG_GATEWAY_MQ_URL {}
+
+variable SPG_GATEWAY_MQ_URL {
+  default     = "localhost:61616"
+  description = "SPG messaging broker url"
+}
+
+variable SPG_GATEWAY_MQ_URL_SOURCE {
+  default     = "data"
+  description = "var -> variable.SPG_GATEWAY_MQ_URL | data -> data.terraform.remote_state.amazonmq.amazon_mq_broker_connect_url"
+}
 
 variable SPG_DOCUMENT_REST_SERVICE_ADMIN_URL {}
 variable SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL {}
