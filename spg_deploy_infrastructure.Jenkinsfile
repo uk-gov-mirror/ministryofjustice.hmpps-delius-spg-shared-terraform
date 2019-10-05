@@ -169,17 +169,25 @@ pipeline {
             }
         }
 
-        /* disabled due to some terraform remote state issue complaining about
+        /* Temporarily Needs to be disabled for preprod due to some terraform remote state issue complaining about
         An alias with the name arn:aws:kms:eu-west-2:010587221707:alias/tf-del-pre-prod-certificates-spg-message-signing-certificate-kms-key already exists
         see  https://jenkins.engineering-dev.probation.hmpps.dsd.io/job/DAMS/job/Environments/job/delius-pre-prod/job/SPG/job/Deploy_Infrastructure/17/console
+        */
         stage('Delius | SPG | KMS') {
             steps {
                 script {
-                    do_terraform(project.config, environment_name, project.terraform, 'kms-certificates-spg')
+                    if ("${environment_name}" != "delius-pre-prod") {
+                        do_terraform(project.config, environment_name, project.terraform, 'kms-certificates-spg')
+                    }
+                    else
+                    {
+                        echo "Skipping KMS as workaround for corrupted terraform state in preprod"
+                    }
+
                 }
             }
         }
-         */
+
 
         stage('Delius | SPG | IAM App Policies') {
             steps {

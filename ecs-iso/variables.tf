@@ -35,6 +35,18 @@ variable SPG_ISO_HOST_TYPE {}
 
 
 
+variable spg_iso_asg_desired {
+  default="1"
+}
+
+variable spg_iso_asg_max {
+  default="1"
+}
+variable spg_iso_asg_min {
+  default="1"
+}
+
+
 variable spg_iso_service_desired_count {
   #1 = assumes desired ecs memory = max
   default="1"
