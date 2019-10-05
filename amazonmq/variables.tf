@@ -16,6 +16,6 @@ variable "aws_broker_host_instance_type" {
 
 variable "aws_broker_deployment_mode" {
   type        = "string"
-  default     = "SINGLE_INSTANCE"
+  default     = "ACTIVE_STANDBY_MULTI_AZ" // made default multi az until domain a/b bug fixed (amq alternates between zone a & b i think)
   description = "Either SINGLE_INSTANCE or ACTIVE_STANDBY_MULTI_AZ for a master/slave standby cluster"
 }
