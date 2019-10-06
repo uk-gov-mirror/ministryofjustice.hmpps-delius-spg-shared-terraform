@@ -1,3 +1,31 @@
+saveContent_default: "true"
+
+
+
+
+This is the prod setting
+# List of CRCs that should NOT receive metadata update messages
+spg_disabled_metadata_update_receiverids: C00,C01,C02,C03,C05,C06,C07,C08,C09,C10,C11,C12,C13,C14,C15,C16,C17,C18,C19,C20,C22,C23,C24,C25
+
+DAM-455-apply-connection-retry-patch
+
+
+
+org.apache.karaf.jndi:org.apache.karaf.jndi.core:jar:3.0.4
+
+
+log4j.logger.uk.gov.gsi.justice.spg.core.processors.EndpointMonitor=DEBUG
+
+
+cp test-messages/requests-fromdelius/alfrescopermissions_N00_C00.xml data/stub-injectors/fromNdelius/                                                                   Sat Oct  5 23:20:19 2019
+
+
+
+
+
+arn:aws:iam::723123699647:role/tf-eu-west-2-hmpps-delius-core-dev-spgw-crc-int-ec2-role
+
+arn:aws:iam::723123699647:role/dlc-spg-kibanauser-pri-iam
 
 
 
@@ -74,6 +102,34 @@ type=rpm-md
 
 
 sudo yum install filebeat
+
+
+
+?? dont think we can do this with docker centos
+sudo chkconfig --add filebeat
+
+
+#update config
+
+update /etc/filebeat/filebeat.yml
+*from*
+#-------------------------- Elasticsearch output ------------------------------
+output.elasticsearch:
+  # Array of hosts to connect to.
+  hosts: ["localhost:9200"]
+
+*to*
+#-------------------------- Elasticsearch output ------------------------------
+output.elasticsearch:
+  hosts: ["https://vpc-ndst-elk-audit-stack-6uwzfvrz5qzoi4hijmpepal5z4.eu-west-2.es.amazonaws.com:443"]
+
+
+
+#tail logs full debug
+
+ filebeat -c /etc/filebeat/filebeat.yml -e -d "*"
+
+
 
 
 
