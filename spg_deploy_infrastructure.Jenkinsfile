@@ -222,7 +222,16 @@ pipeline {
                 }
             }
         }
-        
+
+
+        stage('Delius | SPG | ELK Stack') {
+            steps {
+                script {
+                    do_terraform(project.config, environment_name, project.terraform, 'elk-stack')
+                }
+            }
+        }
+
 
         stage('Delius | SPG | Amazon MQ') {
             steps {
