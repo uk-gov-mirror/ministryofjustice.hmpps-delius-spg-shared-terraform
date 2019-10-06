@@ -7,6 +7,7 @@
             "Principal": {
                 "AWS": [
                     "${kibana_role}"
+
                 ]
             },
             "Action":"es:*",
