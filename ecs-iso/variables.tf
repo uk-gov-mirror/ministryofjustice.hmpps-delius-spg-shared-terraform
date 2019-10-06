@@ -7,7 +7,6 @@ variable "remote_state_bucket_name" {
 
 
 variable "s3_bucket_config" {}
-variable "spg_build_inv_dir" {}
 
 variable "asg_instance_type_iso" {default = "t2.small"}
 variable "cloudwatch_log_retention" {}
@@ -30,8 +29,28 @@ variable SPG_ISO_FQDN {}
 variable SPG_MPX_FQDN {}
 variable SPG_CRC_FQDN {}
 variable SPG_ENVIRONMENT_CODE {}
+variable SPG_ENVIRONMENT_CN {}
+
 variable SPG_ISO_HOST_TYPE {}
 
+
+
+variable spg_iso_asg_desired {
+  default="1"
+}
+
+variable spg_iso_asg_max {
+  default="1"
+}
+variable spg_iso_asg_min {
+  default="1"
+}
+
+
+variable spg_iso_service_desired_count {
+  #1 = assumes desired ecs memory = max
+  default="1"
+}
 
 variable spg_iso_ecs_memory {}
 
@@ -43,8 +62,13 @@ variable image_version {
   default = "latest"
 }
 
+variable bastion_inventory {}
 
 variable "tags" {
   type = "map"
 }
 
+variable PO_SPG_CONFIGURATION {
+  description ="map of PO configs"
+  type="map"
+}

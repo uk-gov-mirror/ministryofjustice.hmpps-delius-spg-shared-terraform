@@ -51,6 +51,15 @@ output "public_zone_id" {
   value = "${data.terraform_remote_state.vpc.public_zone_id}"
 }
 
+output "strategic_external_domain" {
+  value = "${var.public_dns_child_zone}.${var.public_dns_parent_zone}"
+}
+
+output "strategic_public_zone_id" {
+  value = "${var.route53_strategic_hosted_zone_id}"
+}
+
+
 output "common_name" {
   value = "${local.common_name}"
 }
@@ -158,14 +167,15 @@ output "private_subnet_ids" {
   ]
 }
 
-# Security groups
-output "sg_map_ids" {
-  value = "${local.sg_map_ids}"
-}
+//# Security groups
+//output "sg_map_ids" {
+//  value = "${local.sg_map_ids}"
+//}
 
 # spg hosts
 output "app_hostnames" {
   value = "${local.app_hostnames}"
 }
+
 
 

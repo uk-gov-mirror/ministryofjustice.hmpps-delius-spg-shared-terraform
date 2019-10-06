@@ -7,10 +7,24 @@ data "aws_ecs_task_definition" "app_task_definition" {
   depends_on      = ["module.app_task_definition"]
 }
 
+
+data "template_file" "po_configuration" {
+  template = "${file("task_definitions/key_value_pair.tpl.json")}"
+  count = "${length(var.PO_SPG_CONFIGURATION)}"
+
+
+  vars {
+    name = "${element(keys(var.PO_SPG_CONFIGURATION),count.index)}"
+    value = "${element(values(var.PO_SPG_CONFIGURATION),count.index)}"
+  }
+}
+
 data "template_file" "app_task_definition" {
   template = "${file("task_definitions/template.json")}"
 
   vars {
+    po_configuration = "${join(",", data.template_file.po_configuration.*.rendered)}"
+
     container_name = "${local.app_name}-${local.app_submodule}"
     ecs_memory = "${local.ecs_memory}"
 
@@ -26,7 +40,6 @@ data "template_file" "app_task_definition" {
 
     kibana_host           = "${local.kibana_host}"
     s3_bucket_config      = "${local.s3_bucket_config}"
-    spg_build_inv_dir     = "${local.spg_build_inv_dir}"
 
     SPG_HOST_TYPE = "${local.SPG_HOST_TYPE}"
     SPG_GENERIC_BUILD_INV_DIR = "${local.SPG_GENERIC_BUILD_INV_DIR}"

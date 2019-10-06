@@ -62,6 +62,7 @@ data "template_file" "user_data" {
     cluster_name         = "${module.ecs_cluster.ecs_cluster_name}"
     log_group_name       = "${module.create_loggroup.loggroup_name}"
     container_name       = "${local.app_name}-${local.app_submodule}"
+    bastion_inventory    = "${var.bastion_inventory}"
 
 
     data_volume_host_path = "${local.data_volume_host_path}"

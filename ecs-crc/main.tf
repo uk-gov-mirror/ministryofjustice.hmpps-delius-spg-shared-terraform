@@ -37,7 +37,7 @@ locals {
   ########################################################################################################
   #Network common (protocol needs to match between front end and back end)
   ########################################################################################################
-  backend_app_port = "8181"
+  backend_app_port = "9001"
 
   backend_app_protocol = "HTTP"
 
@@ -64,29 +64,35 @@ locals {
   backend_timeout        = "60"
   external_domain        = "${data.terraform_remote_state.common.external_domain}"
   public_zone_id         = "${data.terraform_remote_state.common.public_zone_id}"
-  int_lb_security_groups = ["${data.terraform_remote_state.security-groups-and-rules.crc_internal_loadbalancer_sg_id}"
-//TODO remove if LBs do not require ssh access  "${local.sg_map_ids["bastion_in_sg_id"]}"]
+
+  strategic_external_domain        = "${data.terraform_remote_state.common.strategic_external_domain}"
+  strategic_public_zone_id         = "${data.terraform_remote_state.common.strategic_public_zone_id}"
+
+
+
+  loadbalancer_security_groups = ["${data.terraform_remote_state.security-groups-and-rules.crc_internal_loadbalancer_sg_id}"
+    ,"${data.terraform_remote_state.security-groups-and-rules.external_9001_from_vpc_public_ips_sg_id}"
     ]
 
   listener = [
-    {
-      instance_port = "61616"
-      instance_protocol = "TCP"
-      lb_port = "61616"
-      lb_protocol = "TCP"
-    },
-    {
-      instance_port = "8181"
-      instance_protocol = "HTTP"
-      lb_port = "8181"
-      lb_protocol = "HTTP"
-    },
-    {
-      instance_port = "8989"
-      instance_protocol = "HTTP"
-      lb_port = "8989"
-      lb_protocol = "HTTP"
-    },
+//    {
+//      instance_port = "61616"
+//      instance_protocol = "TCP"
+//      lb_port = "61616"
+//      lb_protocol = "TCP"
+//    },
+//    {
+//      instance_port = "8181"
+//      instance_protocol = "HTTP"
+//      lb_port = "8181"
+//      lb_protocol = "HTTP"
+//    },
+//    {
+//      instance_port = "8989"
+//      instance_protocol = "HTTP"
+//      lb_port = "8989"
+//      lb_protocol = "HTTP"
+//    },
     {
       instance_port = "9001"
       instance_protocol = "TCP"
@@ -103,7 +109,8 @@ locals {
 
   health_check_elb = [
     {
-      target = "HTTP:8181/cxf/"
+#      target = "HTTP:8181/cxf/"
+      target = "TCP:9001"
       interval = 60
       healthy_threshold = 2
 
@@ -145,12 +152,14 @@ locals {
   #ecs service - app service
   ########################################################################################################
   ecs_service_role = "${data.terraform_remote_state.iam.iam_role_crc_int_ecs_role_arn}"
-  service_desired_count = "1"
-  sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
+  service_desired_count = "${var.spg_crc_service_desired_count}"
+//  sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
-    "${local.sg_map_ids["bastion_in_sg_id"]}",
+    "${data.terraform_remote_state.vpc-security-groups.sg_ssh_bastion_in_id}",
     "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",
     "${data.terraform_remote_state.security-groups-and-rules.crc_internal_instance_sg_id}",
+    "${data.terraform_remote_state.security-groups-and-rules.crc_internal_loadbalancer_sg_id}",
+
   ]
   ########################################################################################################
   #ecs service block device
@@ -167,7 +176,7 @@ locals {
   instance_profile = "${data.terraform_remote_state.iam.iam_policy_crc_int_app_instance_profile_name}"
   instance_type = "${var.asg_instance_type_crc}"
   ssh_deployer_key = "${data.terraform_remote_state.common.common_ssh_deployer_key}"
-  associate_public_ip_address = true
+  associate_public_ip_address = false
 
   ########################################################################################################
   #ecs task definition
@@ -181,7 +190,6 @@ locals {
   #vars for docker app
   #s3 bucket for ANISBLE jobs (derived from env properties
   s3_bucket_config = "${var.s3_bucket_config}"
-  spg_build_inv_dir = "${var.spg_build_inv_dir}"
   #vars for docker container
   kibana_host           = "NOTUSED(yet)"
   data_volume_host_path = "/opt/spg/servicemix/data"
@@ -192,7 +200,7 @@ locals {
   SPG_GENERIC_BUILD_INV_DIR = "${var.SPG_GENERIC_BUILD_INV_DIR}"
   SPG_JAVA_MAX_MEM = "${var.SPG_CRC_JAVA_MAX_MEM}"
   SPG_ENVIRONMENT_CODE = "${var.SPG_ENVIRONMENT_CODE}"
-  SPG_ENVIRONMENT_CN = "${local.external_domain}"
+  SPG_ENVIRONMENT_CN = "${var.SPG_ENVIRONMENT_CN}"
   SPG_DELIUS_MQ_URL = "${var.SPG_DELIUS_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
   SPG_GATEWAY_MQ_URL = "${var.SPG_GATEWAY_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
   SPG_DOCUMENT_REST_SERVICE_ADMIN_URL = "${var.SPG_DOCUMENT_REST_SERVICE_ADMIN_URL}"

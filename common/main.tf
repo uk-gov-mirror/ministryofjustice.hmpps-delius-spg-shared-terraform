@@ -54,19 +54,19 @@ locals {
 
 
 #security_group_map_ids
-  sg_map_ids            = {
-    #deprecated
-    external_inst_sg_id = "${data.terraform_remote_state.security-groups.sg_spg_nginx_in}"
-    internal_inst_sg_id = "${data.terraform_remote_state.security-groups.sg_spg_api_in}"
-    external_lb_sg_id   = "${data.terraform_remote_state.security-groups.sg_spg_external_lb_in}"
-    internal_lb_sg_id   = "${data.terraform_remote_state.security-groups.sg_spg_internal_lb_in}"
-    outbound_sg_id      = "${aws_security_group.vpc-sg-outbound.id}"
-
-    #retain
-    bastion_in_sg_id    = "${data.terraform_remote_state.security-groups.sg_ssh_bastion_in_id}"
-  }
-
-
+//  sg_map_ids            = {
+//    #deprecated
+////    external_inst_sg_id = "${data.terraform_remote_state.security-groups.sg_spg_nginx_in}"
+////    internal_inst_sg_id = "${data.terraform_remote_state.security-groups.sg_spg_api_in}"
+////    external_lb_sg_id   = "${data.terraform_remote_state.security-groups.sg_spg_external_lb_in}"
+////    internal_lb_sg_id   = "${data.terraform_remote_state.security-groups.sg_spg_internal_lb_in}"
+//
+//    #retain
+////    outbound_sg_id      = "${aws_security_group.vpc-sg-outbound.id}"
+//    bastion_in_sg_id    = "${data.terraform_remote_state.security-groups.sg_ssh_bastion_in_id}"
+//  }
+//
+//  amazonmq_inst_sg_id = "${data.terraform_remote_state.security-groups.sg_amazonmq_in}"
 
   private_subnet_map = {
     az1 = "${data.terraform_remote_state.vpc.vpc_private-subnet-az1}"

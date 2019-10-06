@@ -30,10 +30,6 @@
                 "value": "${s3_bucket_config}"
             },
 
-            {
-            "name": "SPG_BUILD_INV_DIR",
-            "value": "${spg_build_inv_dir}"
-            },
 
             {
             "name": "SPG_HOST_TYPE",
@@ -93,8 +89,9 @@
             {
             "name": "SPG_CRC_FQDN",
             "value": "${SPG_CRC_FQDN}"
-            }
+            },
 
+            ${po_configuration}
 
             ],
         "portMappings": [

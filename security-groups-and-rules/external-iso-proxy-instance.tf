@@ -51,7 +51,7 @@ resource "aws_security_group_rule" "external_instance_8181_egress" {
 
 
 #-------------------------------------------------------------
-### port 8989 (unsigned soap from iso to mpx) (for when ISO is only doing TLS termination,  and mpx-hybrid is unsigning)
+### port 8989 (unsigned soap from iso to mpx) (for when ISO is doing TLS termination + unsigning)
 #-------------------------------------------------------------
 resource "aws_security_group_rule" "external_instance_egress_httpunsigned" {
   security_group_id        = "${aws_security_group.external_iso_instance.id}"
@@ -79,44 +79,6 @@ resource "aws_security_group_rule" "external_instance_egress_httpunsigned" {
 ###################
 # INGRESS
 ###################
-
-
-
-
-
-#---------------------------------------------------------------------------------------
-### port 9001 (soap/rest mutual TLS) from VPC public address for calls from CRC stub
-#---------------------------------------------------------------------------------------
-
-resource "aws_security_group_rule" "external_instance_9001_nataz1" {
-  security_group_id        = "${aws_security_group.external_iso_instance.id}"
-  description              = "from vpcPublicIP AZ1 from crc stub"
-  type                     = "ingress"
-  cidr_blocks              = ["${local.natgateway_common-nat-public-ip-az1}/32"]  #from crc via public ip
-  from_port                = 9001
-  to_port                  = 9001
-  protocol                 = "tcp"
-}
-
-resource "aws_security_group_rule" "external_instance_9001_nataz2" {
-  security_group_id        = "${aws_security_group.external_iso_instance.id}"
-  description              = "from vpcPublicIP AZ2 from crc stub"
-  type                     = "ingress"
-  cidr_blocks              = ["${local.natgateway_common-nat-public-ip-az2}/32"]  #from crc via public ip
-  from_port                = 9001
-  to_port                  = 9001
-  protocol                 = "tcp"
-}
-
-resource "aws_security_group_rule" "external_instance_9001_nataz3" {
-  security_group_id        = "${aws_security_group.external_iso_instance.id}"
-  description              = "from vpcPublicIP AZ3 from crc stub"
-  type                     = "ingress"
-  cidr_blocks              = ["${local.natgateway_common-nat-public-ip-az3}/32"]  #from crc via public ip
-  from_port                = 9001
-  to_port                  = 9001
-  protocol                 = "tcp"
-}
 
 
 

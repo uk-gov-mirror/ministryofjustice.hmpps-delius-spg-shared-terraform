@@ -134,19 +134,19 @@ locals {
   #ecs asg
   ########################################################################################################
 
-  asg_desired = "1"
-  asg_max     = "1"
-  asg_min     = "1"
+  asg_desired = "${var.spg_mpx_asg_desired}"
+  asg_max = "${var.spg_mpx_asg_max}"
+  asg_min = "${var.spg_mpx_asg_min}"
 
 
   ########################################################################################################
   #ecs service - app service
   ########################################################################################################
   ecs_service_role = "${data.terraform_remote_state.iam.iam_role_mpx_int_ecs_role_arn}"
-  service_desired_count = "1" # maxed out on the basis the serive count is decoupled from the ASG
-  sg_map_ids            = "${data.terraform_remote_state.common.sg_map_ids}"
+  service_desired_count = "${var.spg_mpx_service_desired_count}"
+//  sg_map_ids            = "${data.terraform_remote_state.common.sg_map_ids}"
   instance_security_groups = [
-    "${local.sg_map_ids["bastion_in_sg_id"]}",
+    "${data.terraform_remote_state.vpc-security-groups.sg_ssh_bastion_in_id}",
     "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",
     "${data.terraform_remote_state.security-groups-and-rules.mpx_internal_instance_sg_id}",
   ]
@@ -166,7 +166,7 @@ locals {
 #  instance_profile            = "${data.terraform_remote_state.iam.iam_policy_ext_app_instance_profile_name}"
   instance_type               = "${var.asg_instance_type_mpx}"
   ssh_deployer_key            = "${data.terraform_remote_state.common.common_ssh_deployer_key}"
-  associate_public_ip_address = true
+  associate_public_ip_address = false
 
   ########################################################################################################
   #ecs task definition
@@ -180,7 +180,6 @@ locals {
   #vars for docker app
   #s3 bucket for ANISBLE jobs (derived from env properties
   s3_bucket_config      = "${var.s3_bucket_config}"
-  spg_build_inv_dir     = "${var.spg_build_inv_dir}"
   #vars for docker container
   kibana_host           = "NOTUSED(yet)"
   data_volume_host_path = "/opt/spg/servicemix/data"
@@ -191,9 +190,15 @@ locals {
   SPG_GENERIC_BUILD_INV_DIR = "${var.SPG_GENERIC_BUILD_INV_DIR}"
   SPG_JAVA_MAX_MEM = "${var.SPG_MPX_JAVA_MAX_MEM}"
   SPG_ENVIRONMENT_CODE = "${var.SPG_ENVIRONMENT_CODE}"
-  SPG_ENVIRONMENT_CN = "${local.external_domain}"
+  SPG_ENVIRONMENT_CN = "${var.SPG_ENVIRONMENT_CN}"
   SPG_DELIUS_MQ_URL = "${var.SPG_DELIUS_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
-  SPG_GATEWAY_MQ_URL = "${var.SPG_GATEWAY_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
+
+  # The final value of the GATEWAY url is calculated depending on the value of SPG_GATEWAY_MQ_URL_SOURCE in env-configs
+  # This defaults to "data" in this project, which will extrat the url from the amazonmq remote state
+  SPG_GATEWAY_MQ_URL = "${var.SPG_GATEWAY_MQ_URL_SOURCE == "data" ?
+                            data.terraform_remote_state.amazonmq.amazon_mq_broker_connect_url :
+                            var.SPG_GATEWAY_MQ_URL}"
+
   SPG_DOCUMENT_REST_SERVICE_ADMIN_URL = "${var.SPG_DOCUMENT_REST_SERVICE_ADMIN_URL}"
   SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL = "${var.SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL}"
   SPG_ISO_FQDN = "${var.SPG_ISO_FQDN}"

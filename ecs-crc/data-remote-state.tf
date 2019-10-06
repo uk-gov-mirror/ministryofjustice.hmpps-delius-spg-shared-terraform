@@ -1,3 +1,6 @@
+####################################################
+# DATA SOURCE MODULES FROM OTHER TERRAFORM BACKENDS
+####################################################
 #-------------------------------------------------------------
 ### Getting the common details
 #-------------------------------------------------------------
@@ -61,6 +64,16 @@ data "terraform_remote_state" "security-groups-and-rules" {
   config {
     bucket = "${var.remote_state_bucket_name}"
     key    = "spg/security-groups-and-rules/terraform.tfstate"
+    region = "${var.region}"
+  }
+}
+
+data "terraform_remote_state" "vpc-security-groups" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.remote_state_bucket_name}"
+    key    = "security-groups/terraform.tfstate"
     region = "${var.region}"
   }
 }

@@ -9,9 +9,9 @@ module "create_app_elb" {
   # requires provider 2.1.6
   source          = "../modules/loadbalancer/elb/create_elb"
   name            = "${local.common_name}-elb"
-  subnets         = ["${local.private_subnet_ids}"]
-  security_groups = ["${local.int_lb_security_groups}"]
-  internal        = "true"
+  subnets         = ["${local.public_subnet_ids}"]
+  security_groups = ["${local.loadbalancer_security_groups}"]
+  internal        = "false"
 
   cross_zone_load_balancing   = "true"
   idle_timeout                = "${local.backend_timeout}"
@@ -32,9 +32,23 @@ module "create_app_elb" {
 # Create INTERNAL route53 entry for spg lb
 ###############################################
 
-resource "aws_route53_record" "dns_crc_int_entry" {
+resource "aws_route53_record" "dns_crc_entry" {
   zone_id = "${local.public_zone_id}"
-  name    = "${local.application_endpoint}-${local.app_submodule}-int.${local.external_domain}"
+  name    = "${local.application_endpoint}-${local.app_submodule}-ext.${local.external_domain}"
+  type    = "A"
+
+  alias {
+    name                   = "${module.create_app_elb.environment_elb_dns_name}"
+    zone_id                 = "${module.create_app_elb.environment_elb_zone_id}"
+    evaluate_target_health = false
+  }
+}
+
+###strategic - only create if the primary zone id is different to the strategic one
+resource "aws_route53_record" "strategic_dns_crc_entry" {
+  count = "${(local.public_zone_id == local.strategic_public_zone_id) ? 0 : 1}"
+  zone_id = "${local.strategic_public_zone_id}"
+  name    = "${local.application_endpoint}-${local.app_submodule}-ext.${local.strategic_external_domain}"
   type    = "A"
 
   alias {
@@ -43,5 +57,3 @@ resource "aws_route53_record" "dns_crc_int_entry" {
     evaluate_target_health = false
   }
 }
-
-

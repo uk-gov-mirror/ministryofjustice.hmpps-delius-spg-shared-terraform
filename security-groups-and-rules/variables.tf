@@ -30,3 +30,15 @@ variable "spg_app_name" {
 variable "environment_name" {
   type = "string"
 }
+
+
+variable PO_SPG_FIREWALL_INGRESS_PORT {}
+variable PO_SPG_FIREWALL_INGRESS_RULES {
+  description ="map of PO firewall configs"
+  type="map"
+}
+
+variable internet_facing_ips {
+  type = "list"
+  default = []
+}

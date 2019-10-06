@@ -7,7 +7,6 @@ variable "remote_state_bucket_name" {
 
 
 variable "s3_bucket_config" {}
-variable "spg_build_inv_dir" {}
 
 
 variable "asg_instance_type_crc" {default = "t2.small"}
@@ -21,6 +20,7 @@ variable SPG_GENERIC_BUILD_INV_DIR {}
 
 variable SPG_CRC_JAVA_MAX_MEM {}
 variable SPG_ENVIRONMENT_CODE {}
+variable SPG_ENVIRONMENT_CN {}
 
 variable SPG_DELIUS_MQ_URL {}
 variable SPG_GATEWAY_MQ_URL {}
@@ -32,7 +32,12 @@ variable SPG_ISO_FQDN {}
 variable SPG_MPX_FQDN {}
 variable SPG_CRC_FQDN {}
 
+variable bastion_inventory {}
 
+variable spg_crc_service_desired_count {
+  #1 = assumes desired ecs memory = max
+  default="1"
+}
 
 variable spg_crc_ecs_memory {}
 
@@ -50,3 +55,7 @@ variable "tags" {
   type = "map"
 }
 
+variable PO_SPG_CONFIGURATION {
+  description ="map of PO configs"
+  type="map"
+}

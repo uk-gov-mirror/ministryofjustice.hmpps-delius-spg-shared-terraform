@@ -79,7 +79,7 @@ module "certificates_spg_tls_cert_kms_key" {
 
 module "certificates_spg_signing_cert_kms_key" {
   source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//kms_custom_policy"
-  kms_key_name = "${var.short_environment_identifier}-certificates-spg-signing-cert"
+  kms_key_name = "${var.short_environment_identifier}-certificates-spg-message-signing-certificate"
   policy = "${data.template_file.kms_spg_signing_policy.rendered}"
   tags = "${local.tags}"
 }
