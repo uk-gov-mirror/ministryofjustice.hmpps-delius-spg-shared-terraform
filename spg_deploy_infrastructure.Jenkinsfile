@@ -176,7 +176,7 @@ pipeline {
         stage('Delius | SPG | KMS') {
             steps {
                 script {
-                    if ("${environment_name}" != "delius-pre-prod" && ${environment_name}" != "delius-pre-prod" ) {
+                    if ("${environment_name}" != "delius-pre-prod" && "${environment_name}" != "delius-pre-prod" ) {
                         do_terraform(project.config, environment_name, project.terraform, 'kms-certificates-spg')
                     }
                     else
