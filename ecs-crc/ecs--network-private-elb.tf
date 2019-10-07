@@ -46,7 +46,7 @@ resource "aws_route53_record" "dns_crc_entry" {
 
 ###strategic - only create if the primary zone id is different to the strategic one
 resource "aws_route53_record" "strategic_dns_crc_entry" {
-  count = "${(local.public_zone_id == local.strategic_public_zone_id) ? 0 : 1}"
+  count = "${(local.public_zone_id == local.strategic_public_zone_id || local.strategic_public_zone_id == "notyetimplemented")   ? 0 : 1}"
   zone_id = "${local.strategic_public_zone_id}"
   name    = "${local.application_endpoint}-${local.app_submodule}-ext.${local.strategic_external_domain}"
   type    = "A"
