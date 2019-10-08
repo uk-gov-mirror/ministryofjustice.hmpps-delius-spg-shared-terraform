@@ -10,8 +10,13 @@
                 "sourceVolume": "${data_volume_name}",
                 "containerPath": "${data_volume_host_path}",
                 "readOnly": false
-            }
-        ],
+            },
+    {
+        "sourceVolume": "log",
+        "containerPath": "/opt/spg/servicemix/data/log",
+        "readOnly": false
+    }
+],
         "environment": [
 
             {
