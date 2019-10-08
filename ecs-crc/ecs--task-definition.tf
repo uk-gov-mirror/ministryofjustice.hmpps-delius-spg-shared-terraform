@@ -58,25 +58,14 @@ data "template_file" "app_task_definition" {
   }
 }
 
+module "app_task_definition" {
+  source   = "..//modules//ecs_task"
+  app_name = "${local.container_name}"
 
-resource "aws_ecs_task_definition" "environment" {
-  family                = "${local.container_name}-task-definition"
+  container_name        = "${local.container_name}"
   container_definitions = "${data.template_file.app_task_definition.rendered}"
 
+  data_volume_host_path = "${local.data_volume_host_path}"
+  data_volume_name      = "${local.data_volume_name}"
 
-  volume {
-    name      = "amqbroker"
-    host_path = "/opt/spg/servicemix/amq-broker"
-  }
-
-
-  volume {
-    name      = "log"
-    host_path = "/var/log/${local.container_name}"
-  }
-
-  volume {
-    name      = "${local.data_volume_name}"
-    host_path = "${local.data_volume_host_path}"
-  }
 }

@@ -31,6 +31,8 @@ locals {
   spg_app_name = "${data.terraform_remote_state.common.spg_app_name}"
   app_name = "${local.spg_app_name}"
   app_submodule = "iso"
+  container_name = "${local.app_name}-${local.app_submodule}"
+
   application_endpoint = "${local.app_hostnames["external"]}"
   environment_identifier = "${data.terraform_remote_state.common.environment_identifier}"
 

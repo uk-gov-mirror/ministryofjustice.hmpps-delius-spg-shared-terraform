@@ -20,7 +20,7 @@
         "sourceVolume": "amqbroker",
         "containerPath": "/opt/spg/servicemix/amq-broker",
         "readOnly": false
-    },
+    }
 
 
 ],
