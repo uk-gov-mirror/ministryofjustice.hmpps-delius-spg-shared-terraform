@@ -48,7 +48,7 @@ variable "elk-audit_conf" {
 
   default = {
     es_domain  = "ndst-elk-audit-stack"
-    es_version = "6.7"
+    es_version = "7.1"
 
     # Cluster config
     # Data node count
