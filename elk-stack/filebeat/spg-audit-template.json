@@ -1,0 +1,26 @@
+{
+  "index_patterns": ["spg-audit-7.1.1*"],
+  "mappings": {
+      "date_detection": true,
+      "properties": {
+        "messageNotificationStatusCode": {"type":"integer"},
+        "priority":{"type": "short","index": "false"},
+        "messageReferenceNumber":{"type": "integer","index": "false"},
+        "prepDate": {"type": "text","index": "false"},
+        "receiverControlRef": {"type": "long"},
+        "senderControlRef": {"type": "long"}
+      },
+      "dynamic_templates" : [
+      { 
+        "dates" : {
+          "match" : "interchangeTimestamp",
+          "mapping" : {
+            "type" : "date",
+            "format" : "YYYY-MM-dd'T'HH:mm:ss.SSSZ"
+          }
+        }
+      }
+      ]
+  }
+}
+

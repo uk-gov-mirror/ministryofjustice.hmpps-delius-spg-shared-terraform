@@ -1,0 +1,76 @@
+/es open policy, no auth required (any server in vpc can access)
+
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": [
+          "*"
+        ]
+      },
+      "Action": [
+        "es:*"
+      ],
+      "Resource": "arn:aws:es:eu-west-2:723123699647:domain/ndst-elk-audit-stack/*"
+    }
+  ]
+}
+
+
+
+
+unauthroised put
+
+
+curl -XPUT https://vpc-ndst-elk-audit-stack-6uwzfvrz5qzoi4hijmpepal5z4.eu-west-2.es.amazonaws.com/movies/_doc/1 -d '{"director": "Burton, Tim", "genre": ["Comedy","Sci-Fi"], "year": 1996, "actor": ["Jack Nicholson","Pierce Brosnan","Sarah Jessica Parker"], "title": "Mars Attacks!"}' -H 'Content-Type: application/json'
+
+
+
+
+
+1. read this page https://www.elastic.co/guide/en/beats/filebeat/7.4/setup-repositories.html#_yum
+2. sudo rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
+3. Create a file with a .repo extension (for example, elastic.repo) in your /etc/yum.repos.d/ directory and add the following lines:
+
+[elastic-7.x]
+name=Elastic repository for 7.x packages
+#baseurl=https://artifacts.elastic.co/packages/7.x/yum
+baseurl=https://artifacts.elastic.co/packages/oss-7.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
+
+4. Install the latest version (4a) or choose a specific version (4b)
+4a. sudo yum install filebeat
+4b. yum --showduplicates list filebeat | more
+    sudo yum install filebeat-[version number]
+
+5. Edit /etc/filebeat/filebeat.yml
+
+   a) Update the hosts entry to point to the AWS ES url as listed on the AWS ES instance page (on port 443)
+
+    output.elasticsearch:
+        hosts: ["https://vpc-ndst-elk-audit-stack-6uwzfvrz5qzoi4hijmpepal5z4.eu-west-2.es.amazonaws.com:443"]
+
+   b) Update the inputs->log section to be enabled and to monitor at least 1 log file
+
+    filebeat.inputs:
+
+    - type: log
+    # Change to true to enable this input configuration.
+        enabled: true
+    # Paths that should be crawled and fetched. Glob based paths.
+    paths:
+        - /tmp/mgb.log
+
+
+6. Run filebeat and check the log output
+
+#tail logs full debug
+
+ nohup filebeat -c /etc/filebeat/filebeat.yml -e -d "*" 2>&1 > /tmp/filebeat.log &
