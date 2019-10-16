@@ -92,12 +92,6 @@ locals {
       lb_port           = "9001"
       lb_protocol       = "TCP"
     },
-    {
-      instance_port     = "2222"
-      instance_protocol = "TCP"
-      lb_port           = "2222"
-      lb_protocol       = "TCP"
-    },
   ]
 
   health_check_elb = [

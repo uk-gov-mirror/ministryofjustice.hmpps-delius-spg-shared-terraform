@@ -117,11 +117,6 @@
             "containerPort": 61616
             },
             {
-            "hostPort": 2222,
-            "protocol": "tcp",
-            "containerPort": 22
-            },
-            {
             "hostPort": 9001,
             "protocol": "tcp",
             "containerPort": 9001
