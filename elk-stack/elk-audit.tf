@@ -126,3 +126,16 @@ resource "aws_ssm_parameter" "kibana_webops_password" {
   type  = "SecureString"
   value = "null"
 }
+
+#
+resource "aws_route53_record" "dns_spg_aes_int_entry" {
+
+  # Use the ID of the Hosted Zone we retrieved earlier
+  zone_id = "${data.terraform_remote_state.common.private_zone_id}"
+  name = "amazones-audit"
+  type = "CNAME"
+  ttl = "1800"
+  count = 1
+  records = ["${aws_elasticsearch_domain.elk-audit_domain.endpoint}"]
+  depends_on = ["aws_mq_broker.SPG"]
+}
