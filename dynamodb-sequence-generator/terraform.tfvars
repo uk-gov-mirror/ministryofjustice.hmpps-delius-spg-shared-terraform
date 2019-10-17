@@ -6,8 +6,6 @@ terragrunt = {
   dependencies {
     paths = [
       "../common",
-      "../iam",
-      "../security-groups",
     ]
   }
 }
