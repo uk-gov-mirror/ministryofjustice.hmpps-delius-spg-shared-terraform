@@ -10,8 +10,20 @@
                 "sourceVolume": "${data_volume_name}",
                 "containerPath": "${data_volume_host_path}",
                 "readOnly": false
-            }
-        ],
+            },
+    {
+        "sourceVolume": "log",
+        "containerPath": "/opt/spg/servicemix/data/log",
+        "readOnly": false
+    },
+    {
+        "sourceVolume": "amqbroker",
+        "containerPath": "/opt/spg/servicemix/amq-broker",
+        "readOnly": false
+    }
+
+
+],
         "environment": [
 
             {
@@ -103,11 +115,6 @@
             "hostPort": 61616,
             "protocol": "tcp",
             "containerPort": 61616
-            },
-            {
-            "hostPort": 2222,
-            "protocol": "tcp",
-            "containerPort": 22
             },
             {
             "hostPort": 9001,

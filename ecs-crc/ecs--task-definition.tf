@@ -59,10 +59,10 @@ data "template_file" "app_task_definition" {
 }
 
 module "app_task_definition" {
-  source   = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs//ecs-taskdefinitions//appwith_single_volume"
-  app_name = "${local.common_name}"
+  source   = "..//modules//ecs_task"
+  app_name = "${local.container_name}"
 
-  container_name        = "${local.common_name}"
+  container_name        = "${local.container_name}"
   container_definitions = "${data.template_file.app_task_definition.rendered}"
 
   data_volume_host_path = "${local.data_volume_host_path}"
