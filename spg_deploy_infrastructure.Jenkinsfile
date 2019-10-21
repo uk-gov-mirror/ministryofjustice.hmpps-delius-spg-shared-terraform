@@ -104,7 +104,7 @@ def confirm() {
 
 def do_terraform(config_dir, env_name, git_project, component) {
     plancode = plan_submodule(config_dir, env_name, git_project, component)
-    if (plancode == "2") {
+    if (plancode == "2" || component == "common") {
         if ("${confirmation}" == "true") {
             confirm()
         } else {
@@ -222,7 +222,7 @@ pipeline {
                 }
             }
         }
-        
+
 
         stage('Delius | SPG | Amazon MQ') {
             steps {
