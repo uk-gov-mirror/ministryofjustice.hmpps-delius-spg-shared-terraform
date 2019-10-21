@@ -179,3 +179,7 @@ output "app_hostnames" {
 
 
 
+# spg hosts
+output "FORCECHANGE" {
+  value = "dirtyhack to get common rebuilt"
+}
