@@ -24,7 +24,7 @@ data "terraform_remote_state" "vpc_security_groups" {
 data "aws_caller_identity" "current" {}
 
 data "template_file" "elk-audit_accesspolicy_template" {
-  template = "${file("${path.module}/templates/es_access_policy.tpl")}"
+  template = "${file("${path.module}/templates/es_access_open_filebeat_policy.tpl")}"
 
   vars = {
     region      = "${var.region}"
