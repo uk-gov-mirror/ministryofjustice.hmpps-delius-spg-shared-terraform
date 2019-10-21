@@ -104,6 +104,7 @@ def confirm() {
 
 def do_terraform(config_dir, env_name, git_project, component) {
     plancode = plan_submodule(config_dir, env_name, git_project, component)
+    echo "PlanCode="+plancode
     if (plancode == "2" || component == "common") {
         if ("${confirmation}" == "true") {
             confirm()
