@@ -81,6 +81,42 @@ def apply_submodule(config_dir, env_name, git_project_dir, submodule_name) {
     }
 }
 
+
+//required for changes in things like common, where no resources have changed but variables mayhave
+def refresh_submodule(config_dir, env_name, git_project_dir, submodule_name) {
+    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
+        sh """
+        #!/usr/env/bin bash
+        echo "TF APPLY for ${env_name} | ${submodule_name} - component from git project ${git_project_dir}"
+        set +e
+        cp -R -n "${config_dir}" "${git_project_dir}/env_configs"
+        cd "${git_project_dir}"
+        docker run --rm \
+          -v `pwd`:/home/tools/data \
+          -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
+          bash -c " \
+              source env_configs/${env_name}/${env_name}.properties; \
+              cd ${submodule_name}; \
+              terragrunt refresh; \
+              tgexitcode=\\\$?; \
+              echo \\\"TG exited with code \\\$tgexitcode\\\"; \
+              if [ \\\$tgexitcode -ne 0 ]; then \
+                exit  \\\$tgexitcode; \
+              else \
+                exit 0; \
+              fi;"; \
+        dockerexitcode=\$?; \
+        echo "Docker step exited with code \$dockerexitcode"; \
+        if [ \$dockerexitcode -ne 0 ]; then exit \$dockerexitcode; else exit 0; fi;
+        set -e
+        """
+    }
+}
+
+
+
+
+
 def confirm() {
     try {
         timeout(time: 15, unit: 'MINUTES') {
@@ -103,8 +139,12 @@ def confirm() {
 }
 
 def do_terraform(config_dir, env_name, git_project, component) {
+    if (component == "common") {
+        refresh_submodule(config_dir, env_name, git_project, component)
+    }
+
     plancode = plan_submodule(config_dir, env_name, git_project, component)
-    if (plancode == "2") {
+    if (plancode == "2" ) {
         if ("${confirmation}" == "true") {
             confirm()
         } else {
