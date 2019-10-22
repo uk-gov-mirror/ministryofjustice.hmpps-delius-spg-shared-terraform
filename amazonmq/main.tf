@@ -15,6 +15,8 @@ locals {
 //    "${local.sg_map_ids["internal_lb_sg_id"]}",
 //    "${local.sg_map_ids["bastion_in_sg_id"]}"]
 
+  hmpps_asset_name_prefix = "${data.terraform_remote_state.common.hmpps_asset_name_prefix}"
+
   int_amq_security_groups = "${data.terraform_remote_state.vpc-security-groups.sg_amazonmq_in }"
 
   private_subnet_ids = [
@@ -43,7 +45,7 @@ data "aws_ssm_parameter" "remote_broker_password" {
 }
 
 resource "aws_mq_broker" "SPG" {
-  broker_name = "SPG-AMQ-Broker"
+  broker_name = "${local.hmpps_asset_name_prefix}-SPG-AMQ-Broker"
 
   configuration {
     id       = "${aws_mq_configuration.SPG.id}"
