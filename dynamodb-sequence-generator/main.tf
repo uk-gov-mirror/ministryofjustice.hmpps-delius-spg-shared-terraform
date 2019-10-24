@@ -43,7 +43,7 @@ resource "aws_dynamodb_table" "sequence_generator_table" {
 
   attribute {
     name = "${var.hash_key}"
-    type = "N"
+    type = "S"
   }
 
   tags = "${merge(var.tags, map("Name", "${local.table_name}"))}"
