@@ -272,6 +272,13 @@ pipeline {
             }
         }
 
+        stage('Delius | SPG | DynamoDB Sequence') {
+            steps {
+                script {
+                    do_terraform(project.config, environment_name, project.terraform, 'dynamodb-sequence-generator')
+                }
+            }
+        }
 
         stage('Delius | SPG | ECS-SPG-CRC') {
             steps {
