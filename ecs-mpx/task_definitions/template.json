@@ -56,6 +56,11 @@
             },
 
             {
+            "name": "SPG_AWS_REGION",
+            "value": "${SPG_AWS_REGION}"
+            },
+
+            {
             "name": "SPG_DELIUS_MQ_URL",
             "value": "${SPG_DELIUS_MQ_URL}"
             },
