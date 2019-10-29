@@ -23,7 +23,6 @@ variable SPG_MPX_JAVA_MAX_MEM {
 }
 variable SPG_ENVIRONMENT_CODE {}
 variable SPG_ENVIRONMENT_CN {}
-variable SPG_AWS_REGION {}
 
 
 variable SPG_DELIUS_MQ_URL {}
