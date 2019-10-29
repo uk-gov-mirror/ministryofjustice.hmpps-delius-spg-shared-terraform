@@ -9,7 +9,7 @@ provider "aws" {
 }
 
 locals {
-  env_prefix  = "${data.terraform_remote_state.common.short_environment_name}"
+  env_prefix  = "${var.SPG_ENVIRONMENT_CODE}"
   table_name  = "${local.env_prefix}-spg-scr-sequence"
 }
 
