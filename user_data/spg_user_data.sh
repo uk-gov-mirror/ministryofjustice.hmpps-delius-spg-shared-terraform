@@ -74,7 +74,9 @@ sed -i -e "s/{container_instance_id}/$container_instance_id/g" /etc/awslogs/awsl
 sed -i -e "s/{availzone}/$avail_zone/g" /etc/awslogs/awslogs.conf
 sed -i -e "s/{hostname}/$host_name/g" /etc/awslogs/awslogs.conf
 
-service awslogs start
+#service awslogs start
+#systemctl for amazon linux
+systemctl start awslogsd
 chkconfig awslogs on
 
 # Mount our EBS volume on boot

@@ -95,19 +95,19 @@ resource "aws_security_group_rule" "mpx_instance_8181_ingress" {
 }
 
 
-#-------------------------------------------------------------
-### port 2222 (ssh as used by MTS tests with virtuoso user)
-# TODO this should be removed now that crc has its own LB rules
-#-------------------------------------------------------------
-resource "aws_security_group_rule" "mpx_instance_2222_ingress" {
-  security_group_id        = "${aws_security_group.internal_mpx_instance.id}"
-  description              = "from mpx LB"
-  type                     = "ingress"
-  source_security_group_id = "${aws_security_group.internal_mpx_loadbalancer.id}"
-  from_port                = "2222"
-  to_port                  = "2222"
-  protocol                 = "tcp"
-}
+//#-------------------------------------------------------------
+//### port 2222 (ssh as used by MTS tests with virtuoso user)
+//# TODO this should be removed now that crc has its own LB rules
+//#-------------------------------------------------------------
+//resource "aws_security_group_rule" "mpx_instance_2222_ingress" {
+//  security_group_id        = "${aws_security_group.internal_mpx_instance.id}"
+//  description              = "from mpx LB"
+//  type                     = "ingress"
+//  source_security_group_id = "${aws_security_group.internal_mpx_loadbalancer.id}"
+//  from_port                = "2222"
+//  to_port                  = "2222"
+//  protocol                 = "tcp"
+//}
 
 
 

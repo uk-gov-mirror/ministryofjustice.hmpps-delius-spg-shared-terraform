@@ -86,6 +86,7 @@ module "launch_cfg" {
   ebs_volume_type             = "${local.ebs_volume_type}"
   ebs_volume_size             = "${local.ebs_volume_size}"
   ebs_encrypted               = "${local.ebs_encrypted}"
+  ##ebs_delete_on_termination   = "setthis if we dont get amazonmq any time soon"
   associate_public_ip_address = "${local.associate_public_ip_address}"
   security_groups             = ["${local.instance_security_groups}"]
   user_data                   = "${data.template_file.user_data.rendered}"

@@ -31,6 +31,7 @@ locals {
   spg_app_name           = "${data.terraform_remote_state.common.spg_app_name}"
   app_name               = "${local.spg_app_name}"
   app_submodule          = "mpx"
+  container_name = "${local.app_name}-${local.app_submodule}"
   application_endpoint   = "${local.app_hostnames["external"]}"
   environment_identifier = "${data.terraform_remote_state.common.environment_identifier}"
 
@@ -89,12 +90,6 @@ locals {
       instance_port     = "9001"
       instance_protocol = "TCP"
       lb_port           = "9001"
-      lb_protocol       = "TCP"
-    },
-    {
-      instance_port     = "2222"
-      instance_protocol = "TCP"
-      lb_port           = "2222"
       lb_protocol       = "TCP"
     },
   ]

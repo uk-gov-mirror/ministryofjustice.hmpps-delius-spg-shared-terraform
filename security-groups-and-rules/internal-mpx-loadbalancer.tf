@@ -71,29 +71,29 @@ resource "aws_security_group_rule" "mpx_lb_8989_egress" {
 
 
 
-#-------------------------------------------------------------
-### port 2222 (ssh as used by MTS tests with virtuoso user)
-#-------------------------------------------------------------
-resource "aws_security_group_rule" "mpx_lb_2222_ingress" {
-  security_group_id        = "${aws_security_group.internal_mpx_loadbalancer.id}"
-  description              = "from engineeringCIDR for use by virtuoso"
-  type                     = "ingress"
-  cidr_blocks              = ["${data.terraform_remote_state.vpc.eng_vpc_cidr}"]
-  from_port                = 2222
-  to_port                  = 2222
-  protocol                 = "tcp"
-}
-
-
-resource "aws_security_group_rule" "mpx_lb_2222_egress" {
-  security_group_id        = "${aws_security_group.internal_mpx_loadbalancer.id}"
-  description              = "to mpx"
-  type                     = "egress"
-  source_security_group_id = "${aws_security_group.internal_mpx_instance.id}"
-  from_port                = 2222
-  to_port                  = 2222
-  protocol                 = "tcp"
-}
+//#-------------------------------------------------------------
+//### port 2222 (ssh as used by MTS tests with virtuoso user)
+//#-------------------------------------------------------------
+//resource "aws_security_group_rule" "mpx_lb_2222_ingress" {
+//  security_group_id        = "${aws_security_group.internal_mpx_loadbalancer.id}"
+//  description              = "from engineeringCIDR for use by virtuoso"
+//  type                     = "ingress"
+//  cidr_blocks              = ["${data.terraform_remote_state.vpc.eng_vpc_cidr}"]
+//  from_port                = 2222
+//  to_port                  = 2222
+//  protocol                 = "tcp"
+//}
+//
+//
+//resource "aws_security_group_rule" "mpx_lb_2222_egress" {
+//  security_group_id        = "${aws_security_group.internal_mpx_loadbalancer.id}"
+//  description              = "to mpx"
+//  type                     = "egress"
+//  source_security_group_id = "${aws_security_group.internal_mpx_instance.id}"
+//  from_port                = 2222
+//  to_port                  = 2222
+//  protocol                 = "tcp"
+//}
 
 
 
