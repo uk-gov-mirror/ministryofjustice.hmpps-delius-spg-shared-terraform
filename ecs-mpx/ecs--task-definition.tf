@@ -64,6 +64,7 @@ data "template_file" "app_task_definition" {
 module "app_task_definition" {
   source   = "..//modules//ecs_task"
   app_name = "${local.container_name}"
+  hmpps_asset_name_prefix = "${local.hmpps_asset_name_prefix}"
 
   container_name        = "${local.container_name}"
   container_definitions = "${data.template_file.app_task_definition.rendered}"
