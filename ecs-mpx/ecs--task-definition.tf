@@ -25,6 +25,8 @@ data "template_file" "app_task_definition" {
   vars {
     po_configuration = "${join(",", data.template_file.po_configuration.*.rendered)}"
 
+    hmpps_asset_name_prefix = "${local.hmpps_asset_name_prefix}"
+
     container_name = "${local.app_name}-${local.app_submodule}"
     ecs_memory = "${local.ecs_memory}"
 

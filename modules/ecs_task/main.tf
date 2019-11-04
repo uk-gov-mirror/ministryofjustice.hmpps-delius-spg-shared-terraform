@@ -1,5 +1,5 @@
 resource "aws_ecs_task_definition" "environment" {
-  family = "${var.app_name}-task-definition"
+  family = "${var.hmpps_asset_name_prefix}-${var.app_name}-task-definition"
   container_definitions = "${var.container_definitions}"
 
   volume {
