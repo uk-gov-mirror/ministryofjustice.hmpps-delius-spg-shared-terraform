@@ -26,14 +26,14 @@ resource "aws_security_group" "internal_crc_loadbalancer" {
 # TODO should be disabled in non virtuoso envs
 #-------------------------------------------------------------
 resource "aws_security_group_rule" "crc_lb_2222_from_engineering_ingress" {
-  count = 0
+  count                    = "${var.is_production ? 0 : 1}" # do not allow access if on official data enviro (prod, preprod etc)
   security_group_id        = "${aws_security_group.internal_crc_loadbalancer.id}"
   description              = "from engineeringNAT for use by virtuoso"
   type                     = "ingress"
   cidr_blocks              = [
-    "${data.terraform_remote_state.natgateway.common-nat-id-az1}",
-    "${data.terraform_remote_state.natgateway.common-nat-id-az2}",
-    "${data.terraform_remote_state.natgateway.common-nat-id-az3}"
+    "${data.terraform_remote_state.engineering_nat.natgateway_common-nat-public-ip-az1}/32",
+    "${data.terraform_remote_state.engineering_nat.natgateway_common-nat-public-ip-az2}/32",
+    "${data.terraform_remote_state.engineering_nat.natgateway_common-nat-public-ip-az3}/32"
   ]
   from_port                = 2222
   to_port                  = 2222

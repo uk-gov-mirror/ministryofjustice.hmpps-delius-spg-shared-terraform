@@ -41,6 +41,17 @@ data "terraform_remote_state" "nat" {
   }
 }
 
+data "terraform_remote_state" "engineering_nat" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.eng_remote_state_bucket_name}"
+    key    = "natgateway/terraform.tfstate"
+    region = "${var.region}"
+  }
+}
+
+
 data "terraform_remote_state" "vpc-security-groups" {
   backend = "s3"
 
