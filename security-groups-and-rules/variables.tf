@@ -42,3 +42,5 @@ variable internet_facing_ips {
   type = "list"
   default = []
 }
+
+variable is_production {}
