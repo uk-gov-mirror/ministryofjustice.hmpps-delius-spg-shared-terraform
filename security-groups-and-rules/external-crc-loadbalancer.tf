@@ -31,9 +31,9 @@ resource "aws_security_group_rule" "crc_lb_2222_from_engineering_ingress" {
   description              = "from engineeringNAT for use by virtuoso"
   type                     = "ingress"
   cidr_blocks              = [
-    "${data.terraform_remote_state.engineering_nat.natgateway_common-nat-public-ip-az1}/32",
-    "${data.terraform_remote_state.engineering_nat.natgateway_common-nat-public-ip-az2}/32",
-    "${data.terraform_remote_state.engineering_nat.natgateway_common-nat-public-ip-az3}/32"
+    "${data.terraform_remote_state.engineering_nat.common-nat-public-ip-az1}/32",
+    "${data.terraform_remote_state.engineering_nat.common-nat-public-ip-az2}/32",
+    "${data.terraform_remote_state.engineering_nat.common-nat-public-ip-az3}/32"
   ]
   from_port                = 2222
   to_port                  = 2222
