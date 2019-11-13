@@ -186,6 +186,7 @@ locals {
   SPG_JAVA_MAX_MEM = "${var.SPG_MPX_JAVA_MAX_MEM}"
   SPG_ENVIRONMENT_CODE = "${var.SPG_ENVIRONMENT_CODE}"
   SPG_ENVIRONMENT_CN = "${var.SPG_ENVIRONMENT_CN}"
+  SPG_AWS_REGION = "${data.terraform_remote_state.common.region}"
   SPG_DELIUS_MQ_URL = "${var.SPG_DELIUS_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
 
   # The final value of the GATEWAY url is calculated depending on the value of SPG_GATEWAY_MQ_URL_SOURCE in env-configs

@@ -1,4 +1,4 @@
 {
-  "${hash_key}": {"N": "100"},
-  "sequence": {"N": "${initial_sequence_value}"}
+  "${hash_key}": {"S": "100"},
+  "sequence_number": {"N": "${initial_sequence_value}"}
 }
