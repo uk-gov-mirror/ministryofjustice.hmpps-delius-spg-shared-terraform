@@ -46,7 +46,7 @@ exit_on_error $? !!
 
 # pull image
 echo "-> Pulling image ${source_ecr_repo}"
-docker pull "${source_ecr_repo}:branch-latest-DAM-482"
+docker pull "${source_ecr_repo}:latest"
 exit_on_error $? !!
 echo "--> Image pull success"
 
