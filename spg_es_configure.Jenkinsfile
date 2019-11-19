@@ -52,7 +52,7 @@ pipeline {
                 stage('Configure Index Pattern') {
                     steps {
                         dir(project.terraform) {
-                           sh('../elk-stack/filebeat/configure_amazon_es.sh')
+                           sh 'elk-stack/filebeat/configure_amazon_es.sh'
                         }
                     }
                 }
