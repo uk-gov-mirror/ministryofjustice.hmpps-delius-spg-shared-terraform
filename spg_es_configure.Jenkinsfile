@@ -10,6 +10,13 @@ def project = [:]
 project.config = 'hmpps-env-configs'
 project.terraform = 'hmpps-delius-spg-shared-terraform'
 
+def prepare_env() {
+    sh '''
+    #!/usr/env/bin bash
+    docker pull mojdigitalstudio/hmpps-terraform-builder:latest
+    '''
+}
+
 def debug_env() {
     sh '''
     #!/usr/env/bin bash
@@ -35,6 +42,7 @@ pipeline {
                     git url: 'git@github.com:ministryofjustice/' + project.terraform, branch: params.spg_terraform_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
                 }
 
+                prepare_env()
                 debug_env()
             }
         }
