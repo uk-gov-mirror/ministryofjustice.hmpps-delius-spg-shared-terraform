@@ -11,19 +11,19 @@
                 "containerPath": "${data_volume_host_path}",
                 "readOnly": false
             },
-    {
-        "sourceVolume": "log",
-        "containerPath": "/opt/spg/servicemix/data/log",
-        "readOnly": false
-    },
-    {
-        "sourceVolume": "amqbroker",
-        "containerPath": "/opt/spg/servicemix/amq-broker",
-        "readOnly": false
-    }
+            {
+                "sourceVolume": "log",
+                "containerPath": "/opt/spg/servicemix/data/log",
+                "readOnly": false
+            },
+            {
+                "sourceVolume": "amqbroker",
+                "containerPath": "/opt/spg/servicemix/amq-broker",
+                "readOnly": false
+            }
 
 
-],
+        ],
         "environment": [
 
             {
