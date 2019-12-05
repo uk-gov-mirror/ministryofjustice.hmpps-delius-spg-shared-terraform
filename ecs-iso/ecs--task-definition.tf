@@ -43,11 +43,13 @@ data "template_file" "app_task_definition" {
     kibana_host           = "${local.kibana_host}"
     s3_bucket_config      = "${local.s3_bucket_config}"
 
+
     SPG_HOST_TYPE = "${local.SPG_HOST_TYPE}"
     SPG_GENERIC_BUILD_INV_DIR = "${local.SPG_GENERIC_BUILD_INV_DIR}"
     SPG_JAVA_MAX_MEM = "${local.SPG_JAVA_MAX_MEM}"
     SPG_ENVIRONMENT_CODE = "${local.SPG_ENVIRONMENT_CODE}"
     SPG_ENVIRONMENT_CN = "${local.SPG_ENVIRONMENT_CN}"
+    SPG_AWS_REGION = "${local.SPG_AWS_REGION}"
     SPG_DELIUS_MQ_URL = "${local.SPG_DELIUS_MQ_URL}"
     SPG_GATEWAY_MQ_URL = "${local.SPG_GATEWAY_MQ_URL}"
     SPG_DOCUMENT_REST_SERVICE_ADMIN_URL = "${local.SPG_DOCUMENT_REST_SERVICE_ADMIN_URL}"
