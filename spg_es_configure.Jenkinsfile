@@ -31,6 +31,8 @@ pipeline {
 
     agent { label "jenkins_slave" }
 
+    environment { CI = "true" }
+
     stages {
 
         stage('setup') {
@@ -52,7 +54,7 @@ pipeline {
                 stage('Configure Index Pattern') {
                     steps {
                         dir(project.terraform) {
-                           sh 'pwd; ls -l; "elk-stack/filebeat/configure_amazon_es.sh"'
+                           sh 'pwd; ls -l; "elk-stack/filebeat/configure_amazon_es.sh MGB"'
                         }
                     }
                 }
