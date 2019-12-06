@@ -53,9 +53,13 @@ pipeline {
             parallel {
                 stage('Configure Index Pattern') {
                     steps {
-                        dir(project.terraform) {
-                           sh 'pwd; ls -l; "elk-stack/filebeat/configure_amazon_es.sh MGB"'
-                        }
+
+                        dir(WORKSPACE) {
+                            sh '''
+                                pwd
+                                ls -l
+                                sh elk-stack/filebeat/configure_amazon_es.sh
+                            '''
                     }
                 }
             }
