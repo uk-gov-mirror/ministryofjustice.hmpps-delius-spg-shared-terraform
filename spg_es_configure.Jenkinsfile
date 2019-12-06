@@ -1,3 +1,5 @@
+#!groovy
+
 /* The following parameters are required from Jenkins GUI or other upstream jobs
         environment_name
         config_branch
@@ -54,11 +56,12 @@ pipeline {
                 stage('Configure Index Pattern') {
                     steps {
                         dir(WORKSPACE) {
-                            sh '''
-                                pwd
-                                ls -l
-                                sh elk-stack/filebeat/configure_amazon_es.sh
-                        }    '''
+                            sh '''    
+                            pwd
+                            ls -l
+                            sh "elk-stack/filebeat/configure_amazon_es.sh"
+                            '''
+                        }
                     }
                 }
             }
@@ -70,5 +73,4 @@ pipeline {
             deleteDir()
         }
     }
-
 }
