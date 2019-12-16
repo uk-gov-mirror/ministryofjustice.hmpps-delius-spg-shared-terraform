@@ -84,13 +84,7 @@ pipeline {
                 stage('Plan SPG iam polices for app roles') {
                     steps { script { plan_submodule(project.config, environment_name, project.terraform, 'iam-spg-app-policies') } }
                 }
-                stage('Plan SPG security-groups--deprecated') {
-                    steps {
-                        script {
-                            plan_submodule(project.config, environment_name, project.terraform, 'security-groups')
-                        }
-                    }
-                }
+
                 stage('Plan SPG security-groups-and-rules') {
                     steps {
                         script {
