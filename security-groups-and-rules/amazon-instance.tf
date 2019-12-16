@@ -15,7 +15,7 @@ resource "aws_security_group_rule" "amazonmq_inst_sg_ingress_webconsole" {
 //Allows access to the ActiveMQ console from within the SPGW security group
 //TODO should cidr blocks below be replaced with  source_security_group_id = "${aws_security_group.spg_common_outbound.id}"
 //TODO tf does not match above statement
-resource "aws_security_group_rule" "amazonmq_inst_sg_ingress_jms_openwire" {
+resource "aws_security_group_rule" "amazonmq_inst_sg_ingress_brokerconsole" {
   security_group_id        = "${data.terraform_remote_state.vpc-security-groups.sg_amazonmq_in}"
   type                     = "ingress"
   from_port                = "8162"
