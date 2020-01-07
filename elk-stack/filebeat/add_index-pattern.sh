@@ -6,7 +6,7 @@ TG_ENVIRONMENT_TYPE=$1
 
 if [ -z "${TG_ENVIRONMENT_TYPE}" ]
 then
-    echo "TG_ENVIRONMENT_TYPE argument not supplied, please provide an argument!"
+    echo "add_index-pattern.sh: TG_ENVIRONMENT_TYPE argument not supplied, please provide an argument!"
     exit 1
 fi
 

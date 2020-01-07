@@ -20,7 +20,7 @@ export TG_ENVIRONMENT_TYPE=$1
 
 if [ -z "${TG_ENVIRONMENT_TYPE}" ]
 then
-    echo "TG_ENVIRONMENT_TYPE argument not supplied, please provide an argument!"
+    echo "configure_amazon_es.sh: TG_ENVIRONMENT_TYPE argument not supplied, please provide an argument!"
     exit 1
 fi
 
@@ -28,7 +28,7 @@ echo "TG_ENVIRONMENT_TYPE argument ${TG_ENVIRONMENT_TYPE}"
 
 echo "pwd is `pwd`"
 
-sh "./add_index-pattern.sh \${TG_ENVIRONMENT_TYPE}"
+sh "./add_index-pattern.sh"
 #./add_template.sh ${TG_ENVIRONMENT_TYPE}
 #./add_pipeline.sh ${TG_ENVIRONMENT_TYPE}
 #./add_search-tabular.sh ${TG_ENVIRONMENT_TYPE}
