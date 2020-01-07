@@ -10,6 +10,10 @@ then
     exit 1
 fi
 
+echo "ping..."
+ping amazones-audit.delius-core-sandpit.internal
+
+echo "curl..."
 curl -XPOST "https://amazones-audit.${TG_ENVIRONMENT_TYPE}.internal:443/_plugin/kibana/api/saved_objects/index-pattern/spg-audit" -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -d'
 {
     "attributes": {
