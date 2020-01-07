@@ -28,7 +28,7 @@ echo "TG_ENVIRONMENT_TYPE argument ${TG_ENVIRONMENT_TYPE}"
 
 echo "pwd is `pwd`"
 
-sh "./add_index-pattern.sh"
+./add_index-pattern.sh ${TG_ENVIRONMENT_TYPE}
 #./add_template.sh ${TG_ENVIRONMENT_TYPE}
 #./add_pipeline.sh ${TG_ENVIRONMENT_TYPE}
 #./add_search-tabular.sh ${TG_ENVIRONMENT_TYPE}
