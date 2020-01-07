@@ -58,7 +58,8 @@ pipeline {
                             pwd
                             ls -l
                             echo "Calling configure_amazon_es.sh for environment_name ${environment_name}"
-                            sh "elk-stack/filebeat/configure_amazon_es.sh ${environment_name}"
+                            cd elk-stack/filebeat
+                            sh "./configure_amazon_es.sh ${environment_name}"
                             '''
                         }
                     }
