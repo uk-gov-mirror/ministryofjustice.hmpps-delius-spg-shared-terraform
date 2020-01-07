@@ -27,7 +27,7 @@ fi
 echo "TG_ENVIRONMENT_TYPE argument ${TG_ENVIRONMENT_TYPE}"
 
 
-#sh ./add_index-pattern.sh ${TG_ENVIRONMENT_TYPE}
+./add_index-pattern.sh ${TG_ENVIRONMENT_TYPE}
 #./add_template.sh ${TG_ENVIRONMENT_TYPE}
 #./add_pipeline.sh ${TG_ENVIRONMENT_TYPE}
 #./add_search-tabular.sh ${TG_ENVIRONMENT_TYPE}
