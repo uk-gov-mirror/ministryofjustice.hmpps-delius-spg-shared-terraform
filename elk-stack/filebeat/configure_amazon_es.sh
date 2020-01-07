@@ -16,7 +16,7 @@ exit_on_error() {
   fi
 }
 
-#TG_ENVIRONMENT_TYPE=$1
+export TG_ENVIRONMENT_TYPE=$1
 
 if [ -z "${TG_ENVIRONMENT_TYPE}" ]
 then
