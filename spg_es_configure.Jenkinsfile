@@ -45,9 +45,7 @@ pipeline {
                 dir(project.terraform) {
                     git url: 'git@github.com:ministryofjustice/' + project.terraform, branch: params.spg_terraform_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
                 }
-
                 prepare_env()
-                debug_env()
             }
         }
 
@@ -59,6 +57,7 @@ pipeline {
                             sh '''    
                             pwd
                             ls -l
+                            echo "env_name is ${env_name}"
                             sh "elk-stack/filebeat/configure_amazon_es.sh"
                             '''
                         }
