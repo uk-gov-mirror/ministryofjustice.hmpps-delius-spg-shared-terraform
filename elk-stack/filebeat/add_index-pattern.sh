@@ -14,7 +14,7 @@ echo "ping..."
 ping amazones-audit.delius-core-sandpit.internal
 
 echo "curl..."
-curl -XPOST "https://amazones-audit.${TG_ENVIRONMENT_TYPE}.internal:443/_plugin/kibana/api/saved_objects/index-pattern/spg-audit" -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -d'
+curl -XPOST "https://amazones-audit.${TG_ENVIRONMENT_TYPE}.sandpit.probation.service.justice.gov.uk:443/_plugin/kibana/api/saved_objects/index-pattern/spg-audit" -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -d'
 {
     "attributes": {
         "title": "spg-audit-7.1.1*",

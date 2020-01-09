@@ -27,6 +27,7 @@ fi
 echo "TG_ENVIRONMENT_TYPE argument ${TG_ENVIRONMENT_TYPE}"
 
 echo "pwd is `pwd`"
+echo "env variables are `set`"
 
 ./add_index-pattern.sh ${TG_ENVIRONMENT_TYPE}
 #./add_template.sh ${TG_ENVIRONMENT_TYPE}
