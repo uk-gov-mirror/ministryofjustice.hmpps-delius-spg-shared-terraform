@@ -24,12 +24,22 @@ then
     exit 1
 fi
 
+case ${TG_ENVIRONMENT_TYPE} in
+     delius-core-sandpit)
+          export DNS_PREFIX=sandpit
+          ;;
+     *)
+          export DNS_PREFIX=""
+          ;;
+esac
+
 echo "TG_ENVIRONMENT_TYPE argument ${TG_ENVIRONMENT_TYPE}"
+echo "DNS_PREFIX argument is ${DNS_PREFIX}"
 
 echo "pwd is `pwd`"
 echo "env variables are `set`"
 
-./add_index-pattern.sh ${TG_ENVIRONMENT_TYPE}
+./add_index-pattern.sh ${TG_ENVIRONMENT_TYPE} ${DNS_PREFIX}
 #./add_template.sh ${TG_ENVIRONMENT_TYPE}
 #./add_pipeline.sh ${TG_ENVIRONMENT_TYPE}
 #./add_search-tabular.sh ${TG_ENVIRONMENT_TYPE}
