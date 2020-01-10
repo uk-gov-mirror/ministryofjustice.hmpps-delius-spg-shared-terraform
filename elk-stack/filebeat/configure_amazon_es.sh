@@ -38,6 +38,7 @@ echo "DNS_PREFIX argument is ${DNS_PREFIX}"
 
 echo "pwd is `pwd`"
 echo "env variables are `set`"
+echo "jenkins ip is `ifconfig`"
 
 ./add_index-pattern.sh ${TG_ENVIRONMENT_TYPE} ${DNS_PREFIX}
 #./add_template.sh ${TG_ENVIRONMENT_TYPE}
