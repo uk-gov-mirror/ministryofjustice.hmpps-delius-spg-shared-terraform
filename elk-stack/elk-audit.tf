@@ -33,6 +33,22 @@ resource "aws_security_group_rule" "elk-audit_ingress_servers" {
   description       = "ES and Kibana ingress via bastion"
 }
 
+resource "aws_security_group_rule" "elk-audit_ingress_servers" {
+  security_group_id = "${aws_security_group.elk-audit_sg.id}"
+  type              = "ingress"
+  protocol          = "tcp"
+  from_port         = 443
+  to_port           = 443
+  cidr_blocks              = [
+    "${data.terraform_remote_state.engineering_nat.common-nat-public-ip-az1}/32",
+    "${data.terraform_remote_state.engineering_nat.common-nat-public-ip-az2}/32",
+    "${data.terraform_remote_state.engineering_nat.common-nat-public-ip-az3}/32"
+  ]
+  description       = "ES and Kibana ingress via bastion"
+}
+
+
+
 resource "aws_elasticsearch_domain" "elk-audit_domain" {
   domain_name           = "${var.elk-audit_conf["es_domain"]}"
   elasticsearch_version = "${var.elk-audit_conf["es_version"]}"
