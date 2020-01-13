@@ -43,4 +43,4 @@ echo "jenkins ip is `hostname -I`"
 #./add_index-pattern.sh ${TG_ENVIRONMENT_TYPE} ${DNS_PREFIX}
 #./add_template.sh ${TG_ENVIRONMENT_TYPE} ${DNS_PREFIX}
 ./add_pipeline.sh ${TG_ENVIRONMENT_TYPE} ${DNS_PREFIX}
-./add_search-tabular.sh ${TG_ENVIRONMENT_TYPE} ${DNS_PREFIX}
+#./add_search-tabular.sh ${TG_ENVIRONMENT_TYPE} ${DNS_PREFIX}
