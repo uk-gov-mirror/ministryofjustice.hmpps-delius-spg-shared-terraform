@@ -20,10 +20,10 @@ def plan_submodule(configMap, submodule_name) {
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
         sh """
         #!/usr/env/bin bash
-        echo "TF PLAN for ${configMap.env_name} | ${submodule_name} - component from git project ${configMap.git_project_dir}"
+        echo "TF PLAN for ${configMap.env_name} | ${submodule_name} - component from git project ${configMap.terraform}"
         set +e
-        cp -R -n "${configMap.config_dir}" "${configMap.git_project_dir}/env_configs"
-        cd "${configMap.git_project_dir}"
+        cp -R -n "${configMap.config}" "${configMap.terraform}/env_configs"
+        cd "${configMap.terraform}"
         docker run --rm \
             -v `pwd`:/home/tools/data \
             -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
@@ -45,7 +45,7 @@ def plan_submodule(configMap, submodule_name) {
             if [ "\$exitcode" == '1' ]; then exit 1; else exit 0; fi
         set -e
         """
-        return readFile("${configMap.git_project_dir}/${submodule_name}/plan_ret").trim()
+        return readFile("${configMap.terraform}/${submodule_name}/plan_ret").trim()
     }
 }
 
@@ -53,10 +53,10 @@ def apply_submodule(configMap, submodule_name) {
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
         sh """
         #!/usr/env/bin bash
-        echo "TF APPLY for ${configMap.env_name} | ${submodule_name} - component from git project ${configMap.git_project_dir}"
+        echo "TF APPLY for ${configMap.env_name} | ${submodule_name} - component from git project ${configMap.terraform}"
         set +e
-        cp -R -n "${configMap.config_dir}" "${configMap.git_project_dir}/env_configs"
-        cd "${configMap.git_project_dir}"
+        cp -R -n "${configMap.config}" "${configMap.terraform}/env_configs"
+        cd "${configMap.terraform}"
         docker run --rm \
           -v `pwd`:/home/tools/data \
           -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
@@ -84,10 +84,10 @@ def refresh_submodule(configMap, submodule_name) {
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
         sh """
         #!/usr/env/bin bash
-        echo "TF APPLY for ${configMap.env_name} | ${submodule_name} - component from git project ${configMap.git_project_dir}"
+        echo "TF APPLY for ${configMap.env_name} | ${submodule_name} - component from git project ${configMap.terraform}"
         set +e
-        cp -R -n "${configMap.config_dir}" "${configMap.git_project_dir}/env_configs"
-        cd "${configMap.git_project_dir}"
+        cp -R -n "${configMap.config}" "${configMap.terraform}/env_configs"
+        cd "${configMap.terraform}"
         docker run --rm \
           -v `pwd`:/home/tools/data \
           -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
