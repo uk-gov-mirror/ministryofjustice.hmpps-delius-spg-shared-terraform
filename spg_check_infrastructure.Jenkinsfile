@@ -32,7 +32,7 @@ def plan_submodule(config_dir, env_name, git_project_dir, submodule_name, image_
             -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
             bash -c "\
                 source env_configs/${env_name}/${env_name}.properties; \
-                export TG_IMAGE_VERSION=${image_version}; \
+                export TG_SPG_IMAGE_VERSION=${image_version}; \
                 cd ${submodule_name}; \
                 if [ -d .terraform ]; then rm -rf .terraform; fi; sleep 5; \
                 terragrunt init; \
