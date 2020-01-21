@@ -10,10 +10,10 @@
 def project = [:]
 project.config = 'hmpps-env-configs'
 project.terraform = 'hmpps-delius-spg-shared-terraform'
-project.env_name = "${environment_name}"
-project.image_version = "${spg_image_version}"
 
 def prepare_env() {
+    project.env_name = "${environment_name}"
+    project.image_version = "${spg_image_version}"
     sh '''
     #!/usr/env/bin bash
     docker pull mojdigitalstudio/hmpps-terraform-builder:latest
