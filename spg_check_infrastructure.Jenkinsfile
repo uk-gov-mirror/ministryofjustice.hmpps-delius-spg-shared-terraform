@@ -1,9 +1,7 @@
 /* The following parameters are required from Jenkins GUI or other upstream jobs
         environment_name
-        config_branch
+        project_branch
         spg_image_version
-        spg_terraform_branch
-        jenkins_pipeline_branch
         confirm (boolean)
 */
 
@@ -63,10 +61,10 @@ pipeline {
         stage('setup') {
             steps {
                 dir(project.config) {
-                    git url: 'git@github.com:ministryofjustice/' + project.config, branch: params.config_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
+                    git url: 'git@github.com:ministryofjustice/' + project.config, branch: params.project_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
                 }
                 dir(project.terraform) {
-                    git url: 'git@github.com:ministryofjustice/' + project.terraform, branch: params.spg_terraform_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
+                    git url: 'git@github.com:ministryofjustice/' + project.terraform, branch: params.project_branch, credentialsId: 'f44bc5f1-30bd-4ab9-ad61-cc32caf1562a'
                 }
 
                 prepare_env()
