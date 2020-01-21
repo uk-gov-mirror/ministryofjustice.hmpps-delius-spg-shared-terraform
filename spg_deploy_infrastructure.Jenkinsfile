@@ -237,6 +237,13 @@ pipeline {
             }
         }
 
+        stage('Delius | SPG | Security Groups - Deprecated') {
+            steps {
+                script {
+                    do_terraform(project.config, environment_name, project.terraform, 'security-groups')
+                }
+            }
+        }
 
 
         stage('Delius | SPG | Security Groups And Rules') {
@@ -252,6 +259,15 @@ pipeline {
             steps {
                 script {
                     do_terraform(project.config, environment_name, project.terraform, 'psn-proxy-route-53')
+                }
+            }
+        }
+        
+
+        stage('Delius | SPG | ELK Stack') {
+            steps {
+                script {
+                    do_terraform(project.config, environment_name, project.terraform, 'elk-stack')
                 }
             }
         }
