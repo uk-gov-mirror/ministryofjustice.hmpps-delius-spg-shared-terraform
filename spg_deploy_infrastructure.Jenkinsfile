@@ -1,6 +1,7 @@
 /* The following parameters are required from Jenkins GUI or other upstream jobs
         environment_name
         config_branch
+        spg_image_version
         spg_terraform_branch
         jenkins_pipeline_branch
         confirm (boolean)
@@ -10,11 +11,10 @@ def project = [:]
 project.config = 'hmpps-env-configs'
 project.terraform = 'hmpps-delius-spg-shared-terraform'
 
-
 def prepare_env() {
     sh '''
-    #!/usr/env/bin bash
-    docker pull mojdigitalstudio/hmpps-terraform-builder:latest
+        #!/usr/env/bin bash
+        docker pull mojdigitalstudio/hmpps-terraform-builder:latest
     '''
 }
 
@@ -81,7 +81,6 @@ def apply_submodule(config_dir, env_name, git_project_dir, submodule_name) {
     }
 }
 
-
 //required for changes in things like common, where no resources have changed but variables mayhave
 def refresh_submodule(config_dir, env_name, git_project_dir, submodule_name) {
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
@@ -113,17 +112,15 @@ def refresh_submodule(config_dir, env_name, git_project_dir, submodule_name) {
     }
 }
 
-
-
-
-
 def confirm() {
     try {
         timeout(time: 15, unit: 'MINUTES') {
             env.Continue = input(
-                    id: 'Proceed1', message: 'Apply plan?', parameters: [
+                id: 'Proceed1',
+                message: 'Apply plan?',
+                parameters: [
                     [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Apply Terraform']
-            ]
+                ]
             )
         }
     } catch (err) { // timeout reached or input false
@@ -163,20 +160,16 @@ def do_terraform(config_dir, env_name, git_project, component) {
 
 def debug_env() {
     sh '''
-    #!/usr/env/bin bash
-    pwd
-    ls -al
+        #!/usr/env/bin bash
+        pwd
+        ls -al
     '''
 }
 
 pipeline {
-
     agent { label "jenkins_slave" }
 
-
     stages {
-
-
         stage('setup') {
             steps {
                 slackSend(message: "\"Apply\" started on \"${environment_name}\" - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL.replace(':8080', '')}|Open>)")
@@ -199,7 +192,6 @@ pipeline {
                 }
             }
         }
-
 
         stage('Delius | SPG | IAM Roles') {
             steps {
@@ -228,7 +220,6 @@ pipeline {
             }
         }
 
-
         stage('Delius | SPG | IAM App Policies') {
             steps {
                 script {
@@ -236,8 +227,6 @@ pipeline {
                 }
             }
         }
-
-
 
         stage('Delius | SPG | Security Groups And Rules') {
             steps {
@@ -247,7 +236,6 @@ pipeline {
             }
         }
 
-
         stage('Delius | SPG | PSN Proxy Ips - should move to VPC project') {
             steps {
                 script {
@@ -255,7 +243,6 @@ pipeline {
                 }
             }
         }
-
 
         stage('Delius | SPG | Amazon MQ') {
             steps {
@@ -281,7 +268,6 @@ pipeline {
             }
         }
 
-
         stage('Delius | SPG | ECS-SPG-MPX') {
             steps {
                 script {
@@ -290,7 +276,6 @@ pipeline {
             }
         }
 
-
         stage('Delius | SPG | ECS-SPG-ISO') {
             steps {
                 script {
@@ -298,7 +283,6 @@ pipeline {
                 }
             }
         }
-
 
         stage('Delius | SPG | Monitoring') {
             steps {
@@ -320,5 +304,4 @@ pipeline {
             slackSend(message: "\"Apply\" failed on \"${environment_name}\" - ${env.JOB_NAME} ${env.BUILD_NUMBER} ", color: 'danger')
         }
     }
-
 }

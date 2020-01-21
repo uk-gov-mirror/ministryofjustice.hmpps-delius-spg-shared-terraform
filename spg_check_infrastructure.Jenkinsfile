@@ -1,6 +1,7 @@
 /* The following parameters are required from Jenkins GUI or other upstream jobs
         environment_name
         config_branch
+        spg_image_version
         spg_terraform_branch
         jenkins_pipeline_branch
         confirm (boolean)
@@ -18,7 +19,7 @@ def prepare_env() {
     '''
 }
 
-def plan_submodule(config_dir, env_name, git_project_dir, submodule_name) {
+def plan_submodule(config_dir, env_name, git_project_dir, submodule_name, image_version) {
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
         sh """
         #!/usr/env/bin bash
@@ -31,6 +32,7 @@ def plan_submodule(config_dir, env_name, git_project_dir, submodule_name) {
             -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
             bash -c "\
                 source env_configs/${env_name}/${env_name}.properties; \
+                export TG_IMAGE_VERSION=${image_version}; \
                 cd ${submodule_name}; \
                 if [ -d .terraform ]; then rm -rf .terraform; fi; sleep 5; \
                 terragrunt init; \
@@ -73,37 +75,37 @@ pipeline {
         stage('SPG Terraform') {
             parallel {
                 stage('Plan SPG common') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'common') } }
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'common', spg_image_version) } }
                 }
                 stage('Plan SPG iam roles and services policies') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'iam') } }
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'iam', spg_image_version) } }
                 }
                 stage('Plan SPG KMS Keys for Identity Certificates') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'kms-certificates-spg') } }
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'kms-certificates-spg', spg_image_version) } }
                 }
                 stage('Plan SPG iam polices for app roles') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'iam-spg-app-policies') } }
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'iam-spg-app-policies', spg_image_version) } }
                 }
 
                 stage('Plan SPG security-groups-and-rules') {
                     steps {
                         script {
-                            plan_submodule(project.config, environment_name, project.terraform, 'security-groups-and-rules')
+                            plan_submodule(project.config, environment_name, project.terraform, 'security-groups-and-rules', spg_image_version)
                         }
                     }
                 }
 
                 stage('Plan SPG amazonmq') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'amazonmq') } }
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'amazonmq', spg_image_version) } }
                 }
                 stage('Plan SPG ecs-crc') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'ecs-crc') } }
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'ecs-crc', spg_image_version) } }
                 }
                 stage('Plan SPG ecs-mpx') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'ecs-mpx') } }
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'ecs-mpx', spg_image_version) } }
                 }
                 stage('Plan SPG ecs-iso') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'ecs-iso') } }
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'ecs-iso', spg_image_version) } }
                 }
             }
         }
