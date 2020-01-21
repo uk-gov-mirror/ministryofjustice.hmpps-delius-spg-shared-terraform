@@ -29,6 +29,7 @@ def plan_submodule(configMap, submodule_name) {
             -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
             bash -c "\
                 source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
+                export TF_VAR_image_version=${configMap.image_version}; \
                 cd ${submodule_name}; \
                 if [ -d .terraform ]; then rm -rf .terraform; fi; sleep 5; \
                 terragrunt init; \
@@ -62,6 +63,7 @@ def apply_submodule(configMap, submodule_name) {
           -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
           bash -c " \
               source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
+              export TF_VAR_image_version=${configMap.image_version}; \
               cd ${submodule_name}; \
               terragrunt apply ${configMap.env_name}.plan; \
               tgexitcode=\\\$?; \
@@ -93,6 +95,7 @@ def refresh_submodule(configMap, submodule_name) {
           -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
           bash -c " \
               source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
+              export TF_VAR_image_version=${configMap.image_version}; \
               cd ${submodule_name}; \
               terragrunt refresh; \
               tgexitcode=\\\$?; \
