@@ -18,24 +18,24 @@ def prepare_env() {
     '''
 }
 
-def plan_submodule(submodule_name) {
+def plan_submodule(configMap, submodule_name) {
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
         sh """
         #!/usr/env/bin bash
-        echo "TF PLAN for ${project.env_name} | ${submodule_name} - component from git project ${project.terraform}"
+        echo "TF PLAN for ${configMap.env_name} | ${submodule_name} - component from git project ${configMap.terraform}"
         set +e
-        cp -R -n "${project.config}" "${project.terraform}/env_configs"
-        cd "${project.terraform}"
+        cp -R -n "${configMap.config}" "${configMap.terraform}/env_configs"
+        cd "${configMap.terraform}"
         docker run --rm \
             -v `pwd`:/home/tools/data \
             -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
             bash -c "\
-                source env_configs/${project.env_name}/${project.env_name}.properties; \
-                export TF_VAR_image_version=${project.image_version}; \
+                source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
+                export TF_VAR_image_version=${configMap.image_version}; \
                 cd ${submodule_name}; \
                 if [ -d .terraform ]; then rm -rf .terraform; fi; sleep 5; \
                 terragrunt init; \
-                terragrunt plan -detailed-exitcode --out ${project.env_name}.plan > tf.plan.out; \
+                terragrunt plan -detailed-exitcode --out ${configMap.env_name}.plan > tf.plan.out; \
                 exitcode=\\\"\\\$?\\\"; \
                 cat tf.plan.out; \
                 if [ \\\"\\\$exitcode\\\" == '1' ]; then exit 1; fi; \
@@ -48,7 +48,7 @@ def plan_submodule(submodule_name) {
             if [ "\$exitcode" == '1' ]; then exit 1; else exit 0; fi
         set -e
         """
-        return readFile("${project.terraform}/${submodule_name}/plan_ret").trim()
+        return readFile("${configMap.terraform}/${submodule_name}/plan_ret").trim()
     }
 }
 
@@ -88,48 +88,48 @@ pipeline {
                 stage('Plan SPG KMS Keys for Identity Certificates') {
                     steps { script {
                         project.env_name = environment_name
-                        plan_submodule(environment_name, 'kms-certificates-spg')
+                        plan_submodule(project, 'kms-certificates-spg')
                     } }
                 }
                 stage('Plan SPG iam polices for app roles') {
                     steps { script {
                         project.env_name = environment_name
-                        plan_submodule(environment_name, 'iam-spg-app-policies')
+                        plan_submodule(project, 'iam-spg-app-policies')
                     } }
                 }
 
                 stage('Plan SPG security-groups-and-rules') {
                     steps { script {
                         project.env_name = environment_name
-                        plan_submodule(environment_name, 'security-groups-and-rules')
+                        plan_submodule(project, 'security-groups-and-rules')
                     } }
                 }
 
                 stage('Plan SPG amazonmq') {
                     steps { script {
                         project.env_name = environment_name
-                        plan_submodule(environment_name, 'amazonmq')
+                        plan_submodule(project, 'amazonmq')
                     } }
                 }
                 stage('Plan SPG ecs-crc') {
                     steps { script {
                         project.env_name = environment_name
                         project.image_version = spg_image_version
-                        plan_submodule(environment_name, 'ecs-crc')
+                        plan_submodule(project, 'ecs-crc')
                     } }
                 }
                 stage('Plan SPG ecs-mpx') {
                     steps { script {
                         project.env_name = environment_name
                         project.image_version = spg_image_version
-                        plan_submodule(environment_name, 'ecs-mpx')
+                        plan_submodule(project, 'ecs-mpx')
                     } }
                 }
                 stage('Plan SPG ecs-iso') {
                     steps { script {
                         project.env_name = environment_name
                         project.image_version = spg_image_version
-                        plan_submodule(environment_name, 'ecs-iso')
+                        plan_submodule(project, 'ecs-iso')
                     } }
                 }
             }
