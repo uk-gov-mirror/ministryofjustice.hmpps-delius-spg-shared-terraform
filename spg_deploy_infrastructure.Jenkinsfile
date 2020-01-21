@@ -133,7 +133,7 @@ def confirm() {
     }
 }
 
-def do_terraform(configMap component) {
+def do_terraform(configMap, component) {
     if (component == "common") {
         refresh_submodule(configMap, component)
     }
