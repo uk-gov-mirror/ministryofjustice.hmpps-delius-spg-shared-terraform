@@ -10,7 +10,8 @@
 def project = [:]
 project.config = 'hmpps-env-configs'
 project.terraform = 'hmpps-delius-spg-shared-terraform'
-
+project.env_name = "${environment_name}"
+project.image_version = "${spg_image_version}"
 
 def prepare_env() {
     sh '''
@@ -19,24 +20,24 @@ def prepare_env() {
     '''
 }
 
-def plan_submodule(config_dir, env_name, git_project_dir, submodule_name, image_version) {
+def plan_submodule(submodule_name) {
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
         sh """
         #!/usr/env/bin bash
-        echo "TF PLAN for ${env_name} | ${submodule_name} - component from git project ${git_project_dir}"
+        echo "TF PLAN for ${project.env_name} | ${submodule_name} - component from git project ${project.terraform}"
         set +e
-        cp -R -n "${config_dir}" "${git_project_dir}/env_configs"
-        cd "${git_project_dir}"
+        cp -R -n "${project.config}" "${project.terraform}/env_configs"
+        cd "${project.terraform}"
         docker run --rm \
             -v `pwd`:/home/tools/data \
             -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
             bash -c "\
-                source env_configs/${env_name}/${env_name}.properties; \
-                export TF_VAR_image_version=${image_version}; \
+                source env_configs/${project.env_name}/${project.env_name}.properties; \
+                export TF_VAR_image_version=${project.image_version}; \
                 cd ${submodule_name}; \
                 if [ -d .terraform ]; then rm -rf .terraform; fi; sleep 5; \
                 terragrunt init; \
-                terragrunt plan -detailed-exitcode --out ${env_name}.plan > tf.plan.out; \
+                terragrunt plan -detailed-exitcode --out ${project.env_name}.plan > tf.plan.out; \
                 exitcode=\\\"\\\$?\\\"; \
                 cat tf.plan.out; \
                 if [ \\\"\\\$exitcode\\\" == '1' ]; then exit 1; fi; \
@@ -49,7 +50,7 @@ def plan_submodule(config_dir, env_name, git_project_dir, submodule_name, image_
             if [ "\$exitcode" == '1' ]; then exit 1; else exit 0; fi
         set -e
         """
-        return readFile("${git_project_dir}/${submodule_name}/plan_ret").trim()
+        return readFile("${project.terraform}/${submodule_name}/plan_ret").trim()
     }
 }
 
@@ -75,37 +76,37 @@ pipeline {
         stage('SPG Terraform') {
             parallel {
                 stage('Plan SPG common') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'common') } }
+                    steps { script { plan_submodule('common') } }
                 }
                 stage('Plan SPG iam roles and services policies') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'iam') } }
+                    steps { script { plan_submodule('iam') } }
                 }
                 stage('Plan SPG KMS Keys for Identity Certificates') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'kms-certificates-spg') } }
+                    steps { script { plan_submodule('kms-certificates-spg') } }
                 }
                 stage('Plan SPG iam polices for app roles') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'iam-spg-app-policies') } }
+                    steps { script { plan_submodule('iam-spg-app-policies') } }
                 }
 
                 stage('Plan SPG security-groups-and-rules') {
                     steps {
                         script {
-                            plan_submodule(project.config, environment_name, project.terraform, 'security-groups-and-rules')
+                            plan_submodule('security-groups-and-rules')
                         }
                     }
                 }
 
                 stage('Plan SPG amazonmq') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'amazonmq') } }
+                    steps { script { plan_submodule('amazonmq') } }
                 }
                 stage('Plan SPG ecs-crc') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'ecs-crc', spg_image_version) } }
+                    steps { script { plan_submodule('ecs-crc') } }
                 }
                 stage('Plan SPG ecs-mpx') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'ecs-mpx', spg_image_version) } }
+                    steps { script { plan_submodule('ecs-mpx') } }
                 }
                 stage('Plan SPG ecs-iso') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'ecs-iso', spg_image_version) } }
+                    steps { script { plan_submodule('ecs-iso') } }
                 }
             }
         }
