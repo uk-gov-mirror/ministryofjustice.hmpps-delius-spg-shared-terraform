@@ -75,28 +75,28 @@ pipeline {
         stage('SPG Terraform') {
             parallel {
                 stage('Plan SPG common') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'common', spg_image_version) } }
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'common') } }
                 }
                 stage('Plan SPG iam roles and services policies') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'iam', spg_image_version) } }
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'iam') } }
                 }
                 stage('Plan SPG KMS Keys for Identity Certificates') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'kms-certificates-spg', spg_image_version) } }
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'kms-certificates-spg') } }
                 }
                 stage('Plan SPG iam polices for app roles') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'iam-spg-app-policies', spg_image_version) } }
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'iam-spg-app-policies') } }
                 }
 
                 stage('Plan SPG security-groups-and-rules') {
                     steps {
                         script {
-                            plan_submodule(project.config, environment_name, project.terraform, 'security-groups-and-rules', spg_image_version)
+                            plan_submodule(project.config, environment_name, project.terraform, 'security-groups-and-rules')
                         }
                     }
                 }
 
                 stage('Plan SPG amazonmq') {
-                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'amazonmq', spg_image_version) } }
+                    steps { script { plan_submodule(project.config, environment_name, project.terraform, 'amazonmq') } }
                 }
                 stage('Plan SPG ecs-crc') {
                     steps { script { plan_submodule(project.config, environment_name, project.terraform, 'ecs-crc', spg_image_version) } }
@@ -116,5 +116,4 @@ pipeline {
             deleteDir()
         }
     }
-
 }
