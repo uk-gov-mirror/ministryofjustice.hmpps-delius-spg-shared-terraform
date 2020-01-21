@@ -31,6 +31,7 @@ locals {
   spg_app_name = "${data.terraform_remote_state.common.spg_app_name}"
   app_name = "${local.spg_app_name}"
   app_submodule = "crc"
+  container_name = "${local.app_name}-${local.app_submodule}"
   application_endpoint = "${local.app_hostnames["external"]}"
   environment_identifier = "${data.terraform_remote_state.common.environment_identifier}"
 
@@ -70,8 +71,10 @@ locals {
 
 
 
-  loadbalancer_security_groups = ["${data.terraform_remote_state.security-groups-and-rules.crc_internal_loadbalancer_sg_id}"
-    ,"${data.terraform_remote_state.security-groups-and-rules.external_9001_from_vpc_public_ips_sg_id}"
+  loadbalancer_security_groups = [
+    "${data.terraform_remote_state.security-groups-and-rules.crc_internal_loadbalancer_sg_id}",
+    "${data.terraform_remote_state.security-groups-and-rules.external_9001_from_vpc_public_ips_sg_id}",
+    "${data.terraform_remote_state.vpc-security-groups.sg_ssh_bastion_in_id}"
     ]
 
   listener = [
@@ -143,9 +146,9 @@ locals {
   #ecs asg
   ########################################################################################################
 
-  asg_desired = "1"
-  asg_max = "1"
-  asg_min = "1"
+  asg_desired = "${var.spg_crc_asg_desired}"
+  asg_max = "${var.spg_crc_asg_max}"
+  asg_min = "${var.spg_crc_asg_min}"
 
 
   ########################################################################################################
@@ -201,6 +204,7 @@ locals {
   SPG_JAVA_MAX_MEM = "${var.SPG_CRC_JAVA_MAX_MEM}"
   SPG_ENVIRONMENT_CODE = "${var.SPG_ENVIRONMENT_CODE}"
   SPG_ENVIRONMENT_CN = "${var.SPG_ENVIRONMENT_CN}"
+  SPG_AWS_REGION = "${data.terraform_remote_state.common.region}"
   SPG_DELIUS_MQ_URL = "${var.SPG_DELIUS_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
   SPG_GATEWAY_MQ_URL = "${var.SPG_GATEWAY_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
   SPG_DOCUMENT_REST_SERVICE_ADMIN_URL = "${var.SPG_DOCUMENT_REST_SERVICE_ADMIN_URL}"

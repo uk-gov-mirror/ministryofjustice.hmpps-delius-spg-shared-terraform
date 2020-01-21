@@ -10,7 +10,19 @@
                 "sourceVolume": "${data_volume_name}",
                 "containerPath": "${data_volume_host_path}",
                 "readOnly": false
+            },
+            {
+                "sourceVolume": "log",
+                "containerPath": "/opt/spg/servicemix/data/log",
+                "readOnly": false
+            },
+            {
+                "sourceVolume": "amqbroker",
+                "containerPath": "/opt/spg/servicemix/amq-broker",
+                "readOnly": false
             }
+
+
         ],
         "environment": [
 
@@ -29,7 +41,6 @@
                 "name": "SPG_BUILD_S3_REPO",
                 "value": "${s3_bucket_config}"
             },
-
 
             {
             "name": "SPG_HOST_TYPE",
@@ -54,6 +65,11 @@
             {
             "name": "SPG_ENVIRONMENT_CN",
             "value": "${SPG_ENVIRONMENT_CN}"
+            },
+
+            {
+            "name": "SPG_AWS_REGION",
+            "value": "${SPG_AWS_REGION}"
             },
 
             {

@@ -4,6 +4,8 @@ terragrunt = {
   }
 
   dependencies {
-    paths = ["../common"]
+    paths = [
+      "../common",
+    ]
   }
 }

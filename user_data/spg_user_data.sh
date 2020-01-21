@@ -74,7 +74,9 @@ sed -i -e "s/{container_instance_id}/$container_instance_id/g" /etc/awslogs/awsl
 sed -i -e "s/{availzone}/$avail_zone/g" /etc/awslogs/awslogs.conf
 sed -i -e "s/{hostname}/$host_name/g" /etc/awslogs/awslogs.conf
 
-service awslogs start
+#service awslogs start
+#systemctl for amazon linux
+systemctl start awslogsd
 chkconfig awslogs on
 
 # Mount our EBS volume on boot
@@ -139,6 +141,13 @@ EOF
 echo 'creating users'
 ansible-galaxy install -f -r ~/requirements.yml
 ansible-playbook ~/bootstrap-users.yml
+
+cat << 'EOF' >> ~/update_users.sh
+
+/usr/bin/curl -o ~/users.yml https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/${bastion_inventory}.yml
+ansible-playbook ~/bootstrap-users.yml
+
+EOF
 
 cat << 'EOF' >> ~/.bashrc
 alias dcontainergetspgid='SPG_CONTAINER_ID="$(docker container ps | grep spg | egrep -o ^[[:alnum:]]*)"'

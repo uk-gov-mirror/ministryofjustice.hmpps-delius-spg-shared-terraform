@@ -25,6 +25,8 @@ data "template_file" "app_task_definition" {
   vars {
     po_configuration = "${join(",", data.template_file.po_configuration.*.rendered)}"
 
+    hmpps_asset_name_prefix = "${local.hmpps_asset_name_prefix}"
+
     container_name = "${local.app_name}-${local.app_submodule}"
     ecs_memory = "${local.ecs_memory}"
 
@@ -41,11 +43,13 @@ data "template_file" "app_task_definition" {
     kibana_host           = "${local.kibana_host}"
     s3_bucket_config      = "${local.s3_bucket_config}"
 
+
     SPG_HOST_TYPE = "${local.SPG_HOST_TYPE}"
     SPG_GENERIC_BUILD_INV_DIR = "${local.SPG_GENERIC_BUILD_INV_DIR}"
     SPG_JAVA_MAX_MEM = "${local.SPG_JAVA_MAX_MEM}"
     SPG_ENVIRONMENT_CODE = "${local.SPG_ENVIRONMENT_CODE}"
     SPG_ENVIRONMENT_CN = "${local.SPG_ENVIRONMENT_CN}"
+    SPG_AWS_REGION = "${local.SPG_AWS_REGION}"
     SPG_DELIUS_MQ_URL = "${local.SPG_DELIUS_MQ_URL}"
     SPG_GATEWAY_MQ_URL = "${local.SPG_GATEWAY_MQ_URL}"
     SPG_DOCUMENT_REST_SERVICE_ADMIN_URL = "${local.SPG_DOCUMENT_REST_SERVICE_ADMIN_URL}"
@@ -59,10 +63,11 @@ data "template_file" "app_task_definition" {
 }
 
 module "app_task_definition" {
-  source   = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs//ecs-taskdefinitions//appwith_single_volume"
-  app_name = "${local.common_name}"
+  source   = "..//modules//ecs_task"
+  app_name = "${local.container_name}"
+  hmpps_asset_name_prefix = "${local.hmpps_asset_name_prefix}"
 
-  container_name        = "${local.common_name}"
+  container_name        = "${local.container_name}"
   container_definitions = "${data.template_file.app_task_definition.rendered}"
 
   data_volume_host_path = "${local.data_volume_host_path}"

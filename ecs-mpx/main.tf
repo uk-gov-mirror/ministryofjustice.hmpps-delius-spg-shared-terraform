@@ -31,6 +31,7 @@ locals {
   spg_app_name           = "${data.terraform_remote_state.common.spg_app_name}"
   app_name               = "${local.spg_app_name}"
   app_submodule          = "mpx"
+  container_name = "${local.app_name}-${local.app_submodule}"
   application_endpoint   = "${local.app_hostnames["external"]}"
   environment_identifier = "${data.terraform_remote_state.common.environment_identifier}"
 
@@ -89,12 +90,6 @@ locals {
       instance_port     = "9001"
       instance_protocol = "TCP"
       lb_port           = "9001"
-      lb_protocol       = "TCP"
-    },
-    {
-      instance_port     = "2222"
-      instance_protocol = "TCP"
-      lb_port           = "2222"
       lb_protocol       = "TCP"
     },
   ]
@@ -163,7 +158,6 @@ locals {
   ########################################################################################################
   ami_id = "${data.aws_ami.amazon_ami.id}"
   instance_profile            = "${data.terraform_remote_state.iam.iam_policy_mpx_int_app_instance_profile_name}"
-#  instance_profile            = "${data.terraform_remote_state.iam.iam_policy_ext_app_instance_profile_name}"
   instance_type               = "${var.asg_instance_type_mpx}"
   ssh_deployer_key            = "${data.terraform_remote_state.common.common_ssh_deployer_key}"
   associate_public_ip_address = false
@@ -191,6 +185,7 @@ locals {
   SPG_JAVA_MAX_MEM = "${var.SPG_MPX_JAVA_MAX_MEM}"
   SPG_ENVIRONMENT_CODE = "${var.SPG_ENVIRONMENT_CODE}"
   SPG_ENVIRONMENT_CN = "${var.SPG_ENVIRONMENT_CN}"
+  SPG_AWS_REGION = "${data.terraform_remote_state.common.region}"
   SPG_DELIUS_MQ_URL = "${var.SPG_DELIUS_MQ_URL}"  //to be replaced with values from hmpps env configs (username / passes from SSM store)
 
   # The final value of the GATEWAY url is calculated depending on the value of SPG_GATEWAY_MQ_URL_SOURCE in env-configs
