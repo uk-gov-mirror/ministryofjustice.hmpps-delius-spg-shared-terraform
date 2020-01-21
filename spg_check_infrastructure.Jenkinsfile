@@ -12,6 +12,9 @@ project.config = 'hmpps-env-configs'
 project.terraform = 'hmpps-delius-spg-shared-terraform'
 
 def prepare_env() {
+    project.env_name = environment_name
+    project.image_version = spg_image_version
+
     sh '''
     #!/usr/env/bin bash
     docker pull mojdigitalstudio/hmpps-terraform-builder:latest
@@ -53,7 +56,6 @@ def plan_submodule(configMap, submodule_name) {
 }
 
 pipeline {
-
     agent { label "jenkins_slave" }
 
     stages {
@@ -75,60 +77,48 @@ pipeline {
             parallel {
                 stage('Plan SPG common') {
                     steps { script {
-                        project.env_name = environment_name
                         plan_submodule(project, 'common')
                     } }
                 }
                 stage('Plan SPG iam roles and services policies') {
                     steps { script {
-                        project.env_name = environment_name
                         plan_submodule(project, 'iam')
                     } }
                 }
                 stage('Plan SPG KMS Keys for Identity Certificates') {
                     steps { script {
-                        project.env_name = environment_name
                         plan_submodule(project, 'kms-certificates-spg')
                     } }
                 }
                 stage('Plan SPG iam polices for app roles') {
                     steps { script {
-                        project.env_name = environment_name
                         plan_submodule(project, 'iam-spg-app-policies')
                     } }
                 }
 
                 stage('Plan SPG security-groups-and-rules') {
                     steps { script {
-                        project.env_name = environment_name
                         plan_submodule(project, 'security-groups-and-rules')
                     } }
                 }
 
                 stage('Plan SPG amazonmq') {
                     steps { script {
-                        project.env_name = environment_name
                         plan_submodule(project, 'amazonmq')
                     } }
                 }
                 stage('Plan SPG ecs-crc') {
                     steps { script {
-                        project.env_name = environment_name
-                        project.image_version = spg_image_version
                         plan_submodule(project, 'ecs-crc')
                     } }
                 }
                 stage('Plan SPG ecs-mpx') {
                     steps { script {
-                        project.env_name = environment_name
-                        project.image_version = spg_image_version
                         plan_submodule(project, 'ecs-mpx')
                     } }
                 }
                 stage('Plan SPG ecs-iso') {
                     steps { script {
-                        project.env_name = environment_name
-                        project.image_version = spg_image_version
                         plan_submodule(project, 'ecs-iso')
                     } }
                 }
