@@ -56,6 +56,7 @@ type=rpm-md
 
     output.elasticsearch:
         hosts: ["https://vpc-ndst-elk-audit-stack-6uwzfvrz5qzoi4hijmpepal5z4.eu-west-2.es.amazonaws.com:443"]
+        hosts: ["https://amazones-audit.delius-core-sandpit.internal:443"]
 
    b) Update the inputs->log section to be enabled and to monitor at least 1 log file
 
