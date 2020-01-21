@@ -12,8 +12,6 @@ project.config = 'hmpps-env-configs'
 project.terraform = 'hmpps-delius-spg-shared-terraform'
 
 def prepare_env() {
-    project.env_name = "${environment_name}"
-    project.image_version = "${spg_image_version}"
     sh '''
     #!/usr/env/bin bash
     docker pull mojdigitalstudio/hmpps-terraform-builder:latest
@@ -76,37 +74,63 @@ pipeline {
         stage('SPG Terraform') {
             parallel {
                 stage('Plan SPG common') {
-                    steps { script { plan_submodule('common') } }
+                    steps { script {
+                        project.env_name = environment_name
+                        plan_submodule(project, 'common')
+                    } }
                 }
                 stage('Plan SPG iam roles and services policies') {
-                    steps { script { plan_submodule('iam') } }
+                    steps { script {
+                        project.env_name = environment_name
+                        plan_submodule(project, 'iam')
+                    } }
                 }
                 stage('Plan SPG KMS Keys for Identity Certificates') {
-                    steps { script { plan_submodule('kms-certificates-spg') } }
+                    steps { script {
+                        project.env_name = environment_name
+                        plan_submodule(environment_name, 'kms-certificates-spg')
+                    } }
                 }
                 stage('Plan SPG iam polices for app roles') {
-                    steps { script { plan_submodule('iam-spg-app-policies') } }
+                    steps { script {
+                        project.env_name = environment_name
+                        plan_submodule(environment_name, 'iam-spg-app-policies')
+                    } }
                 }
 
                 stage('Plan SPG security-groups-and-rules') {
-                    steps {
-                        script {
-                            plan_submodule('security-groups-and-rules')
-                        }
-                    }
+                    steps { script {
+                        project.env_name = environment_name
+                        plan_submodule(environment_name, 'security-groups-and-rules')
+                    } }
                 }
 
                 stage('Plan SPG amazonmq') {
-                    steps { script { plan_submodule('amazonmq') } }
+                    steps { script {
+                        project.env_name = environment_name
+                        plan_submodule(environment_name, 'amazonmq')
+                    } }
                 }
                 stage('Plan SPG ecs-crc') {
-                    steps { script { plan_submodule('ecs-crc') } }
+                    steps { script {
+                        project.env_name = environment_name
+                        project.image_version = spg_image_version
+                        plan_submodule(environment_name, 'ecs-crc')
+                    } }
                 }
                 stage('Plan SPG ecs-mpx') {
-                    steps { script { plan_submodule('ecs-mpx') } }
+                    steps { script {
+                        project.env_name = environment_name
+                        project.image_version = spg_image_version
+                        plan_submodule(environment_name, 'ecs-mpx')
+                    } }
                 }
                 stage('Plan SPG ecs-iso') {
-                    steps { script { plan_submodule('ecs-iso') } }
+                    steps { script {
+                        project.env_name = environment_name
+                        project.image_version = spg_image_version
+                        plan_submodule(environment_name, 'ecs-iso')
+                    } }
                 }
             }
         }
