@@ -233,14 +233,6 @@ pipeline {
             }
         }
 
-        stage('Delius | SPG | Security Groups - Deprecated') {
-            steps {
-                script {
-                    do_terraform(project, 'security-groups')
-                }
-            }
-        }
-
         stage('Delius | SPG | Security Groups And Rules') {
             steps {
                 script {
