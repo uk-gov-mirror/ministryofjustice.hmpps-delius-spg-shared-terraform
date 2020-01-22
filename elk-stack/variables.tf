@@ -38,6 +38,10 @@ variable "dependencies_bucket_arn" {
   description = "S3 bucket arn for dependencies"
 }
 
+variable eng_remote_state_bucket_name {}
+
+variable eng_role_arn {}
+
 variable "tags" {
   type = "map"
 }

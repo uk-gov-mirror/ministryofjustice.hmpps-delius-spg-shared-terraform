@@ -9,6 +9,17 @@ data "terraform_remote_state" "vpc" {
   }
 }
 
+data "terraform_remote_state" "engineering_nat" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.eng_remote_state_bucket_name}"
+    key    = "natgateway/terraform.tfstate"
+    region = "${var.region}"
+    role_arn = "${var.eng_role_arn}"
+  }
+}
+
 # Load in VPC security groups to reference bastion ssh inbound group for ecs hosts
 data "terraform_remote_state" "vpc_security_groups" {
   backend = "s3"
