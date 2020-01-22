@@ -55,7 +55,7 @@ resource "aws_lambda_function" "notify-slack" {
   role               = "${data.aws_iam_role.lambda_exec_role.arn}"
   handler            = "${local.lambda_name}.handler"
   source_code_hash   = "${base64sha256(file("${data.archive_file.notify-slack-lambda.output_path}"))}"
-  runtime            = "nodejs12.14"
+  runtime            = "nodejs8.10"
 }
 
 resource "aws_lambda_permission" "with_sns" {
