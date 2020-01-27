@@ -16,7 +16,12 @@ cat > /etc/awslogs/awslogs.conf <<- EOF
 state_file = /var/lib/awslogs/agent-state
 
 [application_log]
-file = /var/log/${container_name}/*.log
+#check for *.log* so that if any logs roll over whilst cloudwatch is offline, they will still be picked up
+file = /var/log/${container_name}/*.log*
+#servicemix log is/was \nDATE\nMODULE\nOUTPUT so requires 4 lines for fingerprint to determine new content is being written to file
+file_fingerprint_lines = 1-4
+datetime_format = %Y-%m-%dT%H:%M:%S.%f%z
+multi_line_start_pattern = {datetime_format}
 log_group_name = ${log_group_name}
 log_stream_name = {hostname}/{container_instance_id}/application
 
@@ -142,7 +147,7 @@ echo 'creating users'
 ansible-galaxy install -f -r ~/requirements.yml
 ansible-playbook ~/bootstrap-users.yml
 
-cat << 'EOF' >> ~/update_users.sh
+cat << 'EOF' >> ~/update_ssh_users_from_github.sh
 
 /usr/bin/curl -o ~/users.yml https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/${bastion_inventory}.yml
 ansible-playbook ~/bootstrap-users.yml
