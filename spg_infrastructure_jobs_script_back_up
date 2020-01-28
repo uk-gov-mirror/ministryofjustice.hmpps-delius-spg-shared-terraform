@@ -1,0 +1,21 @@
+/* The following parameters are required from Jenkins GUI or other upstream jobs
+        environment_name
+        project_branch
+        spg_image_version
+        confirm (boolean)
+*/
+
+import groovy.json.JsonSlurper
+List<String> availableVersions = new ArrayList<String>()
+def identityServiceUrl = "http://169.254.169.254/latest/dynamic/instance-identity/document"
+def identityDoc = ["curl", "--url", "${identityServiceUrl}"].execute().text
+def jsonSlurper = new JsonSlurper()
+def identityDocJsonObject = jsonSlurper.parseText(identityDoc)
+def region = identityDocJsonObject.region
+def jsonString = ["aws", "ecr", "list-images", "--repository-name", "hmpps/spg", "--region", "${region}"].execute().text
+def versionsJsonObject = jsonSlurper.parseText(jsonString)
+def dataArray = versionsJsonObject.imageIds
+for(item in dataArray) {
+    availableVersions.add(item.imageTag)
+}
+return availableVersions as String[]
