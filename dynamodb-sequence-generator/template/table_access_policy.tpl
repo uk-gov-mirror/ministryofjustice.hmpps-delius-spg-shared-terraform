@@ -10,7 +10,8 @@
                 "dynamodb:Scan",
                 "dynamodb:BatchWriteItem",
                 "dynamodb:PutItem",
-                "dynamodb:UpdateItem"
+                "dynamodb:UpdateItem",
+                "dynamodb:CreateTable"
             ],
             "Resource": "arn:aws:dynamodb:${region}:${current_account_id}:table/${environment}-spg-scr-sequence"
         }
