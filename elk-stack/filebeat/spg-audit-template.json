@@ -1,5 +1,5 @@
 {
-  "index_patterns": ["spg-audit-7.1.1*"],
+  "index_patterns": ["spg-*-7.1.1*"],
   "mappings": {
       "date_detection": true,
       "properties": {
