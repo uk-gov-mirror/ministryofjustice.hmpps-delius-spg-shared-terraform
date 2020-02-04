@@ -2,6 +2,7 @@
 
 # Set any ECS agent configuration options
 echo "ECS_CLUSTER=${cluster_name}" >> /etc/ecs/ecs.config
+echo "ECS_CONTAINER_STOP_TIMEOUT=${esc_container_stop_timeout}" >> /etc/ecs/ecs.config
 service docker start
 start ecs
 

@@ -63,8 +63,9 @@ data "template_file" "user_data" {
     container_name = "${local.app_name}-${local.app_submodule}"
     bastion_inventory    = "${var.bastion_inventory}"
 
-    data_volume_host_path = "${local.data_volume_host_path}"
-    data_volume_name      = "${local.data_volume_name}"
+    data_volume_host_path      = "${local.data_volume_host_path}"
+    data_volume_name           = "${local.data_volume_name}"
+    esc_container_stop_timeout = "${var.esc_container_stop_timeout}"
   }
 }
 ############################################

@@ -88,3 +88,7 @@ variable PO_SPG_CONFIGURATION {
   description ="map of PO configs"
   type="map"
 }
+
+variable "esc_container_stop_timeout" {
+  default = "310s"
+}
