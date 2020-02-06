@@ -82,7 +82,7 @@ sed -i -e "s/{hostname}/$host_name/g" /etc/awslogs/awslogs.conf
 
 #service awslogs start
 #systemctl for amazon linux
-    systemctl start awslogsd
+systemctl start awslogsd
 chkconfig awslogs on
 
 # Mount our EBS volume on boot
