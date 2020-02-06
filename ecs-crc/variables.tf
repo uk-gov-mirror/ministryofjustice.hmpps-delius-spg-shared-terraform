@@ -76,3 +76,7 @@ variable PO_SPG_CONFIGURATION {
 variable "esc_container_stop_timeout" {
   default = "310s"
 }
+
+variable "deployment_minimum_healthy_percent" {
+  default = "50"
+}
