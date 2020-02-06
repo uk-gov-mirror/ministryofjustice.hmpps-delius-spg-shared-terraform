@@ -50,13 +50,13 @@ log_stream_name = {hostname}/{container_instance_id}/ecsinit_logs
 datetime_format = %Y-%m-%dT%H:%M:%SZ
 
 [/var/log/ecs/ecs-agent.log]
-file = /var/log/ecs/ecs-agent.log
+file = /var/log/ecs/ecs-agent.log*
 log_group_name = ${log_group_name}
 log_stream_name = {hostname}/{container_instance_id}/ecsagent_logs
 datetime_format = %Y-%m-%dT%H:%M:%SZ
 
 [/var/log/ecs/audit.log]
-file = /var/log/ecs/audit.log
+file = /var/log/ecs/audit.log*
 log_group_name = ${log_group_name}
 log_stream_name = {hostname}/{container_instance_id}/ecsaudit_logs
 datetime_format = %Y-%m-%dT%H:%M:%SZ
@@ -82,7 +82,7 @@ sed -i -e "s/{hostname}/$host_name/g" /etc/awslogs/awslogs.conf
 
 #service awslogs start
 #systemctl for amazon linux
-systemctl start awslogsd
+    systemctl start awslogsd
 chkconfig awslogs on
 
 # Mount our EBS volume on boot
@@ -154,6 +154,9 @@ cat << 'EOF' >> ~/update_ssh_users_from_github.sh
 ansible-playbook ~/bootstrap-users.yml
 
 EOF
+
+
+
 
 cat << 'EOF' >> ~/.bashrc
 alias dcontainergetspgid='SPG_CONTAINER_ID="$(docker container ps | grep spg | egrep -o ^[[:alnum:]]*)"'
