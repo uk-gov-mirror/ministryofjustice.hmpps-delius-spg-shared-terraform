@@ -138,7 +138,7 @@ resource "aws_elasticsearch_domain" "elk-audit_domain" {
 # Value must be updated when administering the webops kibana user in cognito
 # This is just a placeholder to store the secure password
 resource "aws_ssm_parameter" "kibana_webops_password" {
-  name  = "${local.name_prefix_conflict}-kibana-pri-ssm"
+  name  = "${local.name_prefix}-kibana-pri-ssm"
   type  = "SecureString"
   value = "null"
 }

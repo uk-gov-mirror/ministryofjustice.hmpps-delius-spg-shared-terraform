@@ -9,6 +9,16 @@ data "terraform_remote_state" "vpc" {
   }
 }
 
+data "terraform_remote_state" "common" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.remote_state_bucket_name}"
+    key    = "spg/common/terraform.tfstate"
+    region = "${var.region}"
+  }
+}
+
 data "terraform_remote_state" "engineering_nat" {
   backend = "s3"
 

@@ -1,9 +1,6 @@
 locals {
   # Handle mixed environments project name
-  short_project_name = "${replace(var.project_name, "delius-core", "delius")}"
-  name_prefix        = "${var.project_name_abbreviated}-${local.short_project_name}"
-
-  name_prefix_conflict = "${var.project_name_abbreviated}-spg"
+  name_prefix = "${data.terraform_remote_state.common.hmpps_asset_name_prefix}"
 
   # Handle ES config for single instance or multiple instance deployments
   es_single_instance_subnet_id = [

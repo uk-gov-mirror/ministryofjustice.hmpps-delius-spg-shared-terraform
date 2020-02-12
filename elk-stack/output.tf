@@ -8,3 +8,7 @@ output "ndst_elk-audit_config" {
     kibana_endpoint  = "${aws_elasticsearch_domain.elk-audit_domain.kibana_endpoint}"
   }
 }
+
+output "name_prefix" {
+  value = "${local.name_prefix}"
+}
