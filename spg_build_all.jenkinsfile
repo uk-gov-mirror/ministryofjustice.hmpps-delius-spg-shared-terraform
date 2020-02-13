@@ -38,7 +38,7 @@ pipeline {
 
         stage('Smoke test') {
             steps {
-                // NEEDS TO WAIT FOR INSTANCES TO BE UP!!!
+                // NEEDS TO WAIT FOR LATEST INSTANCES TO BE UP (do a version check?)!!!
                 build_job_if_exists("DAMS/Environments/${environment_name}/SPG/Smoke_Test")
             }
         }

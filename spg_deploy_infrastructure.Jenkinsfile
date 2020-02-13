@@ -277,7 +277,28 @@ pipeline {
                     do_terraform(project, 'ecs-crc')
                 }
             }
+
+
         }
+            /* temporarily disabled until the new SPG version with application driven table creation is released
+            once it is, then the terraform needs to be modified to not include the table creation script
+            also need to ensure it is not deleted by terraform, so some kind of terraform like this before the terraform plan is run
+
+            `terraform state rm 'aws_dynamodb_table.sequence_generator_table'`
+    
+            stage('Delius | SPG | DynamoDB Sequence') {
+                steps {
+                    script {
+                    project.env_name = environment_name
+                    project.image_version = spg_image_version
+                    do_terraform(project, 'dynamodb-sequence-generator')
+                        do_terraform(project.config, environment_name, project.terraform, 'dynamodb-sequence-generator')
+                    }
+                }
+            }
+            */
+
+
 
         stage('Delius | SPG | ECS-SPG-MPX') {
             steps {

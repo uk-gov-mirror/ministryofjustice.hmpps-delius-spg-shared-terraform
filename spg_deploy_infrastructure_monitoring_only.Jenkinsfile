@@ -193,6 +193,33 @@ pipeline {
         }
 
 
+
+        stage('Delius | SPG | ECS-SPG-CRC') {
+            steps {
+                script {
+                    refresh_submodule(project.config, environment_name, project.terraform, 'ecs-crc')
+                }
+            }
+        }
+
+
+        stage('Delius | SPG | ECS-SPG-MPX') {
+            steps {
+                script {
+                    refresh_submodule(project.config, environment_name, project.terraform, 'ecs-mpx')
+                }
+            }
+        }
+
+
+        stage('Delius | SPG | ECS-SPG-ISO') {
+            steps {
+                script {
+                    refresh_submodule(project.config, environment_name, project.terraform, 'ecs-iso')
+                }
+            }
+        }
+
         stage('Delius | SPG | Monitoring') {
             steps {
                 script {
