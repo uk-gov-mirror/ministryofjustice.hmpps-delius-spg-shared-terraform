@@ -31,17 +31,18 @@ module "create_loggroup" {
 #with predefined alb or nlb
 
 module "app_service" {
-  source                          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs/ecs_service//withloadbalancer//alb"
-  servicename                     = "${local.common_name}"
-  clustername                     = "${module.ecs_cluster.ecs_cluster_id}"
-  ecs_service_role                = "${local.ecs_service_role}"
-  target_group_arn                = "${module.create_app_nlb_ext_targetgrp.target_group_arn}"
-  containername                   = "${local.app_name}-${local.app_submodule}"
-  containerport                   = "${local.backend_app_port}"
-  task_definition_family          = "${module.app_task_definition.task_definition_family}"
-  task_definition_revision        = "${module.app_task_definition.task_definition_revision}"
-  current_task_definition_version = "${data.aws_ecs_task_definition.app_task_definition.revision}"
-  service_desired_count           = "${local.service_desired_count}"
+  source                             = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs/ecs_service//withloadbalancer//alb"
+  servicename                        = "${local.common_name}"
+  clustername                        = "${module.ecs_cluster.ecs_cluster_id}"
+  ecs_service_role                   = "${local.ecs_service_role}"
+  target_group_arn                   = "${module.create_app_nlb_ext_targetgrp.target_group_arn}"
+  containername                      = "${local.app_name}-${local.app_submodule}"
+  containerport                      = "${local.backend_app_port}"
+  task_definition_family             = "${module.app_task_definition.task_definition_family}"
+  task_definition_revision           = "${module.app_task_definition.task_definition_revision}"
+  current_task_definition_version    = "${data.aws_ecs_task_definition.app_task_definition.revision}"
+  service_desired_count              = "${local.service_desired_count}"
+  deployment_minimum_healthy_percent = "${var.deployment_minimum_healthy_percent}"
 }
 
 
@@ -63,8 +64,9 @@ data "template_file" "user_data" {
     container_name = "${local.app_name}-${local.app_submodule}"
     bastion_inventory    = "${var.bastion_inventory}"
 
-    data_volume_host_path = "${local.data_volume_host_path}"
-    data_volume_name      = "${local.data_volume_name}"
+    data_volume_host_path      = "${local.data_volume_host_path}"
+    data_volume_name           = "${local.data_volume_name}"
+    esc_container_stop_timeout = "${var.esc_container_stop_timeout}"
   }
 }
 ############################################

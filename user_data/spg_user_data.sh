@@ -2,6 +2,7 @@
 
 # Set any ECS agent configuration options
 echo "ECS_CLUSTER=${cluster_name}" >> /etc/ecs/ecs.config
+echo "ECS_CONTAINER_STOP_TIMEOUT=${esc_container_stop_timeout}" >> /etc/ecs/ecs.config
 service docker start
 start ecs
 
@@ -16,7 +17,12 @@ cat > /etc/awslogs/awslogs.conf <<- EOF
 state_file = /var/lib/awslogs/agent-state
 
 [application_log]
-file = /var/log/${container_name}/*.log
+#check for *.log* so that if any logs roll over whilst cloudwatch is offline, they will still be picked up
+file = /var/log/${container_name}/*.log*
+#servicemix log is/was \nDATE\nMODULE\nOUTPUT so requires 4 lines for fingerprint to determine new content is being written to file
+file_fingerprint_lines = 1-4
+datetime_format = %Y-%m-%dT%H:%M:%S.%f%z
+multi_line_start_pattern = {datetime_format}
 log_group_name = ${log_group_name}
 log_stream_name = {hostname}/{container_instance_id}/application
 
@@ -44,13 +50,13 @@ log_stream_name = {hostname}/{container_instance_id}/ecsinit_logs
 datetime_format = %Y-%m-%dT%H:%M:%SZ
 
 [/var/log/ecs/ecs-agent.log]
-file = /var/log/ecs/ecs-agent.log
+file = /var/log/ecs/ecs-agent.log*
 log_group_name = ${log_group_name}
 log_stream_name = {hostname}/{container_instance_id}/ecsagent_logs
 datetime_format = %Y-%m-%dT%H:%M:%SZ
 
 [/var/log/ecs/audit.log]
-file = /var/log/ecs/audit.log
+file = /var/log/ecs/audit.log*
 log_group_name = ${log_group_name}
 log_stream_name = {hostname}/{container_instance_id}/ecsaudit_logs
 datetime_format = %Y-%m-%dT%H:%M:%SZ
@@ -142,12 +148,15 @@ echo 'creating users'
 ansible-galaxy install -f -r ~/requirements.yml
 ansible-playbook ~/bootstrap-users.yml
 
-cat << 'EOF' >> ~/update_users.sh
+cat << 'EOF' >> ~/update_ssh_users_from_github.sh
 
 /usr/bin/curl -o ~/users.yml https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/${bastion_inventory}.yml
 ansible-playbook ~/bootstrap-users.yml
 
 EOF
+
+
+
 
 cat << 'EOF' >> ~/.bashrc
 alias dcontainergetspgid='SPG_CONTAINER_ID="$(docker container ps | grep spg | egrep -o ^[[:alnum:]]*)"'

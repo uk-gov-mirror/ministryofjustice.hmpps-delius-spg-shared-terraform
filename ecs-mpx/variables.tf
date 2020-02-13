@@ -88,3 +88,11 @@ variable PO_SPG_CONFIGURATION {
   description ="map of PO configs"
   type="map"
 }
+
+variable "esc_container_stop_timeout" {
+  default = "310s"
+}
+
+variable "deployment_minimum_healthy_percent" {
+  default = "50"
+}

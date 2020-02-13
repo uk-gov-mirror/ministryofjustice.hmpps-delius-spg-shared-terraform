@@ -1,0 +1,23 @@
+{
+  "description" : "Convert SPG Audit log to indexed fields",
+  "processors" : [
+      {
+        "dissect": {
+          "field": "message",
+          "pattern": "%{logLevel} %{interchangeTimestamp}|%{logType}||%{logMessageFields}"
+        }
+      },
+      {
+        "trim": {
+	  "field": "logMessageFields"
+        }
+      },
+      {
+        "kv": {
+          "field": "logMessageFields",
+          "field_split": "\\|",
+          "value_split": "="
+        }
+      }
+  ]
+}
