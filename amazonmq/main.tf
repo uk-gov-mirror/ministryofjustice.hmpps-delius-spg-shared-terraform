@@ -81,6 +81,45 @@ resource "aws_mq_configuration" "SPG" {
   data = <<DATA
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <broker xmlns="http://activemq.apache.org/schema/core">
+
+    <destinationPolicy>
+            <policyMap>
+              <!--  TODO make this configurable? -->
+              <policyEntries>#
+
+                <policyEntry queue="outbound.crc.>">
+              		  <deadLetterStrategy>
+              				<individualDeadLetterStrategy queuePrefix="" queueSuffix=".DLQ" useQueueForQueueMessages="false" processExpired="false"/>
+              		  </deadLetterStrategy>
+              	</policyEntry>
+
+				<policyEntry queue="outbound.alfresco">
+				  <deadLetterStrategy>
+					<individualDeadLetterStrategy queuePrefix="" queueSuffix=".DLQ" useQueueForQueueMessages="true"/>
+				  </deadLetterStrategy>
+				</policyEntry>
+
+				<policyEntry queue="outbound.delius">
+				  <deadLetterStrategy>
+					<individualDeadLetterStrategy queuePrefix="" queueSuffix=".DLQ" useQueueForQueueMessages="true"/>
+				  </deadLetterStrategy>
+				</policyEntry>
+
+                <policyEntry queue="spg-time-tracking" maxPageSize="5000">
+                    <deadLetterStrategy>
+                        <individualDeadLetterStrategy processExpired="false" />
+                    </deadLetterStrategy>
+                </policyEntry>
+
+                <policyEntry queue="toDocumentRepository" maxPageSize="5000">
+                    <deadLetterStrategy>
+                        <individualDeadLetterStrategy processExpired="false" />
+                    </deadLetterStrategy>
+                </policyEntry>
+              </policyEntries>
+            </policyMap>
+  </destinationPolicy>
+
   <plugins>
     <forcePersistencyModeBrokerPlugin persistenceFlag="true"/>
     <statisticsBrokerPlugin/>
