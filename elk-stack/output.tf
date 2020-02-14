@@ -12,3 +12,7 @@ output "ndst_elk-audit_config" {
 output "name_prefix" {
   value = "${local.name_prefix}"
 }
+
+output "domain_name" {
+  value = "${local.domain_name}"
+}

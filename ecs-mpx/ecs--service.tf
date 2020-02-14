@@ -31,17 +31,17 @@ module "create_loggroup" {
 #with predefined elb
 
 module "app_service" {
-  source                          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs/ecs_service//withloadbalancer//elb"
-  servicename                     = "${local.common_name}"
-  clustername                     = "${module.ecs_cluster.ecs_cluster_id}"
-  ecs_service_role                = "${local.ecs_service_role}"
-  elb_name                        = "${module.create_app_elb.environment_elb_name}"
-  containername                   = "${local.app_name}-${local.app_submodule}"
-  containerport                   = "${local.backend_app_port}"
-  task_definition_family          = "${module.app_task_definition.task_definition_family}"
-  task_definition_revision        = "${module.app_task_definition.task_definition_revision}"
-  current_task_definition_version = "${data.aws_ecs_task_definition.app_task_definition.revision}"
-  service_desired_count           = "${local.service_desired_count}"
+  source                             = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs/ecs_service//withloadbalancer//elb"
+  servicename                        = "${local.common_name}"
+  clustername                        = "${module.ecs_cluster.ecs_cluster_id}"
+  ecs_service_role                   = "${local.ecs_service_role}"
+  elb_name                           = "${module.create_app_elb.environment_elb_name}"
+  containername                      = "${local.app_name}-${local.app_submodule}"
+  containerport                      = "${local.backend_app_port}"
+  task_definition_family             = "${module.app_task_definition.task_definition_family}"
+  task_definition_revision           = "${module.app_task_definition.task_definition_revision}"
+  current_task_definition_version    = "${data.aws_ecs_task_definition.app_task_definition.revision}"
+  service_desired_count              = "${local.service_desired_count}"
   deployment_minimum_healthy_percent = "${var.deployment_minimum_healthy_percent}"
 }
 

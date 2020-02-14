@@ -50,7 +50,7 @@ resource "aws_security_group_rule" "elk-audit_jenkins_servers" {
 
 
 resource "aws_elasticsearch_domain" "elk-audit_domain" {
-  domain_name           = "${var.elk-audit_conf["es_domain"]}"
+  domain_name           = "${local.domain_name}"
   elasticsearch_version = "${var.elk-audit_conf["es_version"]}"
 
   vpc_options {

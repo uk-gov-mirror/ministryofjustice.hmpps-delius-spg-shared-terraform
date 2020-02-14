@@ -51,7 +51,7 @@ variable "elk-audit_conf" {
   type        = "map"
 
   default = {
-    es_domain  = "ndst-elk-audit-stack"
+    es_domain  = "elk-audit-stack"
     es_version = "7.1"
 
     # Cluster config
