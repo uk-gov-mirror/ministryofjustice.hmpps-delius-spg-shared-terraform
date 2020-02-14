@@ -105,17 +105,6 @@ resource "aws_mq_configuration" "SPG" {
 				  </deadLetterStrategy>
 				</policyEntry>
 
-                <policyEntry queue="spg-time-tracking" maxPageSize="5000">
-                    <deadLetterStrategy>
-                        <individualDeadLetterStrategy processExpired="false" />
-                    </deadLetterStrategy>
-                </policyEntry>
-
-                <policyEntry queue="toDocumentRepository" maxPageSize="5000">
-                    <deadLetterStrategy>
-                        <individualDeadLetterStrategy processExpired="false" />
-                    </deadLetterStrategy>
-                </policyEntry>
               </policyEntries>
             </policyMap>
   </destinationPolicy>
@@ -124,6 +113,34 @@ resource "aws_mq_configuration" "SPG" {
     <forcePersistencyModeBrokerPlugin persistenceFlag="true"/>
     <statisticsBrokerPlugin/>
     <timeStampingBrokerPlugin ttlCeiling="86400000" zeroExpirationOverride="86400000"/>
+
+    <redeliveryPlugin fallbackToDeadLetter="true" sendToDlqIfMaxRetriesExceeded="true">
+      <redeliveryPolicyMap>
+          <redeliveryPolicyEntries>
+
+            <!-- a destination specific policy 1440 x 60000 = 24 hours-->
+	        <redeliveryPolicy queue="outbound.delius"
+                      maximumRedeliveries="10"
+                      initialRedeliveryDelay="10000"
+                      redeliveryDelay="60000"/>
+
+            <redeliveryPolicy queue="outbound.alfresco"
+                      maximumRedeliveries="10"
+                      initialRedeliveryDelay="10000"
+                      redeliveryDelay="60000"/>
+
+          </redeliveryPolicyEntries>
+
+          <defaultEntry>
+            <!-- the fallback policy for all other destinations. Set to zero retries -->
+            redeliveryPolicy maximumRedeliveries="0"
+                initialRedeliveryDelay="10000"
+                redeliveryDelay="60000"/>
+          </defaultEntry>
+
+      </redeliveryPolicyMap>
+  </redeliveryPlugin>
+
   </plugins>
 </broker>
 DATA
