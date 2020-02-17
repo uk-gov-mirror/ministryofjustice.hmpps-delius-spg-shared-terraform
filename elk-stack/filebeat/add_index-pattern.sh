@@ -17,7 +17,7 @@ then
     exit 1
 fi
 
-curl -k -XPOST "https://amazones-audit.${TG_ENVIRONMENT_TYPE}.${DNS_PREFIX}.probation.service.justice.gov.uk:443/_plugin/kibana/api/saved_objects/index-pattern/spg-audit" -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -d'
+curl -k -XPOST "https://amazones-audit.${DNS_PREFIX}.probation.service.justice.gov.uk:443/_plugin/kibana/api/saved_objects/index-pattern/spg-audit" -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -d'
 {
     "attributes": {
         "title": "spg-audit-7.1.1*",

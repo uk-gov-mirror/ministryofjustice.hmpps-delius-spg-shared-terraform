@@ -327,6 +327,24 @@ pipeline {
                 }
             }
         }
+
+        stage('Amazon ES Configuration') {
+            parallel {
+                stage('Configure Index Pattern') {
+                    steps {
+                        dir(WORKSPACE) {
+                            sh '''
+                            pwd
+                            ls -l
+                            echo "Calling configure_amazon_es.sh for environment_name ${environment_name}"
+                            cd elk-stack/filebeat
+                            ./configure_amazon_es.sh ${environment_name}
+                            '''
+                        }
+                    }
+                }
+            }
+        }
     }
 
     post {
