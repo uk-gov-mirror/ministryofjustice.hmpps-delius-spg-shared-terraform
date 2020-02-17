@@ -28,6 +28,31 @@ case ${TG_ENVIRONMENT_TYPE} in
      delius-core-sandpit)
           export DNS_PREFIX=sandpit
           ;;
+
+    delius-core-dev)
+          export DNS_PREFIX=dev
+          ;;
+
+    delius-test)
+          export DNS_PREFIX=test
+          ;;
+
+    po-test1)
+          export DNS_PREFIX=po-test
+          ;;
+
+    delius-stage)
+          export DNS_PREFIX=stage
+          ;;
+
+    delius-pre-prod)
+          export DNS_PREFIX=pre-prod
+          ;;
+
+    delius-prod)
+          export DNS_PREFIX=""
+          ;;
+
      *)
           export DNS_PREFIX=""
           ;;
