@@ -14,8 +14,8 @@ data "aws_ami" "amazon_ami" {
   most_recent = true
 
   filter {
-    name   = "description"
-    values = ["Amazon Linux AMI *"]
+    name   = "name"
+    values = ["*amzn2-ami-ecs-hvm*"]
   }
 
   filter {
