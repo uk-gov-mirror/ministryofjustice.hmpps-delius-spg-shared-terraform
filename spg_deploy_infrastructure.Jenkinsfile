@@ -285,7 +285,7 @@ pipeline {
             also need to ensure it is not deleted by terraform, so some kind of terraform like this before the terraform plan is run
 
             `terraform state rm 'aws_dynamodb_table.sequence_generator_table'`
-    
+            */
             stage('Delius | SPG | DynamoDB Sequence') {
                 steps {
                     script {
@@ -296,7 +296,6 @@ pipeline {
                     }
                 }
             }
-            */
 
 
         stage('Delius | SPG | ECS-SPG-MPX') {
