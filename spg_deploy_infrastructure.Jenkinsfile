@@ -159,6 +159,61 @@ def do_terraform(configMap, component) {
     }
 }
 
+// The terraform state rm command always reports a success if the specified resource is in the correct format - even if it doesn't exist anymore.
+// So, issue the terraform state list command on each resource first and capture the output to determine if it exists or not.
+def remove_submodule_resources(configMap, submodule_name, resources) {
+    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
+        sh """
+        #!/usr/env/bin bash
+        COUNTER=2
+        echo "COUNTER is \\\$COUNTER"
+        echo "TF remove resource for ${configMap.env_name} | ${submodule_name} - component from git project ${configMap.terraform}"
+        set +e
+        cp -R -n "${configMap.config}" "${configMap.terraform}/env_configs"
+        cd "${configMap.terraform}"
+        docker run --rm \
+          -v `pwd`:/home/tools/data \
+          -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
+          bash -c " \
+              source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
+              cd ${submodule_name}; \
+
+            resource0=\\\"\\\$(terragrunt state list ${resources[0]})\\\"; \
+            if [ -z \\\$resource0 ]; then \
+                echo \\\"${resources[0]} does not exist\\\"; \
+            else \
+                echo \\\"Will remove resource \\\$resource0\\\"; \
+                terragrunt state rm ${resources[0]}; \
+                tgexitcode0=\\\$?; \
+                echo \\\" terragrunt state rm ${resources[0]} returned \\\$tgexitcode0\\\"; \
+            fi; \
+
+            resource1=\\\"\\\$(terragrunt state list ${resources[1]})\\\"; \
+            if [ -z \\\$resource1 ]; then \
+                echo \\\"${resources[1]} does not exist\\\"; \
+            else \
+                echo \\\"Will remove resource \\\$resource1\\\"; \
+                terragrunt state rm ${resources[1]}; \
+                tgexitcode1=\\\$?; \
+                echo \\\" terragrunt state rm ${resources[1]} returned \\\$tgexitcode1\\\"; \
+            fi; \
+
+            if [[ \\\$tgexitcode0 -ne 0 || \\\$tgexitcode1 -ne 0 ]]; then \
+                echo \\\"Exiting due to non zero return code\\\"; \
+                exit 1; \
+            else \
+                exit 0; \
+            fi;"; \
+
+        dockerexitcode=\$?; \
+        echo "Docker step exited with code \$dockerexitcode"; \
+        if [ \$dockerexitcode -ne 0 ]; then exit \$dockerexitcode; else exit 0; fi;
+        set -e
+        """
+    }
+}
+
+
 def debug_env() {
     sh '''
         #!/usr/env/bin bash
@@ -291,8 +346,14 @@ pipeline {
                     script {
                     project.env_name = environment_name
                     project.image_version = spg_image_version
+
+                    def resources = [
+                        "aws_dynamodb_table.sequence_generator_table",
+                        "aws_dynamodb_table_item.sequence_value"
+                                                            ]
+                    remove_submodule_resources(project, 'dynamodb-sequence-generator', resources)
+
                     do_terraform(project, 'dynamodb-sequence-generator')
-                        do_terraform(project.config, environment_name, project.terraform, 'dynamodb-sequence-generator')
                     }
                 }
             }

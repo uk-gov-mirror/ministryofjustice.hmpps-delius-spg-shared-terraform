@@ -10,7 +10,6 @@ provider "aws" {
 
 locals {
   env_prefix  = "${var.SPG_ENVIRONMENT_CODE}"
-  table_name  = "${local.env_prefix}-spg-scr-sequence"
 }
 
 data "aws_caller_identity" "current" {}
@@ -44,15 +43,6 @@ data "terraform_remote_state" "iam" {
 #--------------------------------------------------------------
 ### Template files
 #--------------------------------------------------------------
-data "template_file" "initialise_sequence" {
-  template = "${file("${path.module}/template/initialise_sequence.tpl")}"
-
-  vars {
-    hash_key                   = "${var.hash_key}"
-    initial_sequence_value     = "${var.initial_sequence_value}"
-  }
-}
-
 data "template_file" "table_access_policy" {
   template = "${file("${path.module}/template/table_access_policy.tpl")}"
   vars {
@@ -65,25 +55,6 @@ data "template_file" "table_access_policy" {
 #--------------------------------------------------------------
 ### Dynamodb Resources
 #--------------------------------------------------------------
-resource "aws_dynamodb_table" "sequence_generator_table" {
-  name           = "${local.table_name}"
-  read_capacity  = "${var.read_capacity}"
-  write_capacity = "${var.write_capacity}"
-  hash_key       = "${var.hash_key}"
-
-  attribute {
-    name = "${var.hash_key}"
-    type = "S"
-  }
-
-  tags = "${merge(var.tags, map("Name", "${local.table_name}"))}"
-}
-
-resource "aws_dynamodb_table_item" "sequence_value" {
-  table_name = "${aws_dynamodb_table.sequence_generator_table.name}"
-  hash_key   = "${aws_dynamodb_table.sequence_generator_table.hash_key}"
-  item       = "${data.template_file.initialise_sequence.rendered}"
-}
 
 #--------------------------------------------------------------
 ### Define and attach the table access policy to the spgw-mpx-int-role
