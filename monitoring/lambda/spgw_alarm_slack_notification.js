@@ -20,6 +20,7 @@ exports.handler = function(event, context) {
     var metric = alarmName.split("__")[2];
     var severity = alarmName.split("__")[3];
     var severityText = severity;
+    var currentTimestamp = new Date().toUTCString();
 
     if (eventMessage.NewStateValue == "OK") {
         severity="ok";
@@ -75,6 +76,7 @@ exports.handler = function(event, context) {
 
     var textMessage="**************************************************************************************************"
                             +"\nMetric: " + metric
+                            +"\nCurrent timestamp: " + currentTimestamp
                             + "\nEnvironment: " + environment
                             + "\nSeverity: " +severity+"\n";
 
