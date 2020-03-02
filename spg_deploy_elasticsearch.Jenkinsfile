@@ -245,7 +245,7 @@ pipeline {
             steps {
                 script {
                     project.env_name = environment_name
-                    do_terraform(project, 'elk-stack')
+                    do_terraform(project, 'elk-service')
                 }
             }
         }
