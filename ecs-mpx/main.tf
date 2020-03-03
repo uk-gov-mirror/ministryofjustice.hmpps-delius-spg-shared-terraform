@@ -17,10 +17,12 @@ provider "aws" {
 
 locals {
   ########################################################################################################
-  #Common (lots of duplication here, needs further refactoring)
-  ########################################################################################################
+  #Common (lots of duplication here, needs further refactoring)evel.evel.
+  ########################################################################################################evel.evel.evel.evel.evel.
 
-  tags    = "${merge(local.tags, map("sub-application", "spg"))}"
+//  tags    = "${merge(var.tags, map("sub-application", var.sub-application1))}"
+
+  tags    = "${merge(var.tags, map("sub-application", "spg"))}"
 
   short_environment_name = "${data.terraform_remote_state.common.short_environment_name}"
   app_hostnames          = "${data.terraform_remote_state.common.app_hostnames}"
