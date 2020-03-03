@@ -394,6 +394,8 @@ and the problems it causes if it fails
             }
         }
 
+/*
+        This stage has been moved to the spg_deploy_elasticsearch.jenkinsfile
         stage('Amazon ES Configuration') {
             parallel {
                 stage('Configure Index Pattern') {
@@ -403,7 +405,7 @@ and the problems it causes if it fails
                             pwd
                             ls -l
                             echo "Calling configure_amazon_es.sh for environment_name ${environment_name}"
-                            cd elk-stack/filebeat
+                            cd elk-service/filebeat
                             ./configure_amazon_es.sh ${environment_name}
                             '''
                         }
@@ -411,6 +413,7 @@ and the problems it causes if it fails
                 }
             }
         }
+ */
     }
 
     post {
