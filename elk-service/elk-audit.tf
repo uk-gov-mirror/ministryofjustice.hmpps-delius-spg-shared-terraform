@@ -1,14 +1,14 @@
 # SG for ElasticSearch VPC Endpoint
 # Ingress rules will be added ........ TODO
 resource "aws_security_group" "elk-audit_sg" {
-  name        = "${local.name_prefix}-elk-audit-pri-sg"
+  name        = "${local.name_prefix}-elk-audit-main-sg"
   description = "NDST ELK Audit Stack Security Group"
   vpc_id      = "${data.terraform_remote_state.vpc.vpc_id}"
 
   tags = "${
       merge(
           var.tags, 
-          map("Name", "${local.name_prefix}-elk-audit-pri-ecs")
+          map("Name", "${local.name_prefix}-elk-audit-main-ecs")
           )
         }"
 }
@@ -113,7 +113,7 @@ resource "aws_elasticsearch_domain" "elk-audit_domain" {
   tags = "${
       merge(
           var.tags, 
-          map("Name", "${local.name_prefix}-elk-audit-pri-ecs"),
+          map("Name", "${local.name_prefix}-elk-audit-main-ecs"),
           map("Domain", "${var.elk-audit_conf["es_domain"]}")
           )
         }"
@@ -138,7 +138,7 @@ resource "aws_elasticsearch_domain" "elk-audit_domain" {
 # Value must be updated when administering the webops kibana user in cognito
 # This is just a placeholder to store the secure password
 resource "aws_ssm_parameter" "kibana_webops_password" {
-  name  = "${local.name_prefix}-kibana-pri-ssm"
+  name  = "${local.name_prefix}-kibana-main-ssm"
   type  = "SecureString"
   value = "null"
 }
