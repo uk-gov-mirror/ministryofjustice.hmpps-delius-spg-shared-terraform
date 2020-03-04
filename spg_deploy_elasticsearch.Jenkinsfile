@@ -241,6 +241,15 @@ pipeline {
             }
         }
 
+        stage('Delius | SPG | Security Groups And Rules') {
+            steps {
+                script {
+                    project.env_name = environment_name
+                    do_terraform(project, 'security-groups-and-rules')
+                }
+            }
+        }
+
         stage('Delius | SPG | ELK Stack') {
             steps {
                 script {
