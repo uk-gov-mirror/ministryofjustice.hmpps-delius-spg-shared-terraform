@@ -39,11 +39,7 @@ resource "aws_security_group_rule" "elk-audit_jenkins_servers" {
   protocol          = "tcp"
   from_port         = 443
   to_port           = 443
-  cidr_blocks              = [
-    "${data.terraform_remote_state.engineering_nat.common-nat-public-ip-az1}/32",
-    "${data.terraform_remote_state.engineering_nat.common-nat-public-ip-az2}/32",
-    "${data.terraform_remote_state.engineering_nat.common-nat-public-ip-az3}/32"
-  ]
+  cidr_blocks       = ["${data.terraform_remote_state.vpc.eng_vpc_cidr}"]
   description       = "ES and Kibana ingress via jenkins"
 }
 
