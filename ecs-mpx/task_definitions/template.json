@@ -110,6 +110,16 @@
             ${po_configuration}
 
             ],
+            "secrets": [
+            {
+                "name": "SPG_GATEWAY_MQ_USERNAME",
+                "valueFrom": "arn:aws:ssm:${app_region}:${current_account_id}:parameter/${environment_name}/delius-core/weblogic/spg-domain/remote_broker_username"
+            },
+            {
+                "name": "SPG_GATEWAY_MQ_PASSWORD",
+                "valueFrom": "arn:aws:ssm:${app_region}:${current_account_id}:parameter/${environment_name}/delius-core/weblogic/spg-domain/remote_broker_password"
+            }
+            ],
         "portMappings": [
             {
                 "hostPort": 8181,
@@ -136,7 +146,7 @@
             "logDriver": "awslogs",
             "options": {
                 "awslogs-group": "${log_group_name}",
-                "awslogs-region": "${log_group_region}",
+                "awslogs-region": "${app_region}",
                 "awslogs-stream-prefix": "ecs-${container_name}"
             }
         }

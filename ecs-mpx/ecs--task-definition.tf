@@ -34,7 +34,10 @@ data "template_file" "app_task_definition" {
     version = "${local.image_version}"
 
     log_group_name = "${module.create_loggroup.loggroup_name}"
-    log_group_region = "${var.region}"
+
+    app_region = "${var.region}"
+    current_account_id         = "${data.aws_caller_identity.current.account_id}"
+    environment_name = "delius-${local.SPG_ENVIRONMENT_CODE}"
 
     data_volume_host_path = "${local.data_volume_host_path}"
     data_volume_name = "${local.data_volume_name}"
@@ -71,5 +74,5 @@ module "app_task_definition" {
 
   data_volume_host_path = "${local.data_volume_host_path}"
   data_volume_name      = "${local.data_volume_name}"
-
+  execution_role_arn = "${aws_iam_role.iam_execute_role.arn}"
 }
