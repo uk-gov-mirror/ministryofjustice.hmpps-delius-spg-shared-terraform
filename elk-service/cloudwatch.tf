@@ -1,12 +1,12 @@
 resource "aws_cloudwatch_log_group" "elk-audit_log_group" {
-  name              = "${local.name_prefix}-elk-audit-pri-cwl"
+  name              = "${local.name_prefix}-elk-audit-main-cwl"
   retention_in_days = "${var.elk-audit_conf["es_log_retention_days"]}"
-  tags              = "${merge(var.tags, map("Name", "${local.name_prefix}-elk-audit-pri-cwl"))}"
+  tags              = "${merge(var.tags, map("Name", "${local.name_prefix}-elk-audit-main-cwl"))}"
 }
 
 # Create log access policy to allow ES service role to create log stream and put events
 resource "aws_cloudwatch_log_resource_policy" "elk-audit_log_access" {
-  policy_name     = "${local.name_prefix}-elk-audit-pri-cwl"
+  policy_name     = "${local.name_prefix}-elk-audit-main-cwl"
   policy_document = "${data.template_file.cwlogs_accesspolicy_template.rendered}"
 }
 

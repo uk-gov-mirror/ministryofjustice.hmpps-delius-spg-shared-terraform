@@ -5,7 +5,7 @@
 # IAM Role for Cognito auth'd users to assume when logged into Kibana
 # ES Permissions for the role are assigned in the ES access policy document
 resource "aws_iam_role" "elk-audit_kibana_role" {
-  name               = "${local.name_prefix}-kibanauser-pri-iam"
+  name               = "${local.name_prefix}-kibanauser-main-iam"
   assume_role_policy = "${data.template_file.elk-audit_kibana_assume_policy_template.rendered}"
 }
 

@@ -113,7 +113,7 @@ variable "elk-audit_cognito_conf" {
     admin_only_create = true
 
     # Pool domain for Cognito managed login page
-    domain = "ndst-elk-audit"
+    domain = "spg-elk-audit"
 
     # Optional email attribute and associated settings
     email_required           = false
