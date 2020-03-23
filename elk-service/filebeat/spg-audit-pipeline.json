@@ -4,7 +4,15 @@
       {
         "dissect": {
           "field": "message",
-          "pattern": "%{logLevel} %{interchangeTimestamp}|%{logType}||%{logMessageFields}"
+          "pattern": "%{logLevel} %{temp1}|%{logType}||%{logMessageFields}"
+        }
+      },
+      {
+        "date": {
+          "field": "temp1",
+          "target_field": "interchangeTimestamp",
+          "formats": ["yyyy-MM-ddTHH:mm:ss.SSSX"],
+          "tag": "interchangeTimestamp processor"
         }
       },
       {
