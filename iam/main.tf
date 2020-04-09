@@ -32,7 +32,6 @@ locals {
   ecs_module_default_assume_role_policy_file     = "ecs_policy.json"
   ecs_role_policy_file                           = "../policies/ecs_role_policy.json"
   backups-bucket-name                            = "${var.backups-bucket-name}"
-  s3-config-bucket                               = "${data.terraform_remote_state.common.common_s3-config-bucket}"
   s3-certificates-bucket                         = "${data.terraform_remote_state.common.common_engineering_certificates_s3_bucket}"
   tags                                           = "${merge(var.tags, map("sub-project", "${local.spg_app_name}"))}"
 }
