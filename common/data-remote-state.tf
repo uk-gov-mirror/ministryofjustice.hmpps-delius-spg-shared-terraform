@@ -26,7 +26,6 @@ data "terraform_remote_state" "monitor" {
   }
 }
 
-
 #-------------------------------------------------------------
 ### Getting the engineering platform vpc
 #-------------------------------------------------------------
@@ -40,6 +39,3 @@ data "terraform_remote_state" "eng_remote_certificates_s3bucket" {
     role_arn = "${var.eng_role_arn}"
   }
 }
-
-
-

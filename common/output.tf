@@ -9,10 +9,9 @@ output "common_account_id" {
   value = "${data.aws_caller_identity.current.account_id}"
 }
 
-
 # S3 Buckets
-output "common_s3-config-bucket" {
-  value = "${module.s3config_bucket.s3_bucket_name}"
+output "common_s3_backups_bucket" {
+  value = "${module.s3_backups_bucket.s3_bucket_name}"
 }
 
 output "common_s3_lb_logs_bucket" {
@@ -59,7 +58,6 @@ output "strategic_public_zone_id" {
   value = "${var.route53_strategic_hosted_zone_id}"
 }
 
-
 output "common_name" {
   value = "${local.common_name}"
 }
@@ -88,7 +86,6 @@ output "short_environment_name" {
   value = "${local.short_environment_name}"
 }
 
-
 output "project_name_abbreviated" {
   value = "${local.project_name_abbreviated}"
 }
@@ -96,9 +93,6 @@ output "project_name_abbreviated" {
 output "hmpps_asset_name_prefix" {
   value = "${local.hmpps_asset_name_prefix}"
 }
-
-
-
 
 output "remote_state_bucket_name" {
   value = "${local.remote_state_bucket_name}"
@@ -125,7 +119,6 @@ output "monitoring_server_client_sg_id" {
   value = "${data.terraform_remote_state.monitor.monitoring_server_client_sg_id}"
 }
 */
-
 
 output "private_subnet_map" {
   value = {
@@ -176,5 +169,3 @@ output "private_subnet_ids" {
 output "app_hostnames" {
   value = "${local.app_hostnames}"
 }
-
-

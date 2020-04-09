@@ -1,17 +1,11 @@
-
 # #-------------------------------------------
-# ### S3 bucket for config
+# ### S3 bucket for backups
 # #--------------------------------------------
-module "s3config_bucket" {
+module "s3_backups_bucket" {
   source         = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//s3bucket//s3bucket_without_policy"
-  s3_bucket_name = "${local.full_common_name}"
+  s3_bucket_name = "${local.full_common_name}-backups"
   tags           = "${local.tags}"
 }
-
-
-
-
-
 
 # #-------------------------------------------
 # ### S3 bucket for logs
