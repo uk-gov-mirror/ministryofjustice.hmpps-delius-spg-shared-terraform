@@ -22,9 +22,9 @@ module "create-iam-ecs-policy-mpx-int" {
   rolename   = "${module.create-iam-ecs-role-mpx-int.iamrole_name}"
 }
 
-
+//overide role from modules project with extended assumerole permissions for ecs tasks
 module "create-iam-app-role-mpx-int" {
-  source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//role"
+  source     = "../modules/iam/role"
   rolename   = "${local.common_name}-mpx-int-ec2"
   policyfile = "${local.ec2_iam_module_default_assume_role_policy_file}"
 }
