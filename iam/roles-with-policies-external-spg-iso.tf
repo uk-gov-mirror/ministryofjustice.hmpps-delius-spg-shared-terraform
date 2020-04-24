@@ -23,9 +23,9 @@ module "create-iam-ecs-policy-iso-ext" {
 }
 
 
-
+//overide role from modules project with extended assumerole permissions for ecs tasks
 module "create-iam-app-role-iso-ext" {
-  source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//role"
+  source     = "../modules/iam/role"
   rolename   = "${local.common_name}-iso-ext-ec2"
   policyfile = "${local.ec2_iam_module_default_assume_role_policy_file}"
 }
