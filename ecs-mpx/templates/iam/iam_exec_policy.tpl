@@ -25,8 +25,8 @@
             "kms:Decrypt"
         ],
         "Resource": [
-            "arn:aws:ssm:${region}:${aws_account_id}:parameter/delius-core-dev/delius-core/weblogic/spg-domain/remote_broker_username",
-            "arn:aws:ssm:${region}:${aws_account_id}:parameter/delius-core-dev/delius-core/weblogic/spg-domain/remote_broker_password"
+            "arn:aws:ssm:${region}:${aws_account_id}:parameter/${project_name}-${environment_type}/${project_name}/weblogic/spg-domain/remote_broker_username",
+            "arn:aws:ssm:${region}:${aws_account_id}:parameter/${project_name}-${environment_type}/${project_name}/weblogic/spg-domain/remote_broker_password"
         ]
        }
     ]
