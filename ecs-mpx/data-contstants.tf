@@ -43,6 +43,8 @@ data "template_file" "ecs_tasks_assumerole_template" {
   vars = {
     region           = "${var.region}"
     aws_account_id   = "${data.aws_caller_identity.current.account_id}"
+    project_name     = "${var.project_name}"
+    environment_type = "${var.environment_type}"
   }
 }
 

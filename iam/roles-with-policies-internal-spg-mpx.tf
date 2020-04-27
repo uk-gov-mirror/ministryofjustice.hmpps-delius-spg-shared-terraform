@@ -22,7 +22,8 @@ module "create-iam-ecs-policy-mpx-int" {
   rolename   = "${module.create-iam-ecs-role-mpx-int.iamrole_name}"
 }
 
-//overide role from modules project with extended assumerole permissions for ecs tasks
+//overiding role from modules project with extended assumerole permissions for ecs tasks
+//resulted in SSM permission failures
 module "create-iam-app-role-mpx-int" {
   source     = "../modules/iam/role"
   rolename   = "${local.common_name}-mpx-int-ec2"

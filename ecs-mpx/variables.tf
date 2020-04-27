@@ -96,3 +96,6 @@ variable "esc_container_stop_timeout" {
 variable "deployment_minimum_healthy_percent" {
   default = "100"
 }
+
+variable "environment_type" {}
+variable "project_name" {}
