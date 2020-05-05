@@ -113,11 +113,11 @@
             "secrets": [
             {
                 "name": "SPG_GATEWAY_MQ_USERNAME",
-                "valueFrom": "arn:aws:ssm:${app_region}:${current_account_id}:parameter/${environment_name}/delius-core/weblogic/spg-domain/remote_broker_username"
+                "valueFrom": "arn:aws:ssm:${app_region}:${current_account_id}:parameter/${project_name}-${environment_type}/${project_name}/weblogic/spg-domain/remote_broker_username"
             },
             {
                 "name": "SPG_GATEWAY_MQ_PASSWORD",
-                "valueFrom": "arn:aws:ssm:${app_region}:${current_account_id}:parameter/${environment_name}/delius-core/weblogic/spg-domain/remote_broker_password"
+                "valueFrom": "arn:aws:ssm:${app_region}:${current_account_id}:parameter/${project_name}-${environment_type}/${project_name}/weblogic/spg-domain/remote_broker_password"
             }
             ],
         "portMappings": [
