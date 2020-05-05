@@ -37,7 +37,10 @@ data "template_file" "app_task_definition" {
 
     app_region = "${var.region}"
     current_account_id         = "${data.aws_caller_identity.current.account_id}"
-    environment_name = "delius-${local.SPG_ENVIRONMENT_CODE}"
+
+
+    project_name = "${var.project_name}"
+    environment_type = "${var.environment_type}"
 
     data_volume_host_path = "${local.data_volume_host_path}"
     data_volume_name = "${local.data_volume_name}"
