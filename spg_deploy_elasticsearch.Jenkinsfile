@@ -259,6 +259,15 @@ pipeline {
             }
         }
 
+        stage('Delius | SPG | ELK Domains') {
+            steps {
+                script {
+                    project.env_name = environment_name
+                    do_terraform(project, 'elk-domains')
+                }
+            }
+        }
+
         stage('Amazon ES Configuration') {
             parallel {
                 stage('Configure Index Pattern') {
