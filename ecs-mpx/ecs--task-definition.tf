@@ -19,11 +19,22 @@ data "template_file" "po_configuration" {
   }
 }
 
+data "template_file" "SPG_ENV_VARS" {
+  template = "${file("task_definitions/key_value_pair.tpl.json")}"
+  count = "${length(var.SPG_ENV_VARS)}"
+
+  vars {
+    name = "${element(keys(var.SPG_ENV_VARS),count.index)}"
+    value = "${element(values(var.SPG_ENV_VARS),count.index)}"
+  }
+}
+
 data "template_file" "app_task_definition" {
   template = "${file("task_definitions/template.json")}"
 
   vars {
     po_configuration = "${join(",", data.template_file.po_configuration.*.rendered)}"
+    spg_env_configuration = "${join(",", data.template_file.SPG_ENV_VARS.*.rendered)}"
 
     hmpps_asset_name_prefix = "${local.hmpps_asset_name_prefix}"
 

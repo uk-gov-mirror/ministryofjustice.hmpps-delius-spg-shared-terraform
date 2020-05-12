@@ -107,7 +107,8 @@
             "value": "${SPG_CRC_FQDN}"
             },
 
-            ${po_configuration}
+            ${po_configuration},
+            ${spg_env_configuration}
 
             ],
         "portMappings": [

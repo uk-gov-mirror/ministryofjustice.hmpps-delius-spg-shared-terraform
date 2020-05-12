@@ -89,6 +89,11 @@ variable PO_SPG_CONFIGURATION {
   type="map"
 }
 
+variable SPG_ENV_VARS {
+  description ="map of SPG environment vars"
+  type="map"
+}
+
 variable "esc_container_stop_timeout" {
   default = "310s"
 }
