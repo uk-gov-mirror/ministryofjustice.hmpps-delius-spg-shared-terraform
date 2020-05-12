@@ -149,6 +149,7 @@ resource "aws_route53_record" "dns_spg_aes_int_entry" {
   ttl = "1800"
   count = 1
   records = ["${aws_elasticsearch_domain.elk-audit_domain.endpoint}"]
+  depends_on = ["aws_elasticsearch_domain.elk-audit_domain"]
 }
 
 resource "aws_route53_record" "dns_spg_aes_ext_entry" {
@@ -160,4 +161,5 @@ resource "aws_route53_record" "dns_spg_aes_ext_entry" {
   ttl = "1800"
   count = 1
   records = ["${aws_elasticsearch_domain.elk-audit_domain.endpoint}"]
+  depends_on = ["aws_elasticsearch_domain.elk-audit_domain"]
 }
