@@ -140,6 +140,7 @@ resource "aws_ssm_parameter" "kibana_webops_password" {
 }
 
 #
+/*
 resource "aws_route53_record" "dns_spg_aes_int_entry" {
 
   # Use the ID of the Hosted Zone we retrieved earlier
@@ -163,3 +164,4 @@ resource "aws_route53_record" "dns_spg_aes_ext_entry" {
   records = ["${aws_elasticsearch_domain.elk-audit_domain.endpoint}"]
   depends_on = ["aws_elasticsearch_domain.elk-audit_domain"]
 }
+*/
