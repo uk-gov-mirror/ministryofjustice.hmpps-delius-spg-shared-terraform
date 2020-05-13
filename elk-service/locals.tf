@@ -2,7 +2,7 @@ locals {
   # Handle mixed environments project name
   name_prefix = "${data.terraform_remote_state.common.hmpps_asset_name_prefix}"
 
-  domain_name = "${format("%s-%s", local.name_prefix, var.elk-audit_conf["es_domain"])}"
+  domain_name = "${substr(format("%s-%s", local.name_prefix, var.elk-audit_conf["es_domain"]), 0, 28)}"
 
   # Handle ES config for single instance or multiple instance deployments
   es_single_instance_subnet_id = [
