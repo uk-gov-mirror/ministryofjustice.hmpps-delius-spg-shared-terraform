@@ -10,4 +10,5 @@ locals {
   metric_name = "${var.short_environment_name}-${local.name}-count"
 
   alarm_name_prefix = "${var.short_environment_name}__${local.application}__${local.name}"
+  date_range_placeholder = "start_end_date_placeholder"
 }

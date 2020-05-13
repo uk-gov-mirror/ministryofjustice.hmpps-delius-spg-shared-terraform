@@ -20,7 +20,14 @@ exports.handler = function(event, context) {
     var metric = alarmName.split("__")[2];
     var severity = alarmName.split("__")[3];
     var severityText = severity;
-    var currentTimestamp = new Date().toUTCString();
+    var currentDate = new Date();
+
+    var currentDateMinusFiveMinutes = new Date();
+    currentDateMinusFiveMinutes.setMinutes(currentDateMinusFiveMinutes.getMinutes()-5);
+
+    var dateRangePlaceholder = "start_end_date_placeholder"
+    var updatedAlarmDescription = alarmDescription
+                                 .replace(dateRangePlaceholder,"start="+currentDateMinusFiveMinutes.toISOString().concat(";end=".concat(currentDate.toISOString())))
 
     if (eventMessage.NewStateValue == "OK") {
         severity="ok";
@@ -76,7 +83,7 @@ exports.handler = function(event, context) {
 
     var textMessage="**************************************************************************************************"
                             +"\nMetric: " + metric
-                            +"\nCurrent timestamp: " + currentTimestamp
+                            +"\nCurrent timestamp: " + currentDate.toUTCString()
                             + "\nEnvironment: " + environment
                             + "\nSeverity: " +severity+"\n";
 
@@ -88,7 +95,7 @@ exports.handler = function(event, context) {
           + " *" + metricName + " is "
           +  comparisonOperator + " of "
           +  threshold +"*"
-          + "\n\nAction: " + alarmDescription
+          + "\n\nAction: " + updatedAlarmDescription
           + resolvers;
      }
      else
