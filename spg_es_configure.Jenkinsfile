@@ -24,7 +24,7 @@ def debug_env() {
 }
 
 pipeline {
-    agent { label "jenkins_slave" }
+    agent { label "spg_builds" }
 
     environment { CI = "true" }
 
