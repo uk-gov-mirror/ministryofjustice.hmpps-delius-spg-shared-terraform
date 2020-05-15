@@ -30,7 +30,7 @@ curl -k -XPOST "https://amazones-audit.${DNS_PREFIX}.probation.service.justice.g
           "messageNotificationStatusCode"
         ],
         "sort": [
-          "@timestamp",
+          "interchangeTimestamp",
           "desc"
         ],
         "version" : 1,

@@ -13,7 +13,7 @@
       "dynamic_templates" : [
       {
         "dates_ignore_malformed": {
-          "match": "*imestamp*",
+          "match": "timestamp*",
           "mapping": {
             "format" : "yyyy-MM-dd'T'HH:mm:ss.SSS",
             "ignore_malformed": true

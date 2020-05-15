@@ -21,7 +21,7 @@ curl -k -XPOST "https://amazones-audit.${DNS_PREFIX}.probation.service.justice.g
 {
     "attributes": {
         "title": "spg-audit-7.1.1*",
-        "timeFieldName": "@timestamp"
+        "timeFieldName": "interchangeTimestamp"
       }
 }
 '
