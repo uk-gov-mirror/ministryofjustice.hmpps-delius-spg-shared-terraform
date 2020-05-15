@@ -223,7 +223,7 @@ def debug_env() {
 }
 
 pipeline {
-    agent { label "jenkins_slave" }
+    agent { label "spg_builds" }
 
     stages {
         stage('setup') {
