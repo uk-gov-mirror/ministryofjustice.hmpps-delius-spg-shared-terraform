@@ -130,8 +130,12 @@ exports.handler = function (event, context) {
         var alarmFilterText = alarmDescription.split('filter=').pop().split(';')[0];
         var dateRangePlaceholder = "start_end_date_placeholder"
 
-        return  alarmDescription
-            .replace(alarmFilterText, encodeURI(alarmFilterText))
-            .replace(dateRangePlaceholder, "start=" + currentDateMinusFiveMinutes.toISOString().concat(";end=".concat(currentDate.toISOString())));
+        // We want to avoid description generation for non 'exception' alarms e.g. latency and un-healthy hosts
+        if (alarmDescription.includes(dateRangePlaceholder)){
+            return  alarmDescription
+                .replace(alarmFilterText, encodeURI(alarmFilterText))
+                .replace(dateRangePlaceholder, "start=" + currentDateMinusFiveMinutes.toISOString().concat(";end=".concat(currentDate.toISOString())));
+        }
+        return alarmDescription;
     }
 };
