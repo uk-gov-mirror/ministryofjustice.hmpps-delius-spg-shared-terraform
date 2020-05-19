@@ -13,9 +13,11 @@ A shared user account is configured in Cognito. As Terraform does not support Co
 
 **Setup Steps:**
 - Log into Cognito in the target Environment and manage the NDST ELK Audit User Pool
-- Create New User and set temp password which matches the password policy
+- AWS -> Cognito -> User Pools -> Select the user pool for this environment (e.g. dpt1-po-test1-elk-audit-main-cog)
+- Select Menu item -> Users and Groups
+- Create New User (webops) and set temp password which matches the password policy
 - Log into Kibana via the VPC Endpoint (see below) and change password when prompted
-- Store new password in the SSM Parameter created in this code base
+- Store new password in the SSM Parameter created in this code base (kibana_webops_password)
 
 ## Access
 The ES cluster can be accessed either from allowed services, such as New Tech Front End, or via the Bastion servers. Access is predicated on having ssh access to the Bastion serving the target environment.

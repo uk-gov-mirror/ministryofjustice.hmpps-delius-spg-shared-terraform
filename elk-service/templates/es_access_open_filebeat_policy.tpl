@@ -7,7 +7,7 @@
         "AWS": "*"
       },
       "Action": "es:*",
-      "Resource": "arn:aws:es:eu-west-2:*:domain/*-elk-audit-stack/*"
+      "Resource": "arn:aws:es:eu-west-2:*:domain/*-elk-audit-*/*"
     }
   ]
 }
