@@ -137,4 +137,5 @@ resource "aws_ssm_parameter" "kibana_webops_password" {
   name  = "${local.name_prefix}-kibana-main-ssm"
   type  = "SecureString"
   value = "null"
+  overwrite = "true"
 }
