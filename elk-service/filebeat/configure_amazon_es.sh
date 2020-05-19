@@ -37,7 +37,7 @@ case ${TG_ENVIRONMENT_TYPE} in
           export DNS_PREFIX=test
           ;;
 
-    po-test1)
+    delius-po-test1)
           export DNS_PREFIX=po-test
           ;;
 
