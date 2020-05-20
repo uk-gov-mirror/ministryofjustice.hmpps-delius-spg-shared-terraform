@@ -45,6 +45,10 @@ case ${TG_ENVIRONMENT_TYPE} in
           export DNS_PREFIX=stage
           ;;
 
+    delius-training)
+          export DNS_PREFIX=training
+          ;;
+
     delius-pre-prod)
           export DNS_PREFIX=pre-prod
           ;;
