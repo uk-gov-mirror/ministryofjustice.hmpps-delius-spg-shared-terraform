@@ -33,6 +33,8 @@ locals {
     "${data.terraform_remote_state.iam.iam_policy_mpx_int_app_role_arn}",//for when using all in one
     "${data.terraform_remote_state.iam.iam_policy_crc_int_app_role_arn}"]
 
+  hmpps_asset_name_prefix = "${data.terraform_remote_state.common.hmpps_asset_name_prefix}"
+
 }
 
 #################################################################
@@ -72,14 +74,14 @@ data "template_file" "kms_spg_crc_policy" {
 
 module "certificates_spg_tls_cert_kms_key" {
   source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//kms_custom_policy"
-  kms_key_name = "${var.short_environment_identifier}-certificates-spg-tls-cert"
+  kms_key_name = "${local.hmpps_asset_name_prefix}-certificates-spg-tls-cert"
   policy = "${data.template_file.kms_spg_tls_policy.rendered}"
   tags = "${local.tags}"
 }
 
 module "certificates_spg_signing_cert_kms_key" {
   source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//kms_custom_policy"
-  kms_key_name = "${var.short_environment_identifier}-certificates-spg-message-signing-certificate"
+  kms_key_name = "${local.hmpps_asset_name_prefix}-certificates-spg-message-signing-certificate"
   policy = "${data.template_file.kms_spg_signing_policy.rendered}"
   tags = "${local.tags}"
 }
@@ -87,7 +89,7 @@ module "certificates_spg_signing_cert_kms_key" {
 
 module "certificates_spg_crc_cert_kms_key" {
   source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//kms_custom_policy"
-  kms_key_name = "${var.short_environment_identifier}-certificates-spg-crc-cert"
+  kms_key_name = "${local.hmpps_asset_name_prefix}-certificates-spg-crc-cert"
   policy = "${data.template_file.kms_spg_crc_policy.rendered}"
   tags = "${local.tags}"
 }
