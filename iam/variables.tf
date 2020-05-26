@@ -20,3 +20,7 @@ variable "depends_on" {
   default = []
   type    = "list"
 }
+
+variable "short_environment_identifier" {
+  description = "short resource label or name"
+}

@@ -19,7 +19,10 @@ locals {
   short_environment_identifier = "${data.terraform_remote_state.common.short_environment_identifier}"
   account_id                   = "${data.terraform_remote_state.common.common_account_id}"
   #workaround for training-test exceeding 64 chars
+
+  short_environment_identifier = "${var.short_environment_identifier}"
   dynamic_environment_identifier = "${(local.environment_identifier == "tf-eu-west-2-hmpps-delius-training-test") ? local.short_environment_identifier : local.environment_identifier}"
+
   common_name                  = "${local.dynamic_environment_identifier}-${var.spg_app_name}"
 
   ####################################################

@@ -15,7 +15,6 @@ provider "aws" {
 locals {
   spg_app_name                 = "${var.spg_app_name}"
   environment_identifier       = "${var.environment_identifier}"
-  short_environment_identifier = "${var.short_environment_identifier}"
 
   #as of 11/04/2019 in env/common/common.properties, env name also has project name in it
   #export TG_SHORT_ENVIRONMENT_NAME="${TG_PROJECT_NAME_ABBREVIATED}-${TG_ENVIRONMENT_TYPE}"
