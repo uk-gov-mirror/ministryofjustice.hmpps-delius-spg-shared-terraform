@@ -19,8 +19,9 @@ locals {
   account_id                   = "${data.terraform_remote_state.common.common_account_id}"
   #workaround for training-test exceeding 64 chars
 
-  short_environment_identifier = "${var.short_environment_identifier}"
-  dynamic_environment_identifier = "${(local.environment_identifier == "tf-eu-west-2-hmpps-delius-training-test") ? local.short_environment_identifier : local.environment_identifier}"
+  historic_dtt_prefix          = "tf-dtt-training-test" # this used to reference short_environment_identifier, but that got changed by another ALS project
+
+  dynamic_environment_identifier = "${(local.environment_identifier == "tf-eu-west-2-hmpps-delius-training-test") ? local.historic_dtt_prefix : local.environment_identifier}"
 
   common_name                  = "${local.dynamic_environment_identifier}-${var.spg_app_name}"
 
