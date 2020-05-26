@@ -30,10 +30,6 @@ variable "environment_identifier" {
   description = "resource label or name"
 }
 
-variable "short_environment_identifier" {
-  description = "shortend resource label or name"
-}
-
 variable "dependencies_bucket_arn" {
   description = "S3 bucket arn for dependencies"
 }

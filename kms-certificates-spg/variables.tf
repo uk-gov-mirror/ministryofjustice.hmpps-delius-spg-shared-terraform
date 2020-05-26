@@ -8,7 +8,3 @@ variable "remote_state_bucket_name" {
 variable "tags" {
   type = "map"
 }
-
-variable "short_environment_identifier" {
-  description = "short resource label or name"
-}

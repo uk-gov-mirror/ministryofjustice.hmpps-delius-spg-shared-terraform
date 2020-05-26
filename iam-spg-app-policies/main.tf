@@ -16,7 +16,6 @@ locals {
   region                       = "${var.region}"
   spg_app_name                 = "${data.terraform_remote_state.common.spg_app_name}"
   environment_identifier       = "${data.terraform_remote_state.common.environment_identifier}"
-  short_environment_identifier = "${data.terraform_remote_state.common.short_environment_identifier}"
   account_id                   = "${data.terraform_remote_state.common.common_account_id}"
   common_name                  = "${var.environment_identifier}-${var.spg_app_name}"
 
