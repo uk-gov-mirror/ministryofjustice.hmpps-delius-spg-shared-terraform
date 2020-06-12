@@ -9,8 +9,9 @@ fi
 
 if [ -z "${DNS_PREFIX}" ]
 then
-    echo "add_template.sh: DNS_PREFIX argument not supplied, please provide an argument!"
-    exit 1
+  export URL="https://amazones-audit.probation.service.justice.gov.uk"
+else
+  export URL="https://amazones-audit.${DNS_PREFIX}.probation.service.justice.gov.uk"
 fi
 
-curl -k -XPUT "https://amazones-audit.${DNS_PREFIX}.probation.service.justice.gov.uk:443/_template/spg-audit" -H "Content-Type: application/json" -d@spg-audit-template.json
+curl -k -XPUT "${URL}:443/_template/spg-audit" -H "Content-Type: application/json" -d@spg-audit-template.json

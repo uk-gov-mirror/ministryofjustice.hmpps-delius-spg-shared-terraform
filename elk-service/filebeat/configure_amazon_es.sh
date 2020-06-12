@@ -58,7 +58,7 @@ case ${TG_ENVIRONMENT_TYPE} in
           ;;
 
      *)
-          export DNS_PREFIX=""
+          export DNS_PREFIX="unsupported"
           ;;
 esac
 
