@@ -64,7 +64,6 @@ variable "elk-audit_conf" {
     es_dedicated_master_enabled = false
     es_dedicated_master_count   = 0
     es_dedicated_master_type    = ""
-    es_zone_aware_enabled       = false
 
     # Number of AZs and Subnets is calculated based on es_instance_count value
 
@@ -81,7 +80,7 @@ variable "elk-audit_conf" {
     es_logging_enabled = true
     # Valid values: INDEX_SLOW_LOGS, SEARCH_SLOW_LOGS, ES_APPLICATION_LOGS
     es_log_type           = "ES_APPLICATION_LOGS"
-    es_log_retention_days = 14
+    es_log_retention_days = 90
     # Authentication
     auth_enabled = true
   }
