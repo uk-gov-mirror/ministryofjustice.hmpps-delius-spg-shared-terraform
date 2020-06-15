@@ -4,10 +4,6 @@ variable "environment_identifier" {
   description = "resource label or name"
 }
 
-variable "short_environment_identifier" {
-  description = "short resource label or name"
-}
-
 variable "short_environment_name" {
   type = "string"
 }

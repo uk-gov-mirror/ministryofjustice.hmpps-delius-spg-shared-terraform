@@ -37,12 +37,16 @@ case ${TG_ENVIRONMENT_TYPE} in
           export DNS_PREFIX=test
           ;;
 
-    po-test1)
+    delius-po-test1)
           export DNS_PREFIX=po-test
           ;;
 
     delius-stage)
           export DNS_PREFIX=stage
+          ;;
+
+    delius-training)
+          export DNS_PREFIX=training
           ;;
 
     delius-pre-prod)
@@ -54,7 +58,7 @@ case ${TG_ENVIRONMENT_TYPE} in
           ;;
 
      *)
-          export DNS_PREFIX=""
+          export DNS_PREFIX="unsupported"
           ;;
 esac
 

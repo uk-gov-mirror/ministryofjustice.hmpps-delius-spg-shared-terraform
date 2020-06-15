@@ -20,3 +20,7 @@ output "domain_name" {
 output "non-prod cidr az1"{
   value = "${data.terraform_remote_state.engineering_nat.common-nat-public-ip-az1}"
 }
+
+output "domain_name_length" {
+  value = "${local.domain_name_length}"
+}

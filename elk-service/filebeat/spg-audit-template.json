@@ -15,7 +15,7 @@
         "dates_ignore_malformed": {
           "match": "timestamp*",
           "mapping": {
-            "format" : "YYYY-MM-dd'T'HH:mm:ss.SSS",
+            "format" : "yyyy-MM-dd'T'HH:mm:ss.SSS",
             "ignore_malformed": true
           }
         }

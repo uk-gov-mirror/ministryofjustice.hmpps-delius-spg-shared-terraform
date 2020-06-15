@@ -1,6 +1,6 @@
-#resource "aws_iam_service_linked_role" "elk-audit" {
-#  aws_service_name = "es.amazonaws.com"
-#}
+//resource "aws_iam_service_linked_role" "elk-audit" {
+  //aws_service_name = "es.amazonaws.com"
+//}
 
 # IAM Role for Cognito auth'd users to assume when logged into Kibana
 # ES Permissions for the role are assigned in the ES access policy document

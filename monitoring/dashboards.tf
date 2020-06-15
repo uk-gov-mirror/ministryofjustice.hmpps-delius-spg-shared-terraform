@@ -37,23 +37,23 @@ data "template_file" "dashboard_spg_instance_body" {
 }
 
 resource "aws_cloudwatch_dashboard" "LB_monitoring" {
-  dashboard_name = "${local.hmpps_asset_name_prefix}_lb_monitoring"
+  dashboard_name = "${local.hmpps_asset_name_prefix}_spgw_lb_monitoring"
   dashboard_body = "${data.template_file.dashboard_loadbalancer_body.rendered}"
 }
 
 resource "aws_cloudwatch_dashboard" "alert_count" {
-  dashboard_name = "${local.hmpps_asset_name_prefix}_alert_count"
+  dashboard_name = "${local.hmpps_asset_name_prefix}_spgw_alert_count"
   dashboard_body = "${data.template_file.alert_count_body.rendered}"
 }
 
 resource "aws_cloudwatch_dashboard" "amq_monitoring_broker" {
-  dashboard_name = "${local.hmpps_asset_name_prefix}_activemq_monitoring"
+  dashboard_name = "${local.hmpps_asset_name_prefix}_spgw_activemq_monitoring"
   dashboard_body = "${data.template_file.dashboard_activemq_body.rendered}"
 }
 
 
 
 resource "aws_cloudwatch_dashboard" "spg_instance_monitoring" {
-  dashboard_name = "${local.hmpps_asset_name_prefix}_instance_monitoring"
+  dashboard_name = "${local.hmpps_asset_name_prefix}_spgw_instance_monitoring"
   dashboard_body = "${data.template_file.dashboard_spg_instance_body.rendered}"
 }

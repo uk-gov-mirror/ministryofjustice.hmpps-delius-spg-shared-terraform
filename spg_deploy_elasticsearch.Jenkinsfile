@@ -86,7 +86,7 @@ def refresh_submodule(configMap, submodule_name) {
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
         sh """
         #!/usr/env/bin bash
-        echo "TF APPLY for ${configMap.env_name} | ${submodule_name} - component from git project ${configMap.terraform}"
+        echo "Refreshing ${configMap.env_name} | ${submodule_name} - component from git project ${configMap.terraform}"
         set +e
         cp -R -n "${configMap.config}" "${configMap.terraform}/env_configs"
         cd "${configMap.terraform}"
@@ -223,7 +223,7 @@ def debug_env() {
 }
 
 pipeline {
-    agent { label "jenkins_slave" }
+    agent { label "spg_builds" }
 
     stages {
         stage('setup') {
@@ -255,6 +255,15 @@ pipeline {
                 script {
                     project.env_name = environment_name
                     do_terraform(project, 'elk-service')
+                }
+            }
+        }
+
+        stage('Delius | SPG | ELK Domains') {
+            steps {
+                script {
+                    project.env_name = environment_name
+                    do_terraform(project, 'elk-domains')
                 }
             }
         }

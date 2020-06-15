@@ -78,9 +78,6 @@ output "environment_identifier" {
   value = "${local.environment_identifier}"
 }
 
-output "short_environment_identifier" {
-  value = "${local.short_environment_identifier}"
-}
 
 output "short_environment_name" {
   value = "${local.short_environment_name}"
