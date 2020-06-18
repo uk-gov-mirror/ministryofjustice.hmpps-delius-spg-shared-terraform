@@ -5,9 +5,8 @@ variable "remote_state_bucket_name" {
   description = "Terraform remote state bucket name"
 }
 
-variable "alarms_enabled" {
-  type    = "string"
-  default = "false"
+variable "cloudwatch_agent_alarm_enabled" {
+  default = true
 }
 
 variable "build_tag" {

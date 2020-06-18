@@ -2,7 +2,7 @@ var https = require('https');
 var util = require('util');
 
 exports.handler = function (event, context) {
-    console.log(JSON.stringify(event, null, 2));
+    //console.log(JSON.stringify(event, null, 2));
 
     var eventMessage = JSON.parse(event.Records[0].Sns.Message);
     var alarmName = eventMessage.AlarmName;
@@ -21,6 +21,16 @@ exports.handler = function (event, context) {
     var currentDate = new Date();
     var currentDateMinusFiveMinutes = new Date();
     currentDateMinusFiveMinutes.setMinutes(currentDateMinusFiveMinutes.getMinutes() - 10);
+
+    console.log("Event message: " + eventMessage);
+    console.log("Alarm name: " + alarmName);
+    console.log("Alarm alarmDescription: " + alarmDescription);
+    console.log("Environment: " + environment);
+    console.log("Service: " + service);
+    console.log("Metric: " + metric);
+    console.log("Severity: " + severityText);
+
+
 
     var updatedAlarmDescription = generateAlarmDescription();
 
@@ -87,6 +97,10 @@ exports.handler = function (event, context) {
 
     }
     textMessage = textMessage + debug;
+    console.log("Text message: " + textMessage);
+
+    //Make sure no cloudwatch agent alarm is pushed to slack during out of hours time;
+//    shouldPushNotificationCloudwatchAgentIfAlarmEnabled();
 
     var postData = {
         "channel": "# " + channel,
@@ -103,6 +117,8 @@ exports.handler = function (event, context) {
         path: '/services/T02DYEB3A/BGJ1P95C3/f1MBtQ0GoI6kbGUztiSpkOut'
     };
 
+    console.log("After Post data options");
+
     var req = https.request(options, function (res) {
         res.setEncoding('utf8');
         res.on('data', function (chunk) {
@@ -118,7 +134,7 @@ exports.handler = function (event, context) {
     req.end();
 
     function getSlackChannelName() {
-        var subChannelForEnvironment = (environment == 'del-prod') ? "production" : "nonprod";
+        var subChannelForEnvironment = (environment == 'del-prod') ? "production-test" : "nonprod-test"; //TODO: Remove test
 
         if (metricName.includes("connection")) {
             return "delius-alerts-" + service + "-connection-" + subChannelForEnvironment;
@@ -130,12 +146,28 @@ exports.handler = function (event, context) {
         var alarmFilterText = alarmDescription.split('filter=').pop().split(';')[0];
         var dateRangePlaceholder = "start_end_date_placeholder"
 
+        console.log("Alarm description is: " + alarmDescription);
+        console.log("Alarm filter text is : " + alarmFilterText);
+        // console.log("Alarm filter text encoded : " + encodeURIComponent(alarmFilterText));
+
         // We want to avoid description generation for non 'exception' alarms e.g. latency and un-healthy hosts
         if (alarmDescription.includes(dateRangePlaceholder)){
+            console.log("We should end up here: ");
             return  alarmDescription
-                .replace(alarmFilterText, encodeURI(alarmFilterText))
+                .replace(alarmFilterText, encodeURIComponent(alarmFilterText))
                 .replace(dateRangePlaceholder, "start=" + currentDateMinusFiveMinutes.toISOString().concat(";end=".concat(currentDate.toISOString())));
         }
+        console.log("generateAlarmDescription: " + alarmDescription);
         return alarmDescription;
+    }
+    
+    function shouldPushNotificationCloudwatchAgentIfAlarmEnabled() {
+        var isOutOfHours = currentDate.getHours() > 20 && currentDate.getHours() < 7;
+        var isWeekend = (currentDate.getDay() === 6) || (currentDate.getDay() === 0);    // 6 = Saturday, 0 = Sunday
+        var isCloudwatchAgentAlarmName = alarmName.includes("cloudwatch-agent");
+
+        if ((isOutOfHours || isWeekend) && isCloudwatchAgentAlarmName){
+            return;
+        }
     }
 };

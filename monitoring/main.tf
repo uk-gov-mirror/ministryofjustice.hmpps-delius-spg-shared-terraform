@@ -19,6 +19,11 @@ locals {
   project_name_abbreviated = "${data.terraform_remote_state.common.project_name_abbreviated}"
   spg_app_name             = "${data.terraform_remote_state.common.spg_app_name}"
   lambda_name              = "spgw_alarm_slack_notification"
+  application = "spgw"
+  pattern = ""
+
+  filter_name = "${local.short_environment_name}--cloudwatch-agent__filter"
+  metric_name = "${local.short_environment_name}--cloudwatch-agent-count"
 
   mpx_lb_name = "${data.terraform_remote_state.ecs_mpx.environment_elb_name}"
 
