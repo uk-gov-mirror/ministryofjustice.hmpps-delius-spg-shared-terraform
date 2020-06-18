@@ -8,8 +8,6 @@ module "ecs_cluster" {
   cluster_name = "${local.common_name}"
 }
 
-
-
 ############################################
 # CREATE LOG GROUPS FOR CONTAINER LOGS
 ############################################
@@ -22,6 +20,29 @@ module "create_loggroup" {
   tags                     = "${local.tags}"
 }
 
+############################################
+# CREATE LOG GROUPS FOR APPLICATION LOGS
+############################################
+
+module "create_application_loggroup" {
+  source                   = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//cloudwatch//loggroup"
+  log_group_path           = "${local.short_environment_name}"
+  loggroupname             = "${local.app_name}-${local.app_submodule}-application"
+  cloudwatch_log_retention = "${local.cloudwatch_log_retention}"
+  tags                     = "${local.tags}"
+}
+
+############################################
+  # CREATE LOG GROUPS FOR INFRASTRUCTURE LOGS
+############################################
+
+module "create_infrastructure_loggroup" {
+  source                   = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//cloudwatch//loggroup"
+  log_group_path           = "${local.short_environment_name}"
+  loggroupname             = "${local.app_name}-${local.app_submodule}-infrastructure"
+  cloudwatch_log_retention = "${local.cloudwatch_log_retention}"
+  tags                     = "${local.tags}"
+}
 
 ############################################
 # CREATE ECS SERVICES
@@ -60,7 +81,8 @@ data "template_file" "user_data" {
     env_identifier = "${local.environment_identifier}"
     short_env_identifier = "${local.short_environment_name}"
     cluster_name = "${module.ecs_cluster.ecs_cluster_name}"
-    log_group_name = "${module.create_loggroup.loggroup_name}"
+    log_group_application_name = "${module.create_application_loggroup.loggroup_name}"
+    log_group_infrastructure_name = "${module.create_infrastructure_loggroup.loggroup_name}"
     container_name = "${local.app_name}-${local.app_submodule}"
     bastion_inventory    = "${var.bastion_inventory}"
 
