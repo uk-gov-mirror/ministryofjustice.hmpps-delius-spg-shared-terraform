@@ -25,8 +25,8 @@ locals {
   iso_lb_arn_suffix              = "${data.terraform_remote_state.ecs_iso.lb_arn_suffix}"
   iso_lb_target_group_arn_suffix = "${data.terraform_remote_state.ecs_iso.target_group_arn_suffix}"
 
-  crc_log_group_name = "${data.terraform_remote_state.ecs_crc.ecs_spg_loggroup_name}"
-  iso_log_group_name = "${data.terraform_remote_state.ecs_iso.loggroup_name}"
-  mpx_log_group_name = "${data.terraform_remote_state.ecs_mpx.ecs_spg_loggroup_name}"
+  crc_log_group_name = "${data.terraform_remote_state.ecs_crc.ecs_spg_application_loggroup_name}"
+  iso_log_group_name = "${data.terraform_remote_state.ecs_iso.ecs_spg_application_loggroup_name}"
+  mpx_log_group_name = "${data.terraform_remote_state.ecs_mpx.ecs_spg_application_loggroup_name}"
 
 }
