@@ -13,8 +13,8 @@ data "template_file" "iam_policy_app_crc_int" {
   }
 }
 
-module "create-iam-app-policy-crc-int" {
-  source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//rolepolicy"
-  policyfile = "${data.template_file.iam_policy_app_crc_int.rendered}"
-  rolename   = "${data.terraform_remote_state.iam.iam_policy_crc_int_app_role_name}"
+resource "aws_iam_role_policy" "create-iam-app-policy-crc-int" {
+  name   = "${data.terraform_remote_state.iam.iam_policy_crc_int_app_role_name}-policy"
+  role   = "${data.terraform_remote_state.iam.iam_policy_crc_int_app_role_name}"
+  policy = "${data.template_file.iam_policy_app_crc_int.rendered}"
 }

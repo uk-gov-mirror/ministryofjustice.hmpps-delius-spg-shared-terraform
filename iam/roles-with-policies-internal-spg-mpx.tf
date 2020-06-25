@@ -10,28 +10,26 @@ data "template_file" "iam_policy_ecs_mpx_int" {
   }
 }
 
-module "create-iam-ecs-role-mpx-int" {
-  source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//role"
-  rolename   = "${local.common_name}-mpx-int-ecs-svc"
-  policyfile = "${local.ecs_module_default_assume_role_policy_file}"
+resource "aws_iam_role" "create-iam-ecs-role-mpx-int" {
+  name               = "${local.common_name}-mpx-int-ecs-svc-role"
+  assume_role_policy = "${file(local.ecs_module_default_assume_role_policy_file)}"
+  description        = "${local.common_name}-mpx-int-ecs-svc"
 }
 
-module "create-iam-ecs-policy-mpx-int" {
-  source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//rolepolicy"
-  policyfile = "${data.template_file.iam_policy_ecs_mpx_int.rendered}"
-  rolename   = "${module.create-iam-ecs-role-mpx-int.iamrole_name}"
+resource "aws_iam_role_policy" "create-iam-ecs-policy-mpx-int" {
+  name   = "${aws_iam_role.create-iam-ecs-role-mpx-int.name}-policy"
+  role   = "${aws_iam_role.create-iam-ecs-role-mpx-int.name}"
+  policy = "${data.template_file.iam_policy_ecs_mpx_int.rendered}"
 }
 
-//overiding role from modules project with extended assumerole permissions for ecs tasks
-//resulted in SSM permission failures
-module "create-iam-app-role-mpx-int" {
-  source     = "../modules/iam/role"
-  rolename   = "${local.common_name}-mpx-int-ec2"
-  policyfile = "${local.ec2_iam_module_default_assume_role_policy_file}"
+resource "aws_iam_role" "create-iam-app-role-mpx-int" {
+  name               = "${local.common_name}-mpx-ext-ec2-role"
+  assume_role_policy = "${file(local.ec2_iam_module_default_assume_role_policy_file)}"
+  description        = "${local.common_name}-mpx-ext-ec2"
 }
 
-module "create-iam-instance-profile-mpx-int" {
-  source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//instance_profile"
-  role   = "${module.create-iam-app-role-mpx-int.iamrole_name}"
+resource "aws_iam_instance_profile" "create-iam-instance-profile-mpx-int" {
+  name = "${aws_iam_role.create-iam-app-role-mpx-int.name}-instance-profile"
+  role = "${aws_iam_role.create-iam-app-role-mpx-int.name}"
 }
 
