@@ -16,10 +16,12 @@ locals {
   region                       = "${var.region}"
   spg_app_name                 = "${data.terraform_remote_state.common.spg_app_name}"
   environment_identifier       = "${data.terraform_remote_state.common.environment_identifier}"
-  short_environment_identifier = "${data.terraform_remote_state.common.short_environment_identifier}"
   account_id                   = "${data.terraform_remote_state.common.common_account_id}"
-  #workaround for training-test exceeding 64 chars
-  dynamic_environment_identifier = "${(local.environment_identifier == "tf-eu-west-2-hmpps-delius-training-test") ? local.short_environment_identifier : local.environment_identifier}"
+
+  #workaround for training-test exceeding 64 chars & external change of environment prefix (was referencing short_environment_identifier)
+  historic_dtt_prefix          = "tf-dtt-training-test"
+  dynamic_environment_identifier = "${(local.environment_identifier == "tf-eu-west-2-hmpps-delius-training-test") ? local.historic_dtt_prefix : local.environment_identifier}"
+
   common_name                  = "${local.dynamic_environment_identifier}-${var.spg_app_name}"
 
   ####################################################
@@ -32,7 +34,6 @@ locals {
   ecs_module_default_assume_role_policy_file     = "ecs_policy.json"
   ecs_role_policy_file                           = "../policies/ecs_role_policy.json"
   backups-bucket-name                            = "${var.backups-bucket-name}"
-  s3-config-bucket                               = "${data.terraform_remote_state.common.common_s3-config-bucket}"
   s3-certificates-bucket                         = "${data.terraform_remote_state.common.common_engineering_certificates_s3_bucket}"
   tags                                           = "${merge(var.tags, map("sub-project", "${local.spg_app_name}"))}"
 }

@@ -24,7 +24,7 @@ def debug_env() {
 }
 
 pipeline {
-    agent { label "jenkins_slave" }
+    agent { label "spg_builds" }
 
     environment { CI = "true" }
 
@@ -51,7 +51,7 @@ pipeline {
                             pwd
                             ls -l
                             echo "Calling configure_amazon_es.sh for environment_name ${environment_name}"
-                            cd elk-stack/filebeat
+                            cd elk-service/filebeat
                             ./configure_amazon_es.sh ${environment_name}
                             '''
                         }

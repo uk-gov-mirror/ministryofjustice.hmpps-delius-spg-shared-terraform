@@ -51,7 +51,7 @@ def plan_submodule(configMap, submodule_name) {
 }
 
 pipeline {
-    agent { label "jenkins_slave" }
+    agent { label "spg_builds" }
 
     stages {
 

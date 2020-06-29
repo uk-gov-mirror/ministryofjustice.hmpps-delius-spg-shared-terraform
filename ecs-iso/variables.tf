@@ -8,9 +8,9 @@ variable "remote_state_bucket_name" {
 
 variable "s3_bucket_config" {}
 
-variable "asg_instance_type_iso" {default = "t2.small"}
+variable "asg_instance_type_iso" {default = "t2.medium"}
 variable "cloudwatch_log_retention" {}
-
+  
 
 
 variable SPG_GENERIC_BUILD_INV_DIR {}
@@ -70,6 +70,11 @@ variable "tags" {
 
 variable PO_SPG_CONFIGURATION {
   description ="map of PO configs"
+  type="map"
+}
+
+variable SPG_ENV_VARS {
+  description ="map of SPG environment vars"
   type="map"
 }
 

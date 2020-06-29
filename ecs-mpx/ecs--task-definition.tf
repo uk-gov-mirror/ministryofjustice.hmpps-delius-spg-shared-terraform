@@ -19,11 +19,22 @@ data "template_file" "po_configuration" {
   }
 }
 
+data "template_file" "SPG_ENV_VARS" {
+  template = "${file("task_definitions/key_value_pair.tpl.json")}"
+  count = "${length(var.SPG_ENV_VARS)}"
+
+  vars {
+    name = "${element(keys(var.SPG_ENV_VARS),count.index)}"
+    value = "${element(values(var.SPG_ENV_VARS),count.index)}"
+  }
+}
+
 data "template_file" "app_task_definition" {
   template = "${file("task_definitions/template.json")}"
 
   vars {
     po_configuration = "${join(",", data.template_file.po_configuration.*.rendered)}"
+    spg_env_configuration = "${join(",", data.template_file.SPG_ENV_VARS.*.rendered)}"
 
     hmpps_asset_name_prefix = "${local.hmpps_asset_name_prefix}"
 
@@ -34,7 +45,13 @@ data "template_file" "app_task_definition" {
     version = "${local.image_version}"
 
     log_group_name = "${module.create_loggroup.loggroup_name}"
-    log_group_region = "${var.region}"
+
+    app_region = "${var.region}"
+    current_account_id         = "${data.aws_caller_identity.current.account_id}"
+
+
+    project_name = "${var.project_name}"
+    environment_type = "${var.environment_type}"
 
     data_volume_host_path = "${local.data_volume_host_path}"
     data_volume_name = "${local.data_volume_name}"
@@ -71,5 +88,5 @@ module "app_task_definition" {
 
   data_volume_host_path = "${local.data_volume_host_path}"
   data_volume_name      = "${local.data_volume_name}"
-
+  execution_role_arn = "${aws_iam_role.iam_execute_role.arn}"
 }

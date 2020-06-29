@@ -37,7 +37,6 @@ data "terraform_remote_state" "kms" {
   }
 }
 
-
 data "terraform_remote_state" "iam" {
   backend = "s3"
 

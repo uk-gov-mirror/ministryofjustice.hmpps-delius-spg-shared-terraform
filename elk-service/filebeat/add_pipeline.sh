@@ -9,8 +9,9 @@ fi
 
 if [ -z "${DNS_PREFIX}" ]
 then
-    echo "add_pipeline.sh: DNS_PREFIX argument not supplied, please provide an argument!"
-    exit 1
+  export URL="https://amazones-audit.probation.service.justice.gov.uk"
+else
+  export URL="https://amazones-audit.${DNS_PREFIX}.probation.service.justice.gov.uk"
 fi
 
-curl -k -H 'Content-Type: application/json' -XPUT "https://amazones-audit.${DNS_PREFIX}.probation.service.justice.gov.uk:443/_ingest/pipeline/spg-audit" -d@spg-audit-pipeline.json
+curl -k -H 'Content-Type: application/json' -XPUT "${URL}:443/_ingest/pipeline/spg-audit" -d@spg-audit-pipeline.json

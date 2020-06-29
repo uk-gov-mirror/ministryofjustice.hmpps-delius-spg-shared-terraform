@@ -11,16 +11,16 @@
         "senderControlRef": {"type": "long"}
       },
       "dynamic_templates" : [
-      { 
-        "dates" : {
-          "match" : "interchangeTimestamp",
-          "mapping" : {
-            "type" : "date",
-            "format" : "YYYY-MM-dd'T'HH:mm:ss.SSSZ"
+      {
+        "dates_ignore_malformed": {
+          "match": "timestamp*",
+          "mapping": {
+            "format" : "yyyy-MM-dd'T'HH:mm:ss.SSS",
+            "ignore_malformed": true
           }
         }
       }
       ]
+    }
   }
 }
-

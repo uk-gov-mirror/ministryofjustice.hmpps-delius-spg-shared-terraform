@@ -19,7 +19,7 @@ def build_job_if_exists(job) {
 }
 
 pipeline {
-    agent { label "jenkins_slave" }
+    agent { label "spg_builds" }
 
     stages {
         stage('Notify build started') {

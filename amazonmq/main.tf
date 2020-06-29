@@ -31,6 +31,8 @@ locals {
 
   # Construct the credentials_ssm_path from the common remote state variables tags.application and tags.environment_name and the fixed string
   credentials_ssm_path = "/${data.terraform_remote_state.vpc.environment_name}/${data.terraform_remote_state.vpc.tags.application}/weblogic/spg-domain"
+
+  env_prefix  =  "${local.hmpps_asset_name_prefix}"
 }
 
 #-------------------------------------------------------------

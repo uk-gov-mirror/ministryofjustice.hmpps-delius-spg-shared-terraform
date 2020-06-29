@@ -30,10 +30,6 @@ variable "environment_identifier" {
   description = "resource label or name"
 }
 
-variable "short_environment_identifier" {
-  description = "shortend resource label or name"
-}
-
 variable "dependencies_bucket_arn" {
   description = "S3 bucket arn for dependencies"
 }
@@ -56,16 +52,18 @@ variable "elk-audit_conf" {
 
     # Cluster config
     # Data node count
-    es_instance_count = 1
+    # TODO - Make es_instance_count and es_instance_type configurable across envs
+    //es_instance_count = 1
+    es_instance_count = 3
 
     # See the following for restrictions around instance types
     # https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-instance-types.html
-    es_instance_type = "t2.small.elasticsearch"
+    //es_instance_type = "t2.small.elasticsearch"
+    es_instance_type = "m5.large.elasticsearch"
 
     es_dedicated_master_enabled = false
     es_dedicated_master_count   = 0
     es_dedicated_master_type    = ""
-    es_zone_aware_enabled       = false
 
     # Number of AZs and Subnets is calculated based on es_instance_count value
 
@@ -82,7 +80,7 @@ variable "elk-audit_conf" {
     es_logging_enabled = true
     # Valid values: INDEX_SLOW_LOGS, SEARCH_SLOW_LOGS, ES_APPLICATION_LOGS
     es_log_type           = "ES_APPLICATION_LOGS"
-    es_log_retention_days = 14
+    es_log_retention_days = 90
     # Authentication
     auth_enabled = true
   }

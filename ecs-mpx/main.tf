@@ -170,7 +170,6 @@ locals {
   image_version         = "${var.image_version}"
   ecs_memory    = "${var.spg_mpx_ecs_memory}"
   #regular config bucket - not sure what this is used for yet
-  config-bucket         = "${data.terraform_remote_state.common.common_s3-config-bucket}"
   #vars for docker app
   #s3 bucket for ANISBLE jobs (derived from env properties
   s3_bucket_config      = "${var.s3_bucket_config}"

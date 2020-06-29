@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_log_group" "elk-audit_log_group" {
-  name              = "${local.name_prefix}-elk-audit-main-cwl"
+  //name              = "${local.name_prefix}-elk-audit-main-cwl"
   retention_in_days = "${var.elk-audit_conf["es_log_retention_days"]}"
   tags              = "${merge(var.tags, map("Name", "${local.name_prefix}-elk-audit-main-cwl"))}"
 }
