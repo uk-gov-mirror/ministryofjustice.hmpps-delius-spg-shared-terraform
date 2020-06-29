@@ -16,3 +16,7 @@ output "name_prefix" {
 output "domain_name" {
   value = "${local.domain_name}"
 }
+
+output "non-prod cidr az1"{
+  value = "${data.terraform_remote_state.engineering_nat.common-nat-public-ip-az1}"
+}

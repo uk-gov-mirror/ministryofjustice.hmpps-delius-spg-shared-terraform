@@ -42,7 +42,7 @@ module "app_service" {
   task_definition_revision           = "${module.app_task_definition.task_definition_revision}"
   current_task_definition_version    = "${data.aws_ecs_task_definition.app_task_definition.revision}"
   service_desired_count              = "${local.service_desired_count}"
-  deployment_minimum_healthy_percent = "${var.deployment_minimum_healthy_percent}"
+  deployment_minimum_healthy_percent = "${var.deployment_minimum_healthy_percent_crc}"
 }
 
 

@@ -78,5 +78,5 @@ variable "esc_container_stop_timeout" {
 }
 
 variable "deployment_minimum_healthy_percent" {
-  default = "50"
+  default = "100"
 }

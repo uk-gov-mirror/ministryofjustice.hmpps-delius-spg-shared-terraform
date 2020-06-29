@@ -1,5 +1,5 @@
 resource "aws_cognito_user_pool" "elk-audit_user_pool" {
-  name = "${local.name_prefix}-elk-audit-pri-cog"
+  name = "${local.name_prefix}-elk-audit-main-cog"
 
   # Create optional email attribute for potenetial future use
   schema = {
@@ -47,7 +47,7 @@ resource "aws_cognito_user_pool" "elk-audit_user_pool" {
   tags = "${
     merge(
         var.tags, 
-        map("Name", "${local.name_prefix}-elk-audituser-pri-cog"),
+        map("Name", "${local.name_prefix}-elk-audituser-main-cog"),
         map("Domain", "${var.elk-audit_cognito_conf["domain"]}")
         )
     }"

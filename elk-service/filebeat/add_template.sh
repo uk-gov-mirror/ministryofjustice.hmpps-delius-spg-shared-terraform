@@ -13,4 +13,4 @@ then
     exit 1
 fi
 
-curl -k -XPUT "https://amazones-audit.${TG_ENVIRONMENT_TYPE}.${DNS_PREFIX}.probation.service.justice.gov.uk:443/_template/spg-audit" -H "Content-Type: application/json" -d@spg-audit-template.json
+curl -k -XPUT "https://amazones-audit.${DNS_PREFIX}.probation.service.justice.gov.uk:443/_template/spg-audit" -H "Content-Type: application/json" -d@spg-audit-template.json
