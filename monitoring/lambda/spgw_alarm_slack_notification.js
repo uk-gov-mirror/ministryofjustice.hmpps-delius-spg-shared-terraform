@@ -107,6 +107,9 @@ exports.handler = function(event, context) {
 
 
 
+    //Make sure no servicemix log alarm is pushed to slack during out of hours and weekends;
+    bypassServiceMixLogAlarmForOutOfHoursScenarios();
+
     var postData = {
         "channel": "# " + channel,
         "username": "AWS SNS via Lambda :: Alarm notification",
@@ -137,4 +140,36 @@ exports.handler = function(event, context) {
 
     req.write(util.format("%j", postData));
     req.end();
+
+    function getSlackChannelName() {
+        var subChannelForEnvironment = (environment == 'del-prod') ? "production" : "nonprod";
+
+        if (metricName.includes("connection")) {
+            return "delius-alerts-" + service + "-connection-" + subChannelForEnvironment;
+        }
+        return "delius-alerts-" + service + "-" + subChannelForEnvironment;
+    }
+
+    function generateAlarmDescription() {
+        var alarmFilterText = alarmDescription.split('filter=').pop().split(';')[0];
+        var dateRangePlaceholder = "start_end_date_placeholder"
+
+        // We want to avoid description generation for non 'exception' alarms e.g. latency and un-healthy hosts
+        if (alarmDescription.includes(dateRangePlaceholder)){
+            return  alarmDescription
+                .replace(alarmFilterText, encodeURIComponent(alarmFilterText))
+                .replace(dateRangePlaceholder, "start=" + currentDateMinusFiveMinutes.toISOString().concat(";end=".concat(currentDate.toISOString())));
+        }
+        return alarmDescription;
+    }
+    
+    function bypassServiceMixLogAlarmForOutOfHoursScenarios() {
+        var isOutOfHours = currentDate.getHours() > 20 && currentDate.getHours() < 7;
+        var isWeekend = (currentDate.getDay() === 6) || (currentDate.getDay() === 0);    // 6 = Saturday, 0 = Sunday
+        var isCloudwatchAgentAlarmName = alarmName.includes("servicemix-logs");
+
+        if ((isOutOfHours || isWeekend) && isCloudwatchAgentAlarmName){
+            return;
+        }
+    }
 };

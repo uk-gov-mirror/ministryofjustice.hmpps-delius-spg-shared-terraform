@@ -136,7 +136,15 @@
         "logConfiguration": {
             "logDriver": "awslogs",
             "options": {
-                "awslogs-group": "${log_group_name}",
+                "awslogs-group": "${log_group_application_name}",
+                "awslogs-region": "${log_group_region}",
+                "awslogs-stream-prefix": "ecs-${container_name}"
+            }
+        },
+            "logConfiguration": {
+            "logDriver": "awslogs",
+            "options": {
+                "awslogs-group": "${log_group_infrastructure_name}",
                 "awslogs-region": "${log_group_region}",
                 "awslogs-stream-prefix": "ecs-${container_name}"
             }
