@@ -1,0 +1,26 @@
+{
+  "index_patterns": ["spg-*-7.1.1*"],
+  "mappings": {
+      "date_detection": true,
+      "properties": {
+        "messageNotificationStatusCode": {"type":"integer"},
+        "priority":{"type": "short","index": "false"},
+        "messageReferenceNumber":{"type": "integer","index": "false"},
+        "prepDate": {"type": "text","index": "false"},
+        "receiverControlRef": {"type": "long"},
+        "senderControlRef": {"type": "long"}
+      },
+      "dynamic_templates" : [
+      {
+        "dates_ignore_malformed": {
+          "match": "*imestamp*",
+          "mapping": {
+            "format" : "yyyy-MM-dd'T'HH:mm:ss.SSS",
+            "ignore_malformed": true
+          }
+        }
+      }
+      ]
+    }
+}
+

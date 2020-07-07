@@ -1,0 +1,6 @@
+1. Create a repair index with an alias - local-add-repair.sh (copy of new template)
+2. Add a repair alias to all existing indices - local-add-alias
+3. Reindex the old indexes to the new repir index - local-reindex.sh
+4. Create a new template with updated mappings - local-template.sh (with spg-audit-template.json)
+5. Remove the old indexes
+
