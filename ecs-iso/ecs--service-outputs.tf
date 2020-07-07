@@ -15,15 +15,21 @@ output "ecs_cluster_name" {
 
 
 # LOG GROUPS
-output "loggroup_arn" {
-  value = "${module.create_loggroup.loggroup_arn}"
+output "ecs_spg_application_loggroup_arn" {
+  value = "${module.create_application_loggroup.loggroup_arn}"
 }
 
-output "loggroup_name" {
-  value = "${module.create_loggroup.loggroup_name}"
+output "ecs_spg_application_loggroup_name" {
+  value = "${module.create_application_loggroup.loggroup_name}"
 }
 
+output "ecs_spg_infrastructure_loggroup_arn" {
+  value = "${module.create_infrastructure_loggroup.loggroup_arn}"
+}
 
+output "ecs_spg_infrastructure_loggroup_name" {
+  value = "${module.create_infrastructure_loggroup.loggroup_name}"
+}
 
 
 # ECS SERVICE

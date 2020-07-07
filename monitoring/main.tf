@@ -19,14 +19,23 @@ locals {
   project_name_abbreviated = "${data.terraform_remote_state.common.project_name_abbreviated}"
   spg_app_name             = "${data.terraform_remote_state.common.spg_app_name}"
   lambda_name              = "spgw_alarm_slack_notification"
+  application = "spgw"
+  pattern = ""
+  servicemix_log_alarm_evaluation_period = "${var.servicemix_log_alarm_evaluation_period}"
+
+  mpx_filter_name = "${local.short_environment_name}--mpx-cloudwatch-agent__filter"
+  mpx_metric_name = "${local.short_environment_name}--mpx-cloudwatch-agent-count"
+
+  iso_filter_name = "${local.short_environment_name}--iso-cloudwatch-agent__filter"
+  iso_metric_name = "${local.short_environment_name}--iso-cloudwatch-agent-count"
 
   mpx_lb_name = "${data.terraform_remote_state.ecs_mpx.environment_elb_name}"
 
   iso_lb_arn_suffix              = "${data.terraform_remote_state.ecs_iso.lb_arn_suffix}"
   iso_lb_target_group_arn_suffix = "${data.terraform_remote_state.ecs_iso.target_group_arn_suffix}"
 
-  crc_log_group_name = "${data.terraform_remote_state.ecs_crc.ecs_spg_loggroup_name}"
-  iso_log_group_name = "${data.terraform_remote_state.ecs_iso.loggroup_name}"
-  mpx_log_group_name = "${data.terraform_remote_state.ecs_mpx.ecs_spg_loggroup_name}"
+  crc_log_group_name = "${data.terraform_remote_state.ecs_crc.ecs_spg_application_loggroup_name}"
+  iso_log_group_name = "${data.terraform_remote_state.ecs_iso.ecs_spg_application_loggroup_name}"
+  mpx_log_group_name = "${data.terraform_remote_state.ecs_mpx.ecs_spg_application_loggroup_name}"
 
 }

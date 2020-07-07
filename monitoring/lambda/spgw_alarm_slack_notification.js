@@ -88,6 +88,9 @@ exports.handler = function (event, context) {
     }
     textMessage = textMessage + debug;
 
+    //Make sure no servicemix log alarm is pushed to slack during out of hours and weekends;
+    bypassServiceMixLogAlarmForOutOfHoursScenarios();
+
     var postData = {
         "channel": "# " + channel,
         "username": "AWS SNS via Lambda :: Alarm notification",
@@ -133,9 +136,19 @@ exports.handler = function (event, context) {
         // We want to avoid description generation for non 'exception' alarms e.g. latency and un-healthy hosts
         if (alarmDescription.includes(dateRangePlaceholder)){
             return  alarmDescription
-                .replace(alarmFilterText, encodeURI(alarmFilterText))
+                .replace(alarmFilterText, encodeURIComponent(alarmFilterText))
                 .replace(dateRangePlaceholder, "start=" + currentDateMinusFiveMinutes.toISOString().concat(";end=".concat(currentDate.toISOString())));
         }
         return alarmDescription;
+    }
+    
+    function bypassServiceMixLogAlarmForOutOfHoursScenarios() {
+        var isOutOfHours = currentDate.getHours() > 20 && currentDate.getHours() < 7;
+        var isWeekend = (currentDate.getDay() === 6) || (currentDate.getDay() === 0);    // 6 = Saturday, 0 = Sunday
+        var isCloudwatchAgentAlarmName = alarmName.includes("servicemix-logs");
+
+        if ((isOutOfHours || isWeekend) && isCloudwatchAgentAlarmName){
+            return;
+        }
     }
 };
