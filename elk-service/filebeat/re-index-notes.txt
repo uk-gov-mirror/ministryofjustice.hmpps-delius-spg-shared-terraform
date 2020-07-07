@@ -1,6 +1,22 @@
-1. Create a repair index with an alias - local-add-repair.sh (copy of new template)
-2. Add a repair alias to all existing indices - local-add-alias
-3. Reindex the old indexes to the new repir index - local-reindex.sh
-4. Create a new template with updated mappings - local-template.sh (with spg-audit-template.json)
-5. Remove the old indexes
+1. Create a repair template  (copy of new template) with a new index name pattern to include the string repair
+repair-spg-audit-template.json
+local-repair-template.sh
+
+This template will match all indexes with "repair" in the name
+
+2. Add a new repair index pattern so we can separate the repaired indexes from the corrupt ones in Kibana
+local-repair-index-pattern.sh
+
+2. Reindex the old indexes to the new repair index - 
+local-repair-reindex.sh
+This will copy the existing corrupt indexes to new names with "repair" embedded in the index name
+and therefpre they will pickup the index mappings from the repair-spg-audit-template
+
+3. Verify that the new indexes have been created with the same number of records as the old ones
+show_indices.sh
+
+4. Remove the old indexes 
+curl -k -H 'Content-Type: application/json' -XDELETE 'http://spg-elk-200:9200/spg-audit-7.1.1-2020*'
+
+5. Create a new template with updated mappings - local-template.sh (with spg-audit-template.json)
 
