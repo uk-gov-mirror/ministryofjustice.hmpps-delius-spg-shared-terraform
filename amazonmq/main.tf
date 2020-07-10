@@ -9,11 +9,7 @@ provider "aws" {
 }
 
 locals {
-//  sg_map_ids = "${data.terraform_remote_state.common.sg_map_ids}"
 
-//  int_lb_security_groups = [
-//    "${local.sg_map_ids["internal_lb_sg_id"]}",
-//    "${local.sg_map_ids["bastion_in_sg_id"]}"]
 
   hmpps_asset_name_prefix = "${data.terraform_remote_state.common.hmpps_asset_name_prefix}"
 
@@ -33,6 +29,8 @@ locals {
   credentials_ssm_path = "/${data.terraform_remote_state.vpc.environment_name}/${data.terraform_remote_state.vpc.tags.application}/weblogic/spg-domain"
 
   env_prefix  =  "${local.hmpps_asset_name_prefix}"
+
+
 }
 
 #-------------------------------------------------------------
@@ -72,6 +70,9 @@ resource "aws_mq_broker" "SPG" {
     general = "true"
     audit = "true"
   }
+
+  tags = "${var.tags}"
+
 }
 
 resource "aws_mq_configuration" "SPG" {
@@ -108,6 +109,8 @@ resource "aws_route53_record" "dns_spg_amq_a_int_entry" {
   count = 1
   records = ["${substr(element(split(":", aws_mq_broker.SPG.instances.0.endpoints.0),1), 2, -1)}"]
   depends_on = ["aws_mq_broker.SPG"]
+
+
 }
 
 # Broker 2 DNS entry optionally created when there are 2 instances
@@ -125,6 +128,8 @@ resource "aws_route53_record" "dns_spg_amq_b_int_entry" {
   count = "${(local.broker_instances) == 1 ? 0 : 1}"
   records = ["${replace(aws_route53_record.dns_spg_amq_a_int_entry.records[0], "-1.mq", "-2.mq")}"]
   depends_on = ["aws_mq_broker.SPG"]
+
+
 }
 
 # The ssl port should always be 61617, but calculate it from the broker endpoints (SSL always at endpoint offset zero)
@@ -145,14 +150,11 @@ data "null_data_source" "broker_export_url" {
 
     broker_connect_url =  "${(local.broker_instances) == 1 ?
 
-                                format("ssl://%s:%s",
-                                        aws_route53_record.dns_spg_amq_a_int_entry.fqdn,
-                                        data.null_data_source.broker_export_port.outputs["broker_ssl_port"]) :
+                                format("failover:(%s)",
+                                        aws_mq_broker.SPG.instances.0.endpoints.0) :
 
-                                format("failover:(ssl://%s:%s,ssl://%s:%s)",
-                                        aws_route53_record.dns_spg_amq_a_int_entry.fqdn,
-                                        data.null_data_source.broker_export_port.outputs["broker_ssl_port"],
-                                        element(concat(aws_route53_record.dns_spg_amq_b_int_entry.*.fqdn, list("")), 0),
-                                        data.null_data_source.broker_export_port.outputs["broker_ssl_port"])}"
+                                format("failover:(%s,%s)",
+                                        aws_mq_broker.SPG.instances.0.endpoints.0,
+                                       aws_mq_broker.SPG.instances.1.endpoints.0)}"
   }
 }
