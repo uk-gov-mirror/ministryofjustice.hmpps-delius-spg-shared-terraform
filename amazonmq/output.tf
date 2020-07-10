@@ -1,5 +1,5 @@
 output "amazon_mq_broker_connect_url" {
-  value = "${data.null_data_source.broker_export_friendl_url.outputs["broker_connect_url"]}"
+  value = "${data.null_data_source.broker_export_friendly_url.outputs["broker_connect_url"]}"
 }
 
 output "amazon_mq_broker_failover_connection_url" {

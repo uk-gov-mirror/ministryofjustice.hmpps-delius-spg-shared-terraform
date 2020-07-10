@@ -145,7 +145,7 @@ data "null_data_source" "broker_export_port" {
 # A bug in TF 0.11 means that the optional resource of dns_spg_amq_b_int_entry needs to be referenced using the
 # ugly element syntax to prevent a compile time error
 #please note the friendly url means that the SSL CN does not match the domain
-data "null_data_source" "broker_export_friendl_url" {
+data "null_data_source" "broker_export_friendly_url" {
 
   inputs = {
 
