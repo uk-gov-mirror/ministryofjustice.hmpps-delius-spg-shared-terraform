@@ -1,6 +1,12 @@
 output "amazon_mq_broker_connect_url" {
-  value = "${data.null_data_source.broker_export_url.outputs["broker_connect_url"]}"
+  value = "${data.null_data_source.broker_export_friendl_url.outputs["broker_connect_url"]}"
 }
+
+output "amazon_mq_broker_failover_connection_url" {
+  value = "${data.null_data_source.broker_export_full_url.outputs["broker_connect_url"]}"
+}
+
+
 
 output "aws_ssm_credentials_path" {
   value = "${local.credentials_ssm_path}"

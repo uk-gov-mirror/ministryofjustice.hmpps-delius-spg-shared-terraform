@@ -144,7 +144,27 @@ data "null_data_source" "broker_export_port" {
 # This data source is then used as an output to update the remote state
 # A bug in TF 0.11 means that the optional resource of dns_spg_amq_b_int_entry needs to be referenced using the
 # ugly element syntax to prevent a compile time error
-data "null_data_source" "broker_export_url" {
+#please note the friendly url means that the SSL CN does not match the domain
+data "null_data_source" "broker_export_friendl_url" {
+
+  inputs = {
+
+    broker_connect_url = "${(local.broker_instances) == 1 ?
+
+                                format("ssl://%s:%s",
+                                        aws_route53_record.dns_spg_amq_a_int_entry.fqdn,
+                                        data.null_data_source.broker_export_port.outputs["broker_ssl_port"]) :
+
+                                format("failover:(ssl://%s:%s,ssl://%s:%s)",
+                                        aws_route53_record.dns_spg_amq_a_int_entry.fqdn,
+                                        data.null_data_source.broker_export_port.outputs["broker_ssl_port"],
+                                        element(concat(aws_route53_record.dns_spg_amq_b_int_entry.*.fqdn, list("")), 0),
+                                        data.null_data_source.broker_export_port.outputs["broker_ssl_port"])}"
+  }
+}
+
+
+data "null_data_source" "broker_export_full_url" {
 
   inputs = {
 
