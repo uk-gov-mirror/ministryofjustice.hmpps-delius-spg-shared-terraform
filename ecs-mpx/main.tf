@@ -189,9 +189,7 @@ locals {
 
   # The final value of the GATEWAY url is calculated depending on the value of SPG_GATEWAY_MQ_URL_SOURCE in env-configs
   # This defaults to "data" in this project, which will extrat the url from the amazonmq remote state
-  SPG_GATEWAY_MQ_URL = "${var.SPG_GATEWAY_MQ_URL_SOURCE == "data" ?
-                            data.terraform_remote_state.amazonmq.amazon_mq_broker_connect_url :
-                            var.SPG_GATEWAY_MQ_URL}"
+  SPG_GATEWAY_MQ_URL = "${data.terraform_remote_state.amazonmq.amazon_mq_broker_failover_connection_url}"
 
   SPG_DOCUMENT_REST_SERVICE_ADMIN_URL = "${var.SPG_DOCUMENT_REST_SERVICE_ADMIN_URL}"
   SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL = "${var.SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL}"
