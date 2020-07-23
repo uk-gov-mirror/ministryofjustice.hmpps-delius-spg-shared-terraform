@@ -1,4 +1,3 @@
-#"index_patterns": ["spg-*-7.1.1-repair*"],
 {
   "index_patterns": ["repair-spg-*-7.1.1-*"],
   "settings": {
