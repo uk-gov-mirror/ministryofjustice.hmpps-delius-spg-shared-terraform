@@ -23,41 +23,41 @@ file = /var/log/${container_name}/*.log*
 file_fingerprint_lines = 1-4
 datetime_format = %Y-%m-%dT%H:%M:%S.%f%z
 multi_line_start_pattern = {datetime_format}
-log_group_name = ${log_group_name}
+log_group_name = ${log_group_application_name}
 log_stream_name = {hostname}/{container_instance_id}/application
 
 [/var/log/dmesg]
 file = /var/log/dmesg
-log_group_name = ${log_group_name}
+log_group_name = ${log_group_infrastructure_name}
 log_stream_name = {hostname}/{container_instance_id}/dmesg_logs
 
 [/var/log/messages]
 file = /var/log/messages
-log_group_name = ${log_group_name}
+log_group_name = ${log_group_infrastructure_name}
 log_stream_name = {hostname}/{container_instance_id}/messages
 datetime_format = %b %d %H:%M:%S
 
 [/var/log/docker]
 file = /var/log/docker
-log_group_name = ${log_group_name}
+log_group_name = ${log_group_infrastructure_name}
 log_stream_name = {hostname}/{container_instance_id}/docker
 datetime_format = %Y-%m-%dT%H:%M:%S.%f
 
 [/var/log/ecs/ecs-init.log]
 file = /var/log/ecs/ecs-init.log
-log_group_name = ${log_group_name}
+log_group_name = ${log_group_infrastructure_name}
 log_stream_name = {hostname}/{container_instance_id}/ecsinit_logs
 datetime_format = %Y-%m-%dT%H:%M:%SZ
 
 [/var/log/ecs/ecs-agent.log]
 file = /var/log/ecs/ecs-agent.log*
-log_group_name = ${log_group_name}
+log_group_name = ${log_group_infrastructure_name}
 log_stream_name = {hostname}/{container_instance_id}/ecsagent_logs
 datetime_format = %Y-%m-%dT%H:%M:%SZ
 
 [/var/log/ecs/audit.log]
 file = /var/log/ecs/audit.log*
-log_group_name = ${log_group_name}
+log_group_name = ${log_group_infrastructure_name}
 log_stream_name = {hostname}/{container_instance_id}/ecsaudit_logs
 datetime_format = %Y-%m-%dT%H:%M:%SZ
 EOF

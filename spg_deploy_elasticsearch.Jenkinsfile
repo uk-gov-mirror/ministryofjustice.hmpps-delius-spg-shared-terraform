@@ -86,7 +86,7 @@ def refresh_submodule(configMap, submodule_name) {
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
         sh """
         #!/usr/env/bin bash
-        echo "TF APPLY for ${configMap.env_name} | ${submodule_name} - component from git project ${configMap.terraform}"
+        echo "Refreshing ${configMap.env_name} | ${submodule_name} - component from git project ${configMap.terraform}"
         set +e
         cp -R -n "${configMap.config}" "${configMap.terraform}/env_configs"
         cd "${configMap.terraform}"

@@ -19,7 +19,7 @@ locals {
   ########################################################################################################
   #Common (lots of duplication here, needs further refactoring)
   ########################################################################################################
-  tags = "${var.tags}"
+  tags = "${merge(var.tags,map("autostop-test","False"))}"
 
   short_environment_name = "${data.terraform_remote_state.common.short_environment_name}"
   app_hostnames = "${data.terraform_remote_state.common.app_hostnames}"

@@ -44,7 +44,8 @@ data "template_file" "app_task_definition" {
     image_url = "${local.image_url}"
     version = "${local.image_version}"
 
-    log_group_name = "${module.create_loggroup.loggroup_name}"
+    log_group_application_name        = "${module.create_application_loggroup.loggroup_name}"
+    log_group_infrastructure_name        = "${module.create_infrastructure_loggroup.loggroup_name}"
 
     app_region = "${var.region}"
     current_account_id         = "${data.aws_caller_identity.current.account_id}"

@@ -5,9 +5,12 @@ variable "remote_state_bucket_name" {
   description = "Terraform remote state bucket name"
 }
 
-variable "alarms_enabled" {
-  type    = "string"
-  default = "false"
+variable "servicemix_logs_alarm_enabled" {
+  default = false
+}
+
+variable "servicemix_log_alarm_evaluation_period" {
+  default = "1"
 }
 
 variable "build_tag" {

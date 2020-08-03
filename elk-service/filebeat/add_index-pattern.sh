@@ -13,11 +13,12 @@ fi
 
 if [ -z "${DNS_PREFIX}" ]
 then
-    echo "add_index-pattern.sh: DNS_PREFIX argument not supplied, please provide an argument!"
-    exit 1
+  export URL="https://amazones-audit.probation.service.justice.gov.uk"
+else
+  export URL="https://amazones-audit.${DNS_PREFIX}.probation.service.justice.gov.uk"
 fi
 
-curl -k -XPOST "https://amazones-audit.${DNS_PREFIX}.probation.service.justice.gov.uk:443/_plugin/kibana/api/saved_objects/index-pattern/spg-audit" -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -d'
+curl -k -XPOST "${URL}:443/_plugin/kibana/api/saved_objects/index-pattern/spg-audit" -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -d'
 {
     "attributes": {
         "title": "spg-audit-7.1.1*",
