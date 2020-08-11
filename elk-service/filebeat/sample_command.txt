@@ -1,0 +1,7 @@
+# Display shard allocation information
+curl -k -XGET https://amazones-audit.${DNS_PREFIX}.probation.service.justice.gov.uk:443/_cluster/allocation/explain?pretty
+
+#Show the shards
+curl -k -XGET https://amazones-audit.pre-prod.probation.service.justice.gov.uk:443/_cat/shards
+
+curl -k -H 'Content-Type: application/json' -XPUT https://amazones-audit.dev.probation.service.justice.gov.uk:443/spg-audit-7.1.1-2020.06.16/_settings -d '{"index": {"number_of_replicas":0}}'
