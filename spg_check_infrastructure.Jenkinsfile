@@ -12,7 +12,7 @@ project.terraform = 'hmpps-delius-spg-shared-terraform'
 def prepare_env() {
     sh '''
     #!/usr/env/bin bash
-    docker pull mojdigitalstudio/hmpps-terraform-builder:latest
+    docker pull mojdigitalstudio/hmpps-terraform-builder-0-11-14:latest
     '''
 }
 
@@ -26,7 +26,7 @@ def plan_submodule(configMap, submodule_name) {
         cd "${configMap.terraform}"
         docker run --rm \
             -v `pwd`:/home/tools/data \
-            -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder \
+            -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-11-14 \
             bash -c "\
                 source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
                 export TF_VAR_image_version=${configMap.image_version}; \
