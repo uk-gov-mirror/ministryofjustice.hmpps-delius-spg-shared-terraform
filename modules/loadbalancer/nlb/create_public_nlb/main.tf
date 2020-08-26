@@ -2,13 +2,14 @@ resource "aws_lb" "environment" {
   name = "${var.lb_name}-nlb"
   internal = "false"
   load_balancer_type = "network"
+  enable_cross_zone_load_balancing = "true"
 
   enable_deletion_protection = "${var.enable_deletion_protection}"
 
   access_logs {
     bucket = "${var.s3_bucket_name}"
-    prefix = "${var.lb_name}-nlb"
-    enabled = false
+      prefix = "${var.lb_name}-nlb"
+      enabled = false
     //TODO hardcoded to false as was getting permissions errors "${var.logs_enabled}"
   }
 
