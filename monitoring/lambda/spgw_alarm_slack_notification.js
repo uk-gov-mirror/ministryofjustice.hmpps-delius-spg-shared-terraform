@@ -21,6 +21,7 @@ exports.handler = function (event, context) {
     var currentDate = new Date();
     var currentDateMinusFiveMinutes = new Date();
     currentDateMinusFiveMinutes.setMinutes(currentDateMinusFiveMinutes.getMinutes() - 10);
+    var bstTime = new Date().toLocaleString("en-US", {timeZone: "Europe/London"});
 
     var updatedAlarmDescription = generateAlarmDescription();
     var isCloudwatchAgentAlarmName = alarmName.includes("servicemix-logs");
@@ -69,7 +70,7 @@ exports.handler = function (event, context) {
 
     var textMessage = "**************************************************************************************************"
         + "\nMetric: " + metric
-        + "\nCurrent timestamp: " + currentDate.toUTCString()
+        + "\nCurrent timestamp: " + new Date(bstTime).toISOString()
         + "\nEnvironment: " + environment
         + "\nSeverity: " + severity + "\n";
 
