@@ -21,8 +21,10 @@ exports.handler = function (event, context) {
     var currentDate = new Date();
     var currentDateMinusFiveMinutes = new Date();
     currentDateMinusFiveMinutes.setMinutes(currentDateMinusFiveMinutes.getMinutes() - 10);
+    var bstTime = new Date().toLocaleString("en-US", {timeZone: "Europe/London"});
 
     var updatedAlarmDescription = generateAlarmDescription();
+    var isCloudwatchAgentAlarmName = alarmName.includes("servicemix-logs");
 
     if (eventMessage.NewStateValue == "OK") {
         severity = "ok";
@@ -68,7 +70,7 @@ exports.handler = function (event, context) {
 
     var textMessage = "**************************************************************************************************"
         + "\nMetric: " + metric
-        + "\nCurrent timestamp: " + currentDate.toUTCString()
+        + "\nCurrent timestamp: " + new Date(bstTime).toISOString()
         + "\nEnvironment: " + environment
         + "\nSeverity: " + severity + "\n";
 
@@ -126,6 +128,9 @@ exports.handler = function (event, context) {
         if (metricName.includes("connection")) {
             return "delius-alerts-" + service + "-connection-" + subChannelForEnvironment;
         }
+        if (isCloudwatchAgentAlarmName){
+            return "delius-alerts-" + service + "-missing-logs-" + subChannelForEnvironment;
+        }
         return "delius-alerts-" + service + "-" + subChannelForEnvironment;
     }
 
@@ -145,10 +150,9 @@ exports.handler = function (event, context) {
     function bypassServiceMixLogAlarmForOutOfHoursScenarios() {
         var isOutOfHours = currentDate.getHours() > 20 && currentDate.getHours() < 7;
         var isWeekend = (currentDate.getDay() === 6) || (currentDate.getDay() === 0);    // 6 = Saturday, 0 = Sunday
-        var isCloudwatchAgentAlarmName = alarmName.includes("servicemix-logs");
 
         if ((isOutOfHours || isWeekend) && isCloudwatchAgentAlarmName){
-            return;
+            process.exit();
         }
     }
 };
