@@ -152,7 +152,7 @@ exports.handler = function (event, context) {
         var isWeekend = (currentDate.getDay() === 6) || (currentDate.getDay() === 0);    // 6 = Saturday, 0 = Sunday
 
         if ((isOutOfHours || isWeekend) && isCloudwatchAgentAlarmName){
-            return;
+            process.exit();
         }
     }
 };
