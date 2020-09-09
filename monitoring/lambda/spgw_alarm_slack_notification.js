@@ -169,7 +169,7 @@ exports.handler = function(event, context) {
         var isCloudwatchAgentAlarmName = alarmName.includes("servicemix-logs");
 
         if ((isOutOfHours || isWeekend) && isCloudwatchAgentAlarmName){
-            return;
+          process.exit();
         }
     }
 };
