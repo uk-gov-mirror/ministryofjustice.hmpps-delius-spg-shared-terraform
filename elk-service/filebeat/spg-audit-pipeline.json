@@ -1,31 +1,60 @@
 {
   "description" : "Convert SPG Audit log to indexed fields",
   "processors" : [
-      {
-        "dissect": {
-          "field": "message",
-          "pattern": "%{logLevel} %{temp1}|%{logType}||%{logMessageFields}"
-        }
-      },
-      {
-        "date": {
-          "field": "temp1",
-          "target_field": "interchangeTimestamp",
-          "formats": ["yyyy-MM-dd'T'HH:mm:ss.SSSX"],
-          "tag": "interchangeTimestamp processor"
-        }
-      },
-      {
-        "trim": {
+    {
+      "grok" : {
+        "field" : "message",
+        "patterns" : [
+          "%{LOGLEVEL:tempLevel}%{SPACE}%{DATA:tempDate}:%{SPACE}%{GREEDYDATA:messageFields}",
+          "%{DATA:tempLevel}%{SPACE}%{TIMESTAMP_ISO8601:tempDate}%{NOTSPACE:messageFields}"
+        ]
+      }
+    },
+    {
+      "date" : {
+        "field" : "tempDate",
+        "target_field" : "discardDate",
+        "formats" : [
+          "yyyy-MM-dd'T'HH:mm:ss.SSSX"
+        ],
+        "on_failure" : [
+          {
+            "set" : {
+              "field" : "message",
+              "value" : "{{tempLevel}} {{_ingest.timestamp}}|missingDate||exception={{messageFields}}"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "dissect" : {
+        "field" : "message",
+        "pattern" : "%{logLevel} %{temp1}|%{logType}||%{logMessageFields}"
+      }
+    },
+    {
+      "date" : {
+        "field" : "temp1",
+        "target_field" : "interchangeTimestamp",
+        "formats" : [
+          "yyyy-MM-dd'T'HH:mm:ss.SSSX",
+          "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        ],
+        "tag" : "interchangeTimestamp processor"
+    }
+    },
+    {
+      "trim": {
 	  "field": "logMessageFields"
         }
-      },
-      {
+    },
+    {
         "kv": {
           "field": "logMessageFields",
           "field_split": "\\|",
           "value_split": "="
         }
-      }
+    }
   ]
 }
