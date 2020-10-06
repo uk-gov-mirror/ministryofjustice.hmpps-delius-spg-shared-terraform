@@ -147,10 +147,12 @@ def do_terraform(configMap, component) {
             env.Continue = true
         }
         if (env.Continue == "true") {
-            apply_submodule(configMap, component)
+            //apply_submodule(configMap, component)
+            echo "Continue is true - would apply...."
         }
     } else if (plancode == "3") {
-        apply_submodule(configMap, component)
+        //apply_submodule(configMap, component)
+        echo "Would apply automatically...."
         env.Continue = true
     } else {
         env.Continue = true
