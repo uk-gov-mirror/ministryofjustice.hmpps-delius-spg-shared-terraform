@@ -18,36 +18,35 @@ def prepare_env() {
     '''
 }
 
-def plan_submodule(config_dir, env_name, git_project_dir, submodule_name) {
+def plan_submodule(configMap, submodule_name) {
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
         sh """
         #!/usr/env/bin bash
-        echo "TF PLAN for ${env_name} | ${submodule_name} - component from git project ${git_project_dir}"
+        echo "TF PLAN for ${configMap.env_name} | ${submodule_name} - component from git project ${configMap.terraform}"
         set +e
-        cp -R -n "${config_dir}" "${git_project_dir}/env_configs"
-        cd "${git_project_dir}"
+        cp -R -n "${configMap.config}" "${configMap.terraform}/env_configs"
+        cd "${configMap.terraform}"
         docker run --rm \
             -v `pwd`:/home/tools/data \
-            -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-11-14 \
+            -v ~/.aws:/home/tools/.aws \
+			mojdigitalstudio/hmpps-terraform-builder-0-11-14:latest \
             bash -c "\
-                source env_configs/${env_name}/${env_name}.properties; \
+                source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
                 cd ${submodule_name}; \
                 if [ -d .terraform ]; then rm -rf .terraform; fi; sleep 5; \
                 terragrunt init; \
-                terragrunt plan -detailed-exitcode -out ${env_name}.plan > tf.plan.out; \
+				terragrunt refresh; \
+                terragrunt plan -detailed-exitcode -out ${configMap.env_name}.plan > tf.plan.out; \
                 exitcode=\\\"\\\$?\\\"; \
+
                 cat tf.plan.out; \
                 if [ \\\"\\\$exitcode\\\" == '1' ]; then exit 1; fi; \
-                if [ \\\"\\\$exitcode\\\" == '2' ]; then \
-                    parse-terraform-plan -i tf.plan.out | jq '.changedResources[] | (.action != \\\"update\\\") or (.changedAttributes | to_entries | map(.key != \\\"tags.source-hash\\\") | reduce .[] as \\\$item (false; . or \\\$item))' | jq -e -s 'reduce .[] as \\\$item (false; . or \\\$item) == false'; \
-                    if [ \\\"\\\$?\\\" == '1' ]; then exitcode=2 ; else exitcode=3; fi; \
-                fi; \
                 echo \\\"\\\$exitcode\\\" > plan_ret;" \
             || exitcode="\$?"; \
             if [ "\$exitcode" == '1' ]; then exit 1; else exit 0; fi
         set -e
         """
-        return readFile("${git_project_dir}/${submodule_name}/plan_ret").trim()
+        return readFile("${configMap.terraform}/${submodule_name}/plan_ret").trim()
     }
 }
 
