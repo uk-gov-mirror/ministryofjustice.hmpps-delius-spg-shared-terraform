@@ -9,6 +9,10 @@ variable "servicemix_logs_alarm_enabled" {
   default = false
 }
 
+variable "activemq_alarm_enabled" {
+  default = false
+}
+
 variable "servicemix_log_alarm_evaluation_period" {
   default = "1"
 }

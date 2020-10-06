@@ -40,3 +40,16 @@ data "terraform_remote_state" "ecs_iso" {
     region = "${var.region}"
   }
 }
+
+#-------------------------------------------------------------
+### Getting the Amazon broker name
+#-------------------------------------------------------------
+data "terraform_remote_state" "amazonmq" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.remote_state_bucket_name}"
+    key    = "spg/amazonmq/terraform.tfstate"
+    region = "${var.region}"
+  }
+}
