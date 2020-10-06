@@ -37,5 +37,4 @@ locals {
   crc_log_group_name = "${data.terraform_remote_state.ecs_crc.ecs_spg_application_loggroup_name}"
   iso_log_group_name = "${data.terraform_remote_state.ecs_iso.ecs_spg_application_loggroup_name}"
   mpx_log_group_name = "${data.terraform_remote_state.ecs_mpx.ecs_spg_application_loggroup_name}"
-
 }
