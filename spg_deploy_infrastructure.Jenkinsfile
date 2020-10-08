@@ -26,8 +26,7 @@ def plan_submodule(configMap, submodule_name) {
         cd "${configMap.terraform}"
         docker run --rm \
             -v `pwd`:/home/tools/data \
-            -v ~/.aws:/home/tools/.aws \
-			mojdigitalstudio/hmpps-terraform-builder-0-11-14:latest \
+            -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-11-14:latest \
             bash -c "\
                 source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
                 cd ${submodule_name}; \

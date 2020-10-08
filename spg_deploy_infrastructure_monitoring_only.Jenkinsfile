@@ -18,25 +18,24 @@ def prepare_env() {
     '''
 }
 
-def plan_submodule(configMap, submodule_name) {
+def plan_submodule(config_dir, env_name, git_project_dir, submodule_name) {
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
         sh """
         #!/usr/env/bin bash
-        echo "TF PLAN for ${configMap.env_name} | ${submodule_name} - component from git project ${configMap.terraform}"
+        echo "TF PLAN for ${env_name} | ${submodule_name} - component from git project ${git_project_dir}"
         set +e
-        cp -R -n "${configMap.config}" "${configMap.terraform}/env_configs"
-        cd "${configMap.terraform}"
+        cp -R -n "${config_dir}" "${git_project_dir}/env_configs"
+        cd "${git_project_dir}"
         docker run --rm \
             -v `pwd`:/home/tools/data \
-            -v ~/.aws:/home/tools/.aws \
-			mojdigitalstudio/hmpps-terraform-builder-0-11-14:latest \
+            -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-11-14 \
             bash -c "\
-                source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
+                source env_configs/${env_name}/${env_name}.properties; \
                 cd ${submodule_name}; \
                 if [ -d .terraform ]; then rm -rf .terraform; fi; sleep 5; \
                 terragrunt init; \
-				terragrunt refresh; \
-                terragrunt plan -detailed-exitcode -out ${configMap.env_name}.plan > tf.plan.out; \
+                terragrunt refresh; \
+                terragrunt plan -detailed-exitcode -out ${env_name}.plan > tf.plan.out; \
                 exitcode=\\\"\\\$?\\\"; \
 
                 cat tf.plan.out; \
@@ -46,7 +45,7 @@ def plan_submodule(configMap, submodule_name) {
             if [ "\$exitcode" == '1' ]; then exit 1; else exit 0; fi
         set -e
         """
-        return readFile("${configMap.terraform}/${submodule_name}/plan_ret").trim()
+        return readFile("${git_project_dir}/${submodule_name}/plan_ret").trim()
     }
 }
 
