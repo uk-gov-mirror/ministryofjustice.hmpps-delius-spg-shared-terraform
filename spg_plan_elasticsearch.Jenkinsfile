@@ -32,7 +32,7 @@ def plan_submodule(configMap, submodule_name) {
                 cd ${submodule_name}; \
                 if [ -d .terraform ]; then rm -rf .terraform; fi; sleep 5; \
                 terragrunt init; \
-				terragrunt refresh; \
+                terragrunt refresh; \
                 terragrunt plan -detailed-exitcode -out ${configMap.env_name}.plan > tf.plan.out; \
                 exitcode=\\\"\\\$?\\\"; \
 
