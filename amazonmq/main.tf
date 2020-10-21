@@ -1,9 +1,3 @@
-
-provider "aws" {
-  region  = var.region
-  version = "~> 3.2.0"
-}
-
 locals {
   hmpps_asset_name_prefix = data.terraform_remote_state.common.outputs.hmpps_asset_name_prefix
 
