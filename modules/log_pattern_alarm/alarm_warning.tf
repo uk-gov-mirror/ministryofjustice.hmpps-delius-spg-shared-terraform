@@ -3,8 +3,8 @@ resource "aws_cloudwatch_metric_alarm" "warning" {
 
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = "${local.metric_name}"
-  namespace           = "${local.application}"
+  metric_name         = local.metric_name
+  namespace           = local.application
   period              = "300"
   statistic           = "Sum"
   threshold           = "1"
@@ -17,10 +17,10 @@ For alarm / metric: <https://eu-west-2.console.aws.amazon.com/cloudwatch/home?re
 EOF
 
   alarm_actions = [
-    "${local.alarm_notification_arn}",
+    local.alarm_notification_arn
   ]
 
   ok_actions = [
-    "${local.alarm_notification_arn}",
+    local.alarm_notification_arn
   ]
 }

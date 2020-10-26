@@ -1,7 +1,7 @@
 resource "aws_ecs_task_definition" "environment" {
   family = "${var.hmpps_asset_name_prefix}-${var.app_name}-task-definition"
-  container_definitions = "${var.container_definitions}"
-  execution_role_arn = "${var.execution_role_arn}"
+  container_definitions = var.container_definitions
+  execution_role_arn = var.execution_role_arn
 
   volume {
     name = "amqbroker"

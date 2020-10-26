@@ -4,10 +4,10 @@ resource "aws_elb" "environment" {
   internal        = var.internal
   security_groups = var.security_groups
 
-  cross_zone_load_balancing   = "${var.cross_zone_load_balancing}"
-  idle_timeout                = "${var.idle_timeout}"
-  connection_draining         = "${var.connection_draining}"
-  connection_draining_timeout = "${var.connection_draining_timeout}"
+  cross_zone_load_balancing   = var.cross_zone_load_balancing
+  idle_timeout                = var.idle_timeout
+  connection_draining         = var.connection_draining
+  connection_draining_timeout = var.connection_draining_timeout
 
   dynamic "listener" {
     for_each = var.listener
@@ -36,6 +36,6 @@ resource "aws_elb" "environment" {
     }
   }
 
-  tags         = "${merge(var.tags, map("Name", format("%s", var.name)))}"
+  tags         = merge(var.tags, map("Name", format("%s", var.name)))
 
 }
