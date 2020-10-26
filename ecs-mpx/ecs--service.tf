@@ -116,7 +116,7 @@ module "launch_cfg" {
 ############################################
 //TODO change to ref=terraform-0.12
 module "auto_scale" {
-  source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git//modules/autoscaling/group/asg_classic_lb?ref=terraform-12-tags"
+  source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git//modules/autoscaling/group/asg_classic_lb?ref=terraform-0.12"
   asg_name             = local.common_name
   subnet_ids           = local.private_subnet_ids
   asg_min              = local.asg_min
