@@ -114,7 +114,6 @@ module "launch_cfg" {
 ############################################
 # CREATE AUTO SCALING GROUP
 ############################################
-//TODO change to ref=terraform-0.12
 module "auto_scale" {
   source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git//modules/autoscaling/group/asg_classic_lb?ref=terraform-0.12"
   asg_name             = local.common_name

@@ -4,8 +4,7 @@ resource "aws_launch_configuration" "launch_cfg" {
   name_prefix          = "${local.common_name}-launch-cfg-"
   image_id             = data.aws_ami.amazon_ami.id
   instance_type        = var.instance_type
-  //TODO: no idea why iam_policy_ext_app_instance_profile_name is missing
-  iam_instance_profile = data.terraform_remote_state.iam.outputs.iam_policy_iso_ext_app_instance_profile_name
+  iam_instance_profile = data.terraform_remote_state.iam.outputs.iam_policy_ext_app_instance_profile_name
   key_name             = data.terraform_remote_state.vpc.outputs.ssh_deployer_key
   security_groups = [
     data.terraform_remote_state.vpc_security_groups.outputs.sg_ssh_bastion_in_id,

@@ -96,7 +96,8 @@ resource "aws_elasticsearch_domain" "elk-audit_domain" {
 
     zone_awareness_config {
       # Number of AZs must be either 2 or 3 and equal to subnet count when multi az / zone awareness is enabled
-      availability_zone_count = var.elk-audit_conf["es_instance_count"] <= 2 ? 2 : 3
+      // TODO: ALS-2017
+      availability_zone_count = var.elk-audit_conf["es_instance_count"] <= 2 ? 2 : 2
     }
   }
 

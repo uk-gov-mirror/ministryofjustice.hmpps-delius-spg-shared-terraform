@@ -14,6 +14,14 @@ resource "aws_cognito_user_pool" "elk-audit_user_pool" {
     }
   }
 
+  password_policy {
+    minimum_length    = var.elk-audit_cognito_conf["password_min_length"]
+    require_uppercase = var.elk-audit_cognito_conf["password_uppercase"]
+    require_lowercase = var.elk-audit_cognito_conf["password_lowercase"]
+    require_numbers   = var.elk-audit_cognito_conf["password_numbers"]
+    require_symbols   = var.elk-audit_cognito_conf["password_symbols"]
+  }
+
   admin_create_user_config {
     allow_admin_create_user_only = var.elk-audit_cognito_conf["admin_only_create"]
 
