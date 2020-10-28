@@ -96,8 +96,7 @@ resource "aws_elasticsearch_domain" "elk-audit_domain" {
 
     zone_awareness_config {
       # Number of AZs must be either 2 or 3 and equal to subnet count when multi az / zone awareness is enabled
-      // TODO: ALS-2017
-      availability_zone_count = var.elk-audit_conf["es_instance_count"] <= 2 ? 2 : 2
+      availability_zone_count = var.elk-audit_conf["es_instance_count"] <= 2 ? 2 : 3
     }
   }
 
@@ -151,12 +150,6 @@ resource "aws_elasticsearch_domain" "elk-audit_domain" {
     aws_iam_role.elk-audit_kibana_role,
     aws_cloudwatch_log_resource_policy.elk-audit_log_access,
   ]
-
-  # Workaround for issue always applying update when none needed on single instance domains
-  # Given a cluster multi az setup can't be updated after initial creation, this should be safe
-  lifecycle {
-    ignore_changes = [cluster_config.0.zone_awareness_config]
-  }
 }
 
 # Value must be updated when administering the webops kibana user in cognito

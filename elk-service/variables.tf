@@ -55,8 +55,8 @@ variable "elk-audit_conf" {
     # Data node count
     # TODO - Make es_instance_count and es_instance_type configurable across envs
     //es_instance_count = 1
-    // TODO: ALS-2017
-    es_instance_count = 2
+    es_instance_count = 3
+
     # See the following for restrictions around instance types
     # https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-instance-types.html
     //es_instance_type = "t2.small.elasticsearch"
