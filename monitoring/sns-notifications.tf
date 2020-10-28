@@ -3,7 +3,8 @@ resource "aws_sns_topic" "alarm_notification" {
 }
 
 resource "aws_sns_topic_subscription" "alarm_subscription" {
-  topic_arn = "${aws_sns_topic.alarm_notification.arn}"
+  topic_arn = aws_sns_topic.alarm_notification.arn
   protocol  = "lambda"
-  endpoint  = "${aws_lambda_function.notify-slack.arn}"
+  endpoint  = aws_lambda_function.notify-slack.arn
 }
+

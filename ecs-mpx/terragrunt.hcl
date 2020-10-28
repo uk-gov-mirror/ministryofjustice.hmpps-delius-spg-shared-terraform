@@ -1,5 +1,4 @@
-terragrunt = {
-  include {
+ include {
     path = "${find_in_parent_folders()}"
   }
 
@@ -7,8 +6,9 @@ terragrunt = {
     paths = [
       "../common",
       "../iam",
+      "../asg",
       "../certs",
       "../security-groups",
     ]
   }
-}
+

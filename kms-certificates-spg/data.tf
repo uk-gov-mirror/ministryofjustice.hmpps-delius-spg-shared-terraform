@@ -4,13 +4,14 @@
 #-------------------------------------------------------------
 ### Getting current
 #-------------------------------------------------------------
-data "aws_region" "current" {}
+data "aws_region" "current" {
+}
 
 #-------------------------------------------------------------
 ### Getting the current running account id
 #-------------------------------------------------------------
-data "aws_caller_identity" "current" {}
-
+data "aws_caller_identity" "current" {
+}
 
 #-------------------------------------------------------------
 ### Getting the common details
@@ -18,10 +19,10 @@ data "aws_caller_identity" "current" {}
 data "terraform_remote_state" "common" {
   backend = "s3"
 
-  config {
-    bucket = "${var.remote_state_bucket_name}"
+  config = {
+    bucket = var.remote_state_bucket_name
     key    = "spg/common/terraform.tfstate"
-    region = "${var.region}"
+    region = var.region
   }
 }
 
@@ -31,13 +32,12 @@ data "terraform_remote_state" "common" {
 data "terraform_remote_state" "iam" {
   backend = "s3"
 
-  config {
-    bucket = "${var.remote_state_bucket_name}"
+  config = {
+    bucket = var.remote_state_bucket_name
     key    = "spg/iam/terraform.tfstate"
-    region = "${var.region}"
+    region = var.region
   }
 }
-
 
 //#-------------------------------------------------------------
 //### Getting the s3bucket

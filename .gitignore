@@ -65,6 +65,8 @@ hs_err_pid*
 *.tfstate
 *.tfstate.*
 *.plan
+*/backend.tf
+*/provider.tf
 
 .idea/
 
