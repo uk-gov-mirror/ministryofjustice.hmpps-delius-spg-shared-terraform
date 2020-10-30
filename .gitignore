@@ -67,6 +67,7 @@ hs_err_pid*
 *.plan
 */backend.tf
 */provider.tf
+backend.tf
 
 .idea/
 
