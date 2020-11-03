@@ -52,15 +52,6 @@ variable "elk-audit_conf" {
     es_domain  = "elk-audit-stack"
     es_version = "7.1"
     # Cluster config
-    # Data node count
-    # TODO - Make es_instance_count and es_instance_type configurable across envs
-    //es_instance_count = 1
-    es_instance_count = 3
-
-    # See the following for restrictions around instance types
-    # https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-instance-types.html
-    //es_instance_type = "t2.small.elasticsearch"
-    es_instance_type            = "m5.large.elasticsearch"
     es_dedicated_master_enabled = false
     es_dedicated_master_count   = 0
     es_dedicated_master_type    = ""
@@ -113,4 +104,10 @@ variable "elk-audit_cognito_conf" {
     auto_verified_attributes = "email"
   }
 }
+
+variable "is_elk_prod" {
+  type    = bool
+  default = false
+}
+
 

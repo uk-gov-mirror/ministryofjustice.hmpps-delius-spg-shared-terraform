@@ -87,16 +87,16 @@ resource "aws_elasticsearch_domain" "elk-audit_domain" {
   }
 
   cluster_config {
-    instance_count           = var.elk-audit_conf["es_instance_count"]
-    instance_type            = var.elk-audit_conf["es_instance_type"]
+    instance_count           = var.is_elk_prod ? 3 : 1
+    instance_type            = var.is_elk_prod ? "m5.large.elasticsearch" : "t2.small.elasticsearch"
     dedicated_master_enabled = var.elk-audit_conf["es_dedicated_master_enabled"]
     dedicated_master_count   = var.elk-audit_conf["es_dedicated_master_count"]
     dedicated_master_type    = var.elk-audit_conf["es_dedicated_master_type"]
-    zone_awareness_enabled   = var.elk-audit_conf["es_instance_count"] > 1 ? true : false
+    zone_awareness_enabled   = var.is_elk_prod
 
     zone_awareness_config {
       # Number of AZs must be either 2 or 3 and equal to subnet count when multi az / zone awareness is enabled
-      availability_zone_count = var.elk-audit_conf["es_instance_count"] <= 2 ? 2 : 3
+      availability_zone_count = 3
     }
   }
 

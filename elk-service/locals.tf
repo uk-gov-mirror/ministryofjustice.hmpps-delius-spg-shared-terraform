@@ -24,7 +24,7 @@ locals {
   ]
 
   # ES Subnets needs to match number of of instances upto a max value of 3 (max no of AZs in a region)
-  es_subnet_count = var.elk-audit_conf["es_instance_count"] >= 3 ? 3 : var.elk-audit_conf["es_instance_count"]
+  es_subnet_count = var.is_elk_prod ? 3 : 1
 
   # List of ES subnets
   es_subnets = null_resource.subnet_list.*.triggers.subnet
@@ -33,7 +33,7 @@ locals {
 
 # Build list of subnets from private subnet ids equal to number of ES subnets required
 resource "null_resource" "subnet_list" {
-  count = local.es_subnet_count
+  count = var.is_elk_prod ? 3 : 1
 
   triggers = {
     subnet = local.private_subnet_ids[count.index]
