@@ -8,7 +8,6 @@ docker run -it --rm \
     -e TF_LOG=INFO \
     -e HMPPS_BUILD_WORK_DIR=/home/tools/data \
     -e environment_name="${environment_name}" \
-    -e TF_VAR_image_version="${image_tag}" \
     -e LOCK_ID="${lockId}" \
     -e ENV_CONFIGS_DIR=/home/tools/data/env_configs \
     -e sub_project="${sub_project}" \
