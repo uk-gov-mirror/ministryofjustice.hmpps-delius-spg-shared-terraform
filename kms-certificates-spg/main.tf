@@ -21,7 +21,12 @@ locals {
 
   roles_allowed_to_decrypt_spg_tls = [
     "${data.terraform_remote_state.iam.iam_policy_iso_ext_app_role_arn}",
-    "${data.terraform_remote_state.iam.iam_policy_mpx_int_app_role_arn}"]
+    "${data.terraform_remote_state.iam.iam_policy_mpx_int_app_role_arn}",
+    #police account / proxy role to allow downloading of TLS keys
+    #this allows access to all keys, and whilst only prod/preprod and stage are required, there is no harm in this server also having
+    #keys for synthetic data environments
+    "arn:aws:iam::581911240951:role/delius_psn_instance_role"
+  ]
 
   roles_allowed_to_decrypt_spg_signing = [
     "${data.terraform_remote_state.iam.iam_policy_iso_ext_app_role_arn}", //whilst spg-iso smx in place, remove when using haproxy + mpxhybrid
