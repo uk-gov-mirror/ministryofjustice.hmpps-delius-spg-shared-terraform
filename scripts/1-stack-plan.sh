@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-source ${env_config_dir}/${environment_name}/${environment_name}.properties
-
     if [ -d .terraform ]; then
         rm -rf .terraform
     fi

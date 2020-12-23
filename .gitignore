@@ -10,7 +10,7 @@ build/
 
 #env configs are now pulled in from git env project
 env_configs
-
+**/ci_env_configs
 # CMake
 cmake-build-debug/
 
@@ -67,7 +67,7 @@ hs_err_pid*
 *.plan
 */backend.tf
 */provider.tf
-backend.tf
+**/backend.tf
 
 .idea/
 
