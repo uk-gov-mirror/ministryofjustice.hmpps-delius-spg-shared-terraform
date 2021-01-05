@@ -11,6 +11,7 @@ docker run -it --rm \
     -e LOCK_ID="${lockId}" \
     -e ENV_CONFIGS_DIR=/home/tools/data/env_configs \
     -e sub_project="${sub_project}" \
+    -e ci_components_flag=${ci_components_flag} \
     -e "TERM=xterm-256color" \
     --entrypoint "scripts/${1}" \
-    mojdigitalstudio/hmpps-terraform-builder-0-12:latest
+    895523100917.dkr.ecr.eu-west-2.amazonaws.com/hmpps/terraform-builder-0-12:latest
