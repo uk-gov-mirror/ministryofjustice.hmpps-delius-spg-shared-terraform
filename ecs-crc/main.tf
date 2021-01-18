@@ -5,8 +5,8 @@
 locals {
   ########################################################################################################
   #Common (lots of duplication here, needs further refactoring)
-//  ########################################################################################################
-  tags = "${merge(var.tags,map("autostop-test","False"))}"
+  //  ########################################################################################################
+  tags = "${merge(var.tags, map("autostop-test", "False"))}"
 
   short_environment_name   = data.terraform_remote_state.common.outputs.short_environment_name
   app_hostnames            = data.terraform_remote_state.common.outputs.app_hostnames
@@ -63,10 +63,10 @@ locals {
   ]
 
   listener = [{
-      instance_port = 9001
-      instance_protocol = "TCP"
-      lb_port           = "9001"
-      lb_protocol       = "TCP"
+    instance_port     = 9001
+    instance_protocol = "TCP"
+    lb_port           = "9001"
+    lb_protocol       = "TCP"
     },
     {
       instance_port     = 2222
@@ -78,13 +78,13 @@ locals {
 
   health_check_elb = [
     {
-      target = "TCP:9001"
-      interval = 60
+      target            = "TCP:9001"
+      interval          = 60
       healthy_threshold = 2
 
       #set to 10 to allow spg 10 mins to spin up
       unhealthy_threshold = 10
-      timeout = 5
+      timeout             = 5
     },
   ]
 

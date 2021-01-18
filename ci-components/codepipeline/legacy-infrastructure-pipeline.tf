@@ -1,6 +1,5 @@
-module "spg-haproxy-pipeline" {
+module "spg-infrastructure-pipeline" {
   source            = "git::https://github.com/ministryofjustice/hmpps-delius-spg-codepipeline.git//terraform/ci-components/codepipeline?ref=main"
-  environment_name  = "hmpps-sandpit"
   approval_required = false
   artefacts_bucket  = local.artefacts_bucket
   pipeline_name     = local.legacy_infrastructure_pipeline_name
@@ -18,7 +17,7 @@ module "spg-haproxy-pipeline" {
       actions = [
         {
           action_name      = "CRC"
-          codebuild_name   = "spgw-stack-builder-0-12${local.test_var}"
+          codebuild_name   = "spgw-stack-builder-0-12"
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildCrcArtifact"
           namespace        = "BuildCrcVariables"
@@ -39,7 +38,7 @@ module "spg-haproxy-pipeline" {
         },
         {
           action_name      = "MPX"
-          codebuild_name   = "spgw-stack-builder-0-12${local.test_var}"
+          codebuild_name   = "spgw-stack-builder-0-12"
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildMpxArtifact"
           namespace        = "BuildMpxVariables"
@@ -60,7 +59,7 @@ module "spg-haproxy-pipeline" {
         },
         {
           action_name      = "ISO"
-          codebuild_name   = "spgw-stack-builder-0-12${local.test_var}"
+          codebuild_name   = "spgw-stack-builder-0-12"
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildIsoArtifact"
           namespace        = "BuildIsoVariables"
@@ -86,7 +85,7 @@ module "spg-haproxy-pipeline" {
       actions = [
         {
           action_name      = "Elk-Domains"
-          codebuild_name   = "spgw-stack-builder-0-12${local.test_var}"
+          codebuild_name   = "spgw-stack-builder-0-12"
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildElkDomainsArtifacts"
           namespace        = "BuildElkDomainsVariable"
@@ -107,7 +106,7 @@ module "spg-haproxy-pipeline" {
         },
         {
           action_name      = "Elk-Service"
-          codebuild_name   = "spgw-stack-builder-0-12${local.test_var}"
+          codebuild_name   = "spgw-stack-builder-0-12"
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildElkServiceArtifacts"
           namespace        = "BuildElkServiceVariable"
@@ -133,7 +132,7 @@ module "spg-haproxy-pipeline" {
       actions = [
         {
           action_name      = "IAM"
-          codebuild_name   = "spgw-stack-builder-0-12${local.test_var}"
+          codebuild_name   = "spgw-stack-builder-0-12"
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildIamArtifacts"
           namespace        = "BuildIamVariable"
@@ -154,7 +153,7 @@ module "spg-haproxy-pipeline" {
         },
         {
           action_name      = "Iam-Spg-App-Policies"
-          codebuild_name   = "spgw-stack-builder-0-12${local.test_var}"
+          codebuild_name   = "spgw-stack-builder-0-12"
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildIamAppPoliciesArtifacts"
           namespace        = "BuildIamAppPoliciesVariable"
@@ -175,7 +174,7 @@ module "spg-haproxy-pipeline" {
         },
         {
           action_name      = "Kms-Certificates-Spg"
-          codebuild_name   = "spgw-stack-builder-0-12${local.test_var}"
+          codebuild_name   = "spgw-stack-builder-0-12"
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildKmsCertificatesArtifacts"
           namespace        = "BuildKmsCertificatesVariable"
@@ -196,7 +195,7 @@ module "spg-haproxy-pipeline" {
         },
         {
           action_name      = "Security-Groups-And-Rules"
-          codebuild_name   = "spgw-stack-builder-0-12${local.test_var}"
+          codebuild_name   = "spgw-stack-builder-0-12"
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildSecurityGroupsArtifacts"
           namespace        = "BuildSecurityGroupsVariable"
@@ -222,7 +221,7 @@ module "spg-haproxy-pipeline" {
       actions = [
         {
           action_name      = "Monitoring"
-          codebuild_name   = "spgw-stack-builder-0-12${local.test_var}"
+          codebuild_name   = "spgw-stack-builder-0-12"
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildMonitoringArtifacts"
           namespace        = "BuildMonitoringVariable"
@@ -248,7 +247,7 @@ module "spg-haproxy-pipeline" {
       actions = [
         {
           action_name      = "Amazonmq"
-          codebuild_name   = "spgw-stack-builder-0-12${local.test_var}"
+          codebuild_name   = "spgw-stack-builder-0-12"
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildAmazonMqArtifacts"
           namespace        = "BuildAmazonMqVariable"
@@ -269,7 +268,7 @@ module "spg-haproxy-pipeline" {
         },
         {
           action_name      = "Common"
-          codebuild_name   = "spgw-stack-builder-0-12${local.test_var}"
+          codebuild_name   = "spgw-stack-builder-0-12"
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildCommonArtifacts"
           namespace        = "BuildCommonVariable"
@@ -290,7 +289,7 @@ module "spg-haproxy-pipeline" {
         },
         {
           action_name      = "Dynamodb-Sequence-Generator"
-          codebuild_name   = "spgw-stack-builder-0-12${local.test_var}"
+          codebuild_name   = "spgw-stack-builder-0-12"
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildDynamoDbArtifacts"
           namespace        = "BuildDynamoDbVariable"
@@ -311,7 +310,7 @@ module "spg-haproxy-pipeline" {
         },
         {
           action_name      = "Psn-Proxy-Route-53"
-          codebuild_name   = "spgw-stack-builder-0-12${local.test_var}"
+          codebuild_name   = "spgw-stack-builder-0-12"
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildRoute53Artifacts"
           namespace        = "BuildRoute53Variable"

@@ -9,6 +9,7 @@ phases:
       - export CUSTOM_COMMON_PROPERTIES_DIR=${CODEBUILD_SRC_DIR}/env_configs/common
   build:
     commands:
+      - source ${CODEBUILD_SRC_DIR}/env_configs/${environment_name}/${environment_name}.properties
       - cd ${CODEBUILD_SRC_DIR}/${sub_project}
       - ${CODEBUILD_SRC_DIR}/scripts/1-stack-plan.sh
       - ${CODEBUILD_SRC_DIR}/scripts/2-stack-apply.sh
