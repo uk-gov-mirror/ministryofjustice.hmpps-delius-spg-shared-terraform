@@ -109,6 +109,7 @@ sudo -i
 yum install -y \
     git \
     wget \
+    python3 \
     yum-utils
 
 echo 'preppip' > /tmp/paul.log
