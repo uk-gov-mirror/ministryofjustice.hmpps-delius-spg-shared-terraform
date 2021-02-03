@@ -12,7 +12,7 @@ project.terraform = 'hmpps-delius-spg-shared-terraform'
 def prepare_env() {
     sh '''
         #!/usr/env/bin bash
-        docker pull mojdigitalstudio/hmpps-terraform-builder-0-11-14:latest
+        docker pull mojdigitalstudio/hmpps-terraform-builder-0-12:latest
     '''
 }
 
@@ -26,7 +26,7 @@ def plan_submodule(configMap, submodule_name) {
         cd "${configMap.terraform}"
         docker run --rm \
             -v `pwd`:/home/tools/data \
-            -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-11-14:latest \
+            -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-12:latest \
             bash -c "\
                 source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
                 cd ${submodule_name}; \
@@ -57,7 +57,7 @@ def apply_submodule(configMap, submodule_name) {
         cd "${configMap.terraform}"
         docker run --rm \
           -v `pwd`:/home/tools/data \
-          -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-11-14 \
+          -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-12 \
           bash -c " \
               source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
               export TF_VAR_image_version=${configMap.image_version}; \
@@ -89,7 +89,7 @@ def refresh_submodule(configMap, submodule_name) {
         cd "${configMap.terraform}"
         docker run --rm \
           -v `pwd`:/home/tools/data \
-          -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-11-14 \
+          -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-12 \
           bash -c " \
               source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
               export TF_VAR_image_version=${configMap.image_version}; \
@@ -170,7 +170,7 @@ def remove_submodule_resources(configMap, submodule_name, resources) {
         cd "${configMap.terraform}"
         docker run --rm \
           -v `pwd`:/home/tools/data \
-          -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-11-14 \
+          -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-12 \
           bash -c " \
               source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
               cd ${submodule_name}; \
