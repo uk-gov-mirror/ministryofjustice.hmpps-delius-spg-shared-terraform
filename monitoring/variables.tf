@@ -1,11 +1,16 @@
 # region
-variable "region" {}
+variable "region" {
+}
 
 variable "remote_state_bucket_name" {
   description = "Terraform remote state bucket name"
 }
 
 variable "servicemix_logs_alarm_enabled" {
+  default = 0
+}
+
+variable "activemq_alarm_enabled" {
   default = false
 }
 
@@ -19,12 +24,13 @@ variable "build_tag" {
 }
 
 variable "tags" {
-  type        = "map"
+  type        = map(string)
   description = "Default tag set"
 }
 
 variable "lambda_runtime" {
   description = "Lambda runtime"
-  type        = "string"
+  type        = string
   default     = "nodejs12.x"
 }
+

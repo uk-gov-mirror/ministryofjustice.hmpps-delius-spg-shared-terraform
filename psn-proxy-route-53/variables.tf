@@ -8,22 +8,26 @@ variable "region" {
   description = "The AWS region."
 }
 
-
-variable public_dns_child_zone {}
-variable public_dns_parent_zone {}
-variable route53_strategic_hosted_zone_id {
-  default="zonenotimplementedyet"
-
+variable "public_dns_child_zone" {
 }
 
-variable is_production {}
-
-variable psn_facing_ips {
-  type = "list"
-  default=[]
+variable "public_dns_parent_zone" {
 }
 
-variable internet_facing_ips {
-  type = "list"
-  default=[]
+variable "route53_strategic_hosted_zone_id" {
+  default = "zonenotimplementedyet"
 }
+
+variable "is_production" {
+}
+
+variable "psn_facing_ips" {
+  type    = list(string)
+  default = []
+}
+
+variable "internet_facing_ips" {
+  type    = list(string)
+  default = []
+}
+

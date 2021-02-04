@@ -14,19 +14,19 @@ Sometimes POs take their systems offline (and out of hours), this would cause th
 https://dsdmoj.atlassian.net/wiki/spaces/DAM/pages/1578893538/Monitoring+and+Alerting
 EOF
 
+
   alarm_actions = [
-    "${aws_sns_topic.alarm_notification.arn}",
+    aws_sns_topic.alarm_notification.arn,
   ]
 
   ok_actions = [
-    "${aws_sns_topic.alarm_notification.arn}",
+    aws_sns_topic.alarm_notification.arn,
   ]
 
-  dimensions {
-    AutoScalingGroupName = "${data.terraform_remote_state.ecs_mpx.ecs_spg_autoscale_name}"
-
-    //TODO sync output variable name style with crc & mpx in the new year
+  dimensions = {
+    AutoScalingGroupName = data.terraform_remote_state.ecs_mpx.outputs.ecs_spg_autoscale_name
   }
+  //TODO sync output variable name style with crc & mpx in the new year
 }
 
 resource "aws_cloudwatch_metric_alarm" "spgw_mpx_cpu_critical" {
@@ -46,19 +46,19 @@ Sometimes POs take their systems offline (and out of hours), this would cause th
 https://dsdmoj.atlassian.net/wiki/spaces/DAM/pages/1578893538/Monitoring+and+Alerting
 EOF
 
+
   alarm_actions = [
-    "${aws_sns_topic.alarm_notification.arn}",
+    aws_sns_topic.alarm_notification.arn,
   ]
 
   ok_actions = [
-    "${aws_sns_topic.alarm_notification.arn}",
+    aws_sns_topic.alarm_notification.arn,
   ]
 
-  dimensions {
-    AutoScalingGroupName = "${data.terraform_remote_state.ecs_mpx.ecs_spg_autoscale_name}"
-
-    //TODO sync output variable name style with crc & mpx in the new year
+  dimensions = {
+    AutoScalingGroupName = data.terraform_remote_state.ecs_mpx.outputs.ecs_spg_autoscale_name
   }
+  //TODO sync output variable name style with crc & mpx in the new year
 }
 
 resource "aws_cloudwatch_metric_alarm" "spgw_mpx_cpu_fatal" {
@@ -77,17 +77,18 @@ Sometimes POs take their systems offline (and out of hours), this would cause th
 https://dsdmoj.atlassian.net/wiki/spaces/DAM/pages/1578893538/Monitoring+and+Alerting
 EOF
 
+
   alarm_actions = [
-    "${aws_sns_topic.alarm_notification.arn}",
+    aws_sns_topic.alarm_notification.arn,
   ]
 
   ok_actions = [
-    "${aws_sns_topic.alarm_notification.arn}",
+    aws_sns_topic.alarm_notification.arn,
   ]
 
-  dimensions {
-    AutoScalingGroupName = "${data.terraform_remote_state.ecs_mpx.ecs_spg_autoscale_name}"
-
-    //TODO sync output variable name style with crc & mpx in the new year
+  dimensions = {
+    AutoScalingGroupName = data.terraform_remote_state.ecs_mpx.outputs.ecs_spg_autoscale_name
   }
+  //TODO sync output variable name style with crc & mpx in the new year
 }
+

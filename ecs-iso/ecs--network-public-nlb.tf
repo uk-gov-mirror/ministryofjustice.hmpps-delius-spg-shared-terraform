@@ -9,58 +9,49 @@
 #
 ############################################
 
-
-
-
 ############################################
 # CREATE EXTERNAL LB FOR spg (iso)
 ############################################
 module "create_app_nlb_ext" {
-  //  original source              = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_lb"
-  source                    = "../modules/loadbalancer/nlb/create_public_nlb"
+  source = "../modules/loadbalancer/nlb/create_public_nlb"
 
-  az_lb_eip_allocation_ids  = "${local.az_lb_eip_allocation_ids}"
-  internal                  = false
-  lb_name                   = "${local.common_name}"
-  public_subnet_ids         = "${local.public_subnet_ids}"
-  s3_bucket_name            = "${local.access_logs_bucket}"
-  tags                      = "${local.tags}"
-
+  az_lb_eip_allocation_ids = local.az_lb_eip_allocation_ids
+  internal                 = false
+  lb_name                  = local.common_name
+  public_subnet_ids        = local.public_subnet_ids
+  s3_bucket_name           = local.access_logs_bucket
+  tags                     = local.tags
 }
-
-
 
 ###############################################
 # Create route53 entry for spg lb
 ###############################################
 
 resource "aws_route53_record" "dns_ext_entry" {
-  zone_id = "${local.public_zone_id}"
+  zone_id = local.public_zone_id
   name    = "${local.application_endpoint}-ext"
   type    = "A"
 
   alias {
-    name                   = "${module.create_app_nlb_ext.lb_dns_name}"
-    zone_id                = "${module.create_app_nlb_ext.lb_zone_id}"
+    name                   = module.create_app_nlb_ext.lb_dns_name
+    zone_id                = module.create_app_nlb_ext.lb_zone_id
     evaluate_target_health = false
   }
 }
 
 ###strategic - only create if the primary zone id is different to the strategic one
 resource "aws_route53_record" "strategic_dns_ext_entry" {
-  count = "${(local.public_zone_id == local.strategic_public_zone_id || local.strategic_public_zone_id == "notyetimplemented")  ? 0 : 1}"
-  zone_id = "${local.strategic_public_zone_id}"
+  count   = local.public_zone_id == local.strategic_public_zone_id || local.strategic_public_zone_id == "notyetimplemented" ? 0 : 1
+  zone_id = local.strategic_public_zone_id
   name    = "${local.application_endpoint}-ext"
   type    = "A"
 
   alias {
-    name                   = "${module.create_app_nlb_ext.lb_dns_name}"
-    zone_id                = "${module.create_app_nlb_ext.lb_zone_id}"
+    name                   = module.create_app_nlb_ext.lb_dns_name
+    zone_id                = module.create_app_nlb_ext.lb_zone_id
     evaluate_target_health = false
   }
 }
-
-
 
 ############################################
 # CREATE INT TARGET GROUPS FOR APP PORTS
@@ -68,62 +59,55 @@ resource "aws_route53_record" "strategic_dns_ext_entry" {
 
 //nlb  target group
 module "create_app_nlb_ext_targetgrp" {
-  // original source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//targetgroup"
-  source               = "../modules/loadbalancer/nlb/targetgroup"
-  appname              = "${local.common_name}"
-  target_port          = "${local.backend_app_port}"
-  target_protocol      = "${local.backend_app_protocol}"
-  vpc_id               = "${local.vpc_id}"
-  target_type          = "${local.target_type}"
-  tags                 = "${local.tags}"
-  health_check         = "${local.health_check}"
+  source          = "../modules/loadbalancer/nlb/targetgroup"
+  appname         = local.common_name
+  target_port     = local.backend_app_port
+  target_protocol = local.backend_app_protocol
+  vpc_id          = local.vpc_id
+  target_type     = local.target_type
+  tags            = local.tags
+  health_check    = local.health_check
 }
-
-
-
 
 ############################################
 # CREATE LISTENER(S) FOR APP PORTS
 ############################################
 
-
 module "create_app_nlb_ext_listener_9001" {
-  source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//alb//create_listener"
-  lb_port          = "${local.frontend_app_port}"
-  lb_protocol      = "${local.frontend_app_protocol}"
-  lb_arn           = "${module.create_app_nlb_ext.lb_arn}"
-  target_group_arn = "${module.create_app_nlb_ext_targetgrp.target_group_arn}"
+  source           = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git//modules/loadbalancer/alb/create_listener?ref=terraform-0.12"
+  lb_port          = local.frontend_app_port
+  lb_protocol      = local.frontend_app_protocol
+  lb_arn           = module.create_app_nlb_ext.lb_arn
+  target_group_arn = module.create_app_nlb_ext_targetgrp.target_group_arn
 }
-
-
-
 
 ########################################################
 # CREATE SECUIRTY RULE FOR ISO instance to listen to NLB
 ########################################################
 
-
-
-
-
 ###################################################################
 
-
 data "aws_network_interface" "from_nlb_arn_suffix_per_subnet" {
-  count = "${length(local.public_subnet_ids)}"
+  count = length(local.public_subnet_ids)
 
-  filter = {
+  filter {
     name   = "description"
     values = ["ELB ${module.create_app_nlb_ext.lb_arn_suffix}"]
   }
 
-  filter = {
-    name   = "subnet-id"
-    values = ["${element(local.public_subnet_ids, count.index)}"]
+  filter {
+    name = "subnet-id"
+    # TF-UPGRADE-TODO: In Terraform v0.10 and earlier, it was sometimes necessary to
+    # force an interpolation expression to be interpreted as a list by wrapping it
+    # in an extra set of list brackets. That form was supported for compatibility in
+    # v0.11, but is no longer supported in Terraform v0.12.
+    #
+    # If the expression in the following list itself returns a list, remove the
+    # brackets to avoid interpretation as a list of lists. If the expression
+    # returns a single list item then leave it as-is and remove this TODO comment.
+    values = [element(local.public_subnet_ids, count.index)]
   }
 }
-
-
 
 #using NLB, have to specify the CIDR blocks that will come through the NLB
 #CIDR will include, POs, the LB/VPC
@@ -132,12 +116,19 @@ data "aws_network_interface" "from_nlb_arn_suffix_per_subnet" {
 ### port 9001
 #-------------------------------------------------------------
 resource "aws_security_group_rule" "iso_instance_allports_ingress" {
-  security_group_id        = "${data.terraform_remote_state.security-groups-and-rules.iso_external_instance_sg_id}"
-  type                     = "ingress"
-  from_port                = 0
-  to_port                  = 65535
-  protocol                 = "tcp"
+  security_group_id = data.terraform_remote_state.security-groups-and-rules.outputs.iso_external_instance_sg_id
+  type              = "ingress"
+  from_port         = 0
+  to_port           = 65535
+  protocol          = "tcp"
+
   #  protocol          = -1
-  cidr_blocks              = ["${formatlist("%s/32",flatten(data.aws_network_interface.from_nlb_arn_suffix_per_subnet.*.private_ips))}"]
-  description              = "from NLB"
+  cidr_blocks = formatlist(
+    "%s/32",
+    flatten(
+      data.aws_network_interface.from_nlb_arn_suffix_per_subnet.*.private_ips,
+    ),
+  )
+  description = "from NLB"
 }
+

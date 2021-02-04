@@ -12,43 +12,42 @@ project.terraform = 'hmpps-delius-spg-shared-terraform'
 def prepare_env() {
     sh '''
         #!/usr/env/bin bash
-        docker pull mojdigitalstudio/hmpps-terraform-builder-0-11-14:latest
+        docker pull mojdigitalstudio/hmpps-terraform-builder-0-12:latest
     '''
 }
 
 def plan_submodule(configMap, submodule_name) {
-    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
-        sh """
-        #!/usr/env/bin bash
-        echo "TF PLAN for ${configMap.env_name} | ${submodule_name} - component from git project ${configMap.terraform}"
-        set +e
-        cp -R -n "${configMap.config}" "${configMap.terraform}/env_configs"
-        cd "${configMap.terraform}"
-        docker run --rm \
-            -v `pwd`:/home/tools/data \
-            -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-11-14 \
-            bash -c "\
-                source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
-                export TF_VAR_image_version=${configMap.image_version}; \
-                cd ${submodule_name}; \
-                if [ -d .terraform ]; then rm -rf .terraform; fi; sleep 5; \
-                terragrunt init; \
-                terragrunt plan -detailed-exitcode -out ${configMap.env_name}.plan > tf.plan.out; \
-                exitcode=\\\"\\\$?\\\"; \
-                cat tf.plan.out; \
-                if [ \\\"\\\$exitcode\\\" == '1' ]; then exit 1; fi; \
-                if [ \\\"\\\$exitcode\\\" == '2' ]; then \
-                    parse-terraform-plan -i tf.plan.out | jq '.changedResources[] | (.action != \\\"update\\\") or (.changedAttributes | to_entries | map(.key != \\\"tags.source-hash\\\") | reduce .[] as \\\$item (false; . or \\\$item))' | jq -e -s 'reduce .[] as \\\$item (false; . or \\\$item) == false'; \
-                    if [ \\\"\\\$?\\\" == '1' ]; then exitcode=2 ; else exitcode=3; fi; \
-                fi; \
-                echo \\\"\\\$exitcode\\\" > plan_ret;" \
-            || exitcode="\$?"; \
-            if [ "\$exitcode" == '1' ]; then exit 1; else exit 0; fi
-        set -e
-        """
-        return readFile("${configMap.terraform}/${submodule_name}/plan_ret").trim()
-    }
-}
+     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
+         sh """
+         #!/usr/env/bin bash
+         echo "TF PLAN for ${configMap.env_name} | ${submodule_name} - component from git project ${configMap.terraform}"
+         set +e
+         cp -R -n "${configMap.config}" "${configMap.terraform}/env_configs"
+         cd "${configMap.terraform}"
+         docker run --rm \
+             -v `pwd`:/home/tools/data \
+             -v ~/.aws:/home/tools/.aws \
+ 			mojdigitalstudio/hmpps-terraform-builder-0-12:latest \
+             bash -c "\
+                 source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
+                 cd ${submodule_name}; \
+                 if [ -d .terraform ]; then rm -rf .terraform; fi; sleep 5; \
+                 terragrunt init; \
+
+                 terragrunt plan -detailed-exitcode --out ${configMap.env_name}.plan > tf.plan.out; \
+                 exitcode=\\\"\\\$?\\\"; \
+
+                 cat tf.plan.out; \
+                 if [ \\\"\\\$exitcode\\\" == '1' ]; then exit 1; fi; \
+                 echo \\\"\\\$exitcode\\\" > plan_ret;" \
+             || exitcode="\$?"; \
+             if [ "\$exitcode" == '1' ]; then exit 1; else exit 0; fi
+         set -e
+         """
+         return readFile("${configMap.terraform}/${submodule_name}/plan_ret").trim()
+     }
+ }
+
 
 def apply_submodule(configMap, submodule_name) {
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
@@ -60,7 +59,7 @@ def apply_submodule(configMap, submodule_name) {
         cd "${configMap.terraform}"
         docker run --rm \
           -v `pwd`:/home/tools/data \
-          -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-11-14 \
+          -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-12 \
           bash -c " \
               source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
               export TF_VAR_image_version=${configMap.image_version}; \
@@ -92,7 +91,7 @@ def refresh_submodule(configMap, submodule_name) {
         cd "${configMap.terraform}"
         docker run --rm \
           -v `pwd`:/home/tools/data \
-          -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-11-14 \
+          -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-12 \
           bash -c " \
               source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
               export TF_VAR_image_version=${configMap.image_version}; \
@@ -173,7 +172,7 @@ def remove_submodule_resources(configMap, submodule_name, resources) {
         cd "${configMap.terraform}"
         docker run --rm \
           -v `pwd`:/home/tools/data \
-          -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-11-14 \
+          -v ~/.aws:/home/tools/.aws mojdigitalstudio/hmpps-terraform-builder-0-12 \
           bash -c " \
               source env_configs/${configMap.env_name}/${configMap.env_name}.properties; \
               cd ${submodule_name}; \

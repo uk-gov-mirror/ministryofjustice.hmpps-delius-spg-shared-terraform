@@ -5,11 +5,11 @@ variable "environment_identifier" {
 }
 
 variable "short_environment_name" {
-  type = "string"
+  type = string
 }
 
 variable "project_name_abbreviated" {
-  type = "string"
+  type = string
 }
 
 variable "region" {
@@ -29,23 +29,32 @@ variable "eng_role_arn" {
   description = "arn to use for engineering platform terraform"
 }
 
-variable "lb_account_id" {}
+variable "lb_account_id" {
+}
 
-variable "role_arn" {}
+variable "role_arn" {
+}
 
-variable "route53_hosted_zone_id" {}
+variable "route53_hosted_zone_id" {
+}
 
 variable "route53_strategic_hosted_zone_id" {
   default = "notyetimplemented"
 }
 
-variable public_dns_child_zone {}
-variable public_dns_parent_zone {}
+variable "public_dns_child_zone" {
+}
 
-variable "spg_app_name" {}
+variable "public_dns_parent_zone" {
+}
 
-variable "cloudwatch_log_retention" {}
+variable "spg_app_name" {
+}
+
+variable "cloudwatch_log_retention" {
+}
 
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
+
