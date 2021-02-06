@@ -59,8 +59,8 @@ locals {
       #set to 10 to allow spg 10 mins to spin up (can be reduced once sm is pre installed on docker)
       unhealthy_threshold = 10
       #path and matcher must be blank for TCP protocol (would be "/cxf/" and "200" respectively if was ALB healthcheck
-      path    = ""
-      matcher = ""
+      #path    = ""
+      #matcher = ""
     },
   ]
 
