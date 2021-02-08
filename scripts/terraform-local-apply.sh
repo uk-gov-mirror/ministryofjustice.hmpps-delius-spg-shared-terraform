@@ -11,3 +11,7 @@ else
 fi
 
 /home/tools/data/scripts/2-stack-apply.sh
+
+if ${ci_components_flag}  ; then
+  ${HMPPS_BUILD_WORK_DIR}/scripts/disable-release-pipeline-stages.sh
+fi
