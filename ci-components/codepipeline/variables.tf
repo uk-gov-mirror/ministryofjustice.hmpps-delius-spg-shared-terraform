@@ -73,3 +73,7 @@ variable "sub_project_psn_proxy_route_53" {
 variable "pipeline_name" {
   type = string
 }
+
+variable "image_version" {
+  type = string
+}

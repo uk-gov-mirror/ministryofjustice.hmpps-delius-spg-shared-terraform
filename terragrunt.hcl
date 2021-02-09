@@ -31,6 +31,8 @@ remote_state {
           "-var-file=../env_configs/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}.tfvars",
           "-var-file=../env_configs/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}/sub-projects/spg.tfvars",
           "-var-file=../env_configs/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}/sub-projects/parent-orgs.tfvars",
+          "-var-file=../ci-components/config/common.tfvars",
+          "-var-file=../ci-components/config/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}.tfvars",
         ]
       }
     }
