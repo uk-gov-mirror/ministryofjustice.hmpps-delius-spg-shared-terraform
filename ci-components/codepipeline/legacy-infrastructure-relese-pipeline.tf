@@ -32,6 +32,11 @@ module "spg-infrastructure-release-pipeline" {
                 "name" : "environment_name",
                 "value" : var.environment_name,
                 "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "image_version",
+                "value" : var.image_version,
+                "type" : "PLAINTEXT"
               }
             ]
           )
@@ -53,6 +58,11 @@ module "spg-infrastructure-release-pipeline" {
                 "name" : "environment_name",
                 "value" : var.environment_name,
                 "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "image_version",
+                "value" : var.image_version,
+                "type" : "PLAINTEXT"
               }
             ]
           )
@@ -73,6 +83,11 @@ module "spg-infrastructure-release-pipeline" {
               {
                 "name" : "environment_name",
                 "value" : var.environment_name,
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "image_version",
+                "value" : var.image_version,
                 "type" : "PLAINTEXT"
               }
             ]
