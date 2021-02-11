@@ -115,6 +115,7 @@ yum install -y \
 echo 'preppip' > /tmp/paul.log
 
 easy_install pip
+pip3 install --upgrade pip
 
 PATH=/usr/local/bin:$PATH
 
