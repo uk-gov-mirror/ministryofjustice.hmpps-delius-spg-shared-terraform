@@ -1,13 +1,13 @@
-module "spg-infrastructure-pipeline" {
+module "spg-infrastructure-release-pipeline" {
   source            = "git::https://github.com/ministryofjustice/hmpps-delius-spg-codepipeline.git//terraform/ci-components/codepipeline?ref=main"
   approval_required = false
   artefacts_bucket  = local.artefacts_bucket
-  pipeline_name     = local.legacy_infrastructure_pipeline_name
+  pipeline_name     = local.legacy_infrastructure_release_pipeline_name
   iam_role_arn      = local.iam_role_arn
   log_group         = local.log_group_name
   tags              = local.tags
   cache_bucket      = local.cache_bucket
-  codebuild_name    = local.legacy_infrastructure_pipeline_name
+  codebuild_name    = local.legacy_infrastructure_release_pipeline_name
   github_repositories = {
     SourceArtifact = ["hmpps-delius-spg-shared-terraform", var.branch_name]
   }
@@ -17,7 +17,7 @@ module "spg-infrastructure-pipeline" {
       actions = [
         {
           action_name      = "CRC"
-          codebuild_name   = "spgw-stack-builder-0-12"
+          codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildCrcArtifact"
           namespace        = "BuildCrcVariables"
@@ -32,13 +32,18 @@ module "spg-infrastructure-pipeline" {
                 "name" : "environment_name",
                 "value" : var.environment_name,
                 "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "image_version",
+                "value" : var.image_version,
+                "type" : "PLAINTEXT"
               }
             ]
           )
         },
         {
           action_name      = "MPX"
-          codebuild_name   = "spgw-stack-builder-0-12"
+          codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildMpxArtifact"
           namespace        = "BuildMpxVariables"
@@ -53,13 +58,18 @@ module "spg-infrastructure-pipeline" {
                 "name" : "environment_name",
                 "value" : var.environment_name,
                 "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "image_version",
+                "value" : var.image_version,
+                "type" : "PLAINTEXT"
               }
             ]
           )
         },
         {
           action_name      = "ISO"
-          codebuild_name   = "spgw-stack-builder-0-12"
+          codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildIsoArtifact"
           namespace        = "BuildIsoVariables"
@@ -74,6 +84,11 @@ module "spg-infrastructure-pipeline" {
                 "name" : "environment_name",
                 "value" : var.environment_name,
                 "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "image_version",
+                "value" : var.image_version,
+                "type" : "PLAINTEXT"
               }
             ]
           )
@@ -81,32 +96,11 @@ module "spg-infrastructure-pipeline" {
       ]
     },
     {
-      name = "Build-Terraform-ELK"
+      name = "Build-Terraform-ELK-Service"
       actions = [
         {
-          action_name      = "Elk-Domains"
-          codebuild_name   = "spgw-stack-builder-0-12"
-          input_artifacts  = "SourceArtifact"
-          output_artifacts = "BuildElkDomainsArtifacts"
-          namespace        = "BuildElkDomainsVariable"
-          action_env = jsonencode(
-            [
-              {
-                "name" : "sub_project",
-                "value" : var.sub_project_elk_domains,
-                "type" : "PLAINTEXT"
-              },
-              {
-                "name" : "environment_name",
-                "value" : var.environment_name,
-                "type" : "PLAINTEXT"
-              }
-            ]
-          )
-        },
-        {
           action_name      = "Elk-Service"
-          codebuild_name   = "spgw-stack-builder-0-12"
+          codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildElkServiceArtifacts"
           namespace        = "BuildElkServiceVariable"
@@ -128,11 +122,37 @@ module "spg-infrastructure-pipeline" {
       ]
     },
     {
+      name = "Build-Terraform-ELK-Domains"
+      actions = [
+        {
+          action_name      = "Elk-Domains"
+          codebuild_name   = local.stack_builder_name
+          input_artifacts  = "SourceArtifact"
+          output_artifacts = "BuildElkDomainsArtifacts"
+          namespace        = "BuildElkDomainsVariable"
+          action_env = jsonencode(
+            [
+              {
+                "name" : "sub_project",
+                "value" : var.sub_project_elk_domains,
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "environment_name",
+                "value" : var.environment_name,
+                "type" : "PLAINTEXT"
+              }
+            ]
+          )
+        }
+      ]
+    },
+    {
       name = "Build-Terraform-IAM"
       actions = [
         {
           action_name      = "IAM"
-          codebuild_name   = "spgw-stack-builder-0-12"
+          codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildIamArtifacts"
           namespace        = "BuildIamVariable"
@@ -153,7 +173,7 @@ module "spg-infrastructure-pipeline" {
         },
         {
           action_name      = "Iam-Spg-App-Policies"
-          codebuild_name   = "spgw-stack-builder-0-12"
+          codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildIamAppPoliciesArtifacts"
           namespace        = "BuildIamAppPoliciesVariable"
@@ -174,7 +194,7 @@ module "spg-infrastructure-pipeline" {
         },
         {
           action_name      = "Kms-Certificates-Spg"
-          codebuild_name   = "spgw-stack-builder-0-12"
+          codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildKmsCertificatesArtifacts"
           namespace        = "BuildKmsCertificatesVariable"
@@ -195,7 +215,7 @@ module "spg-infrastructure-pipeline" {
         },
         {
           action_name      = "Security-Groups-And-Rules"
-          codebuild_name   = "spgw-stack-builder-0-12"
+          codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildSecurityGroupsArtifacts"
           namespace        = "BuildSecurityGroupsVariable"
@@ -217,37 +237,11 @@ module "spg-infrastructure-pipeline" {
       ]
     },
     {
-      name = "Build-Terrafom-Monitoring"
-      actions = [
-        {
-          action_name      = "Monitoring"
-          codebuild_name   = "spgw-stack-builder-0-12"
-          input_artifacts  = "SourceArtifact"
-          output_artifacts = "BuildMonitoringArtifacts"
-          namespace        = "BuildMonitoringVariable"
-          action_env = jsonencode(
-            [
-              {
-                "name" : "sub_project",
-                "value" : var.sub_project_monitoring,
-                "type" : "PLAINTEXT"
-              },
-              {
-                "name" : "environment_name",
-                "value" : var.environment_name,
-                "type" : "PLAINTEXT"
-              }
-            ]
-          )
-        }
-      ]
-    },
-    {
       name = "Build-Terrafom-Misc"
       actions = [
         {
           action_name      = "Amazonmq"
-          codebuild_name   = "spgw-stack-builder-0-12"
+          codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildAmazonMqArtifacts"
           namespace        = "BuildAmazonMqVariable"
@@ -268,7 +262,7 @@ module "spg-infrastructure-pipeline" {
         },
         {
           action_name      = "Common"
-          codebuild_name   = "spgw-stack-builder-0-12"
+          codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildCommonArtifacts"
           namespace        = "BuildCommonVariable"
@@ -289,7 +283,7 @@ module "spg-infrastructure-pipeline" {
         },
         {
           action_name      = "Dynamodb-Sequence-Generator"
-          codebuild_name   = "spgw-stack-builder-0-12"
+          codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildDynamoDbArtifacts"
           namespace        = "BuildDynamoDbVariable"
@@ -310,7 +304,7 @@ module "spg-infrastructure-pipeline" {
         },
         {
           action_name      = "Psn-Proxy-Route-53"
-          codebuild_name   = "spgw-stack-builder-0-12"
+          codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildRoute53Artifacts"
           namespace        = "BuildRoute53Variable"
@@ -319,6 +313,32 @@ module "spg-infrastructure-pipeline" {
               {
                 "name" : "sub_project",
                 "value" : var.sub_project_psn_proxy_route_53,
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "environment_name",
+                "value" : var.environment_name,
+                "type" : "PLAINTEXT"
+              }
+            ]
+          )
+        }
+      ]
+    },
+    {
+      name = "Build-Terrafom-Monitoring"
+      actions = [
+        {
+          action_name      = "Monitoring"
+          codebuild_name   = local.stack_builder_name
+          input_artifacts  = "SourceArtifact"
+          output_artifacts = "BuildMonitoringArtifacts"
+          namespace        = "BuildMonitoringVariable"
+          action_env = jsonencode(
+            [
+              {
+                "name" : "sub_project",
+                "value" : var.sub_project_monitoring,
                 "type" : "PLAINTEXT"
               },
               {

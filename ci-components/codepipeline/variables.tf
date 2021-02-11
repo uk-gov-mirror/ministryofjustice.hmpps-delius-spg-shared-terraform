@@ -69,3 +69,11 @@ variable "sub_project_dynamodb_sequence_generator" {
 variable "sub_project_psn_proxy_route_53" {
   type = string
 }
+
+variable "pipeline_name" {
+  type = string
+}
+
+variable "image_version" {
+  type = string
+}

@@ -18,3 +18,14 @@ data "terraform_remote_state" "vpc" {
     region = var.region
   }
 }
+
+
+data "terraform_remote_state" "spg-codebuild" {
+  backend = "s3"
+
+  config = {
+    bucket = var.remote_state_bucket_name
+    key    = "spg/codepipeline/codebuild/terraform.tfstate"
+    region = var.region
+  }
+}
