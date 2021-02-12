@@ -109,16 +109,18 @@ sudo -i
 yum install -y \
     git \
     wget \
+    python3 \
     yum-utils
 
 echo 'preppip' > /tmp/paul.log
 
 easy_install pip
+pip3 install --upgrade pip
 
 PATH=/usr/local/bin:$PATH
 
 
-pip install ansible==2.6 virtualenv awscli boto botocore boto3
+pip3 install ansible==2.6 virtualenv awscli boto botocore boto3
 
 echo 'downloading users - may need to apply some other settings to ensure users are able to read and write to spg group, ie change config'
 /usr/bin/curl -o ~/users.yml https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/${bastion_inventory}.yml

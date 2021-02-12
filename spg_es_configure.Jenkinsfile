@@ -11,7 +11,7 @@ project.terraform = 'hmpps-delius-spg-shared-terraform'
 def prepare_env() {
     sh '''
     #!/usr/env/bin bash
-    docker pull mojdigitalstudio/hmpps-terraform-builder-0-11-14:latest
+    docker pull mojdigitalstudio/hmpps-terraform-builder-0-12:latest
     '''
 }
 
