@@ -1,5 +1,5 @@
 // Codepipeline vars
-branch_name = "develop"
+branch_name = "feature/image-version"
 environment_name = "delius-core-sandpit"
 pipeline_name = "sandpit"
-image_version="latest"
+image_version="sandpit"
