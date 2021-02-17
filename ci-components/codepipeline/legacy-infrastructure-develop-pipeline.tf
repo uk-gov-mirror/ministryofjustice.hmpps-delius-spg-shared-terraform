@@ -32,6 +32,11 @@ module "spg-infrastructure-develop-pipeline" {
                 "name" : "environment_name",
                 "value" : "delius-core-dev",
                 "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "image_version",
+                "value" : var.image_version,
+                "type" : "PLAINTEXT"
               }
             ]
           )
@@ -53,6 +58,11 @@ module "spg-infrastructure-develop-pipeline" {
                 "name" : "environment_name",
                 "value" : "delius-core-dev",
                 "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "image_version",
+                "value" : var.image_version,
+                "type" : "PLAINTEXT"
               }
             ]
           )
@@ -73,6 +83,11 @@ module "spg-infrastructure-develop-pipeline" {
               {
                 "name" : "environment_name",
                 "value" : "delius-core-dev",
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "image_version",
+                "value" : var.image_version,
                 "type" : "PLAINTEXT"
               }
             ]
