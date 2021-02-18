@@ -30,15 +30,15 @@ data "terraform_remote_state" "iam" {
 #-------------------------------------------------------------
 ### Getting the ecr
 #-------------------------------------------------------------
-data "terraform_remote_state" "ecr" {
-  backend = "s3"
-
-  config = {
-    bucket = var.remote_state_bucket_name
-    key    = "spg/ecr/terraform.tfstate"
-    region = var.region
-  }
-}
+//data "terraform_remote_state" "ecr" {
+//  backend = "s3"
+//
+//  config = {
+//    bucket = var.remote_state_bucket_name
+//    key    = "spg/ecr/terraform.tfstate"
+//    region = var.region
+//  }
+//}
 
 #-------------------------------------------------------------
 ### Getting the persistent eip
