@@ -1,6 +1,6 @@
 module "spg-infrastructure-release-pipeline" {
   source            = "git::https://github.com/ministryofjustice/hmpps-delius-spg-codepipeline.git//terraform/ci-components/codepipeline?ref=main"
-  approval_required = false
+  approval_required = true
   artefacts_bucket  = local.artefacts_bucket
   pipeline_name     = local.legacy_infrastructure_release_pipeline_name
   iam_role_arn      = local.iam_role_arn
@@ -237,7 +237,7 @@ module "spg-infrastructure-release-pipeline" {
       ]
     },
     {
-      name = "Build-Terrafom-Misc"
+      name = "Build-Terrafom-ActiveMQ"
       actions = [
         {
           action_name      = "Amazonmq"
@@ -260,6 +260,11 @@ module "spg-infrastructure-release-pipeline" {
             ]
           )
         },
+      ]
+    },
+    {
+      name = "Build-Terrafom-Misc"
+      actions = [
         {
           action_name      = "Common"
           codebuild_name   = local.stack_builder_name
@@ -267,18 +272,18 @@ module "spg-infrastructure-release-pipeline" {
           output_artifacts = "BuildCommonArtifacts"
           namespace        = "BuildCommonVariable"
           action_env = jsonencode(
-            [
-              {
-                "name" : "sub_project",
-                "value" : var.sub_project_common,
-                "type" : "PLAINTEXT"
-              },
-              {
-                "name" : "environment_name",
-                "value" : var.environment_name,
-                "type" : "PLAINTEXT"
-              }
-            ]
+          [
+            {
+              "name" : "sub_project",
+              "value" : var.sub_project_common,
+              "type" : "PLAINTEXT"
+            },
+            {
+              "name" : "environment_name",
+              "value" : var.environment_name,
+              "type" : "PLAINTEXT"
+            }
+          ]
           )
         },
         {
@@ -288,18 +293,18 @@ module "spg-infrastructure-release-pipeline" {
           output_artifacts = "BuildDynamoDbArtifacts"
           namespace        = "BuildDynamoDbVariable"
           action_env = jsonencode(
-            [
-              {
-                "name" : "sub_project",
-                "value" : var.sub_project_dynamodb_sequence_generator,
-                "type" : "PLAINTEXT"
-              },
-              {
-                "name" : "environment_name",
-                "value" : var.environment_name,
-                "type" : "PLAINTEXT"
-              }
-            ]
+          [
+            {
+              "name" : "sub_project",
+              "value" : var.sub_project_dynamodb_sequence_generator,
+              "type" : "PLAINTEXT"
+            },
+            {
+              "name" : "environment_name",
+              "value" : var.environment_name,
+              "type" : "PLAINTEXT"
+            }
+          ]
           )
         },
         {
@@ -309,18 +314,18 @@ module "spg-infrastructure-release-pipeline" {
           output_artifacts = "BuildRoute53Artifacts"
           namespace        = "BuildRoute53Variable"
           action_env = jsonencode(
-            [
-              {
-                "name" : "sub_project",
-                "value" : var.sub_project_psn_proxy_route_53,
-                "type" : "PLAINTEXT"
-              },
-              {
-                "name" : "environment_name",
-                "value" : var.environment_name,
-                "type" : "PLAINTEXT"
-              }
-            ]
+          [
+            {
+              "name" : "sub_project",
+              "value" : var.sub_project_psn_proxy_route_53,
+              "type" : "PLAINTEXT"
+            },
+            {
+              "name" : "environment_name",
+              "value" : var.environment_name,
+              "type" : "PLAINTEXT"
+            }
+          ]
           )
         }
       ]
