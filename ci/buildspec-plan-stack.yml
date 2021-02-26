@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - rm -rf env_configs
+      - git clone https://github.com/ministryofjustice/hmpps-env-configs.git env_configs
+      - export env_config_dir=${CODEBUILD_SRC_DIR}/env_configs
+      - export CUSTOM_COMMON_PROPERTIES_DIR=${CODEBUILD_SRC_DIR}/env_configs/common
+  build:
+    commands:
+      - source ${CODEBUILD_SRC_DIR}/env_configs/${environment_name}/${environment_name}.properties
+      - cd ${CODEBUILD_SRC_DIR}/${sub_project}
+      - ${CODEBUILD_SRC_DIR}/scripts/1-stack-plan.sh
+artifacts:
+  files:
+    - '**/*'
+  name: $Env:PROJECT_NAME-$(date +%Y-%m-%d-%H-%m-%S)
