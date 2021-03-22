@@ -1,3 +1,4 @@
+/*
 module "spg-infrastructure-develop-pipeline" {
   source            = "git::https://github.com/ministryofjustice/hmpps-delius-spg-codepipeline.git//terraform/ci-components/codepipeline?ref=main"
   approval_required = false
@@ -11,6 +12,8 @@ module "spg-infrastructure-develop-pipeline" {
   github_repositories = {
     SourceArtifact = ["hmpps-delius-spg-shared-terraform", "develop"]
   }
+
+  /*
   stages = [
     {
       name = "Build"
@@ -337,4 +340,5 @@ module "spg-infrastructure-develop-pipeline" {
       ]
     }
   ]
-}
+
+}*/

@@ -1,23 +1,26 @@
-module "spg-infrastructure-approve-pipeline" {
+module "spg-infrastructure-pipeline" {
   source            = "git::https://github.com/ministryofjustice/hmpps-delius-spg-codepipeline.git//terraform/ci-components/codepipeline?ref=feature/ALS-2862-codepipeline-plan-apply"
   approval_required = true
   artefacts_bucket  = local.artefacts_bucket
-  pipeline_name     = "spgw-test-approve-pipeline"
+  pipeline_name     = "spg_infrastructure"
   iam_role_arn      = local.iam_role_arn
   log_group         = local.log_group_name
   tags              = local.tags
   cache_bucket      = local.cache_bucket
-  codebuild_name    = local.legacy_infrastructure_approve_pipeline_name
+  codebuild_name    = local.legacy_infrastructure_develop_pipeline_name
   github_repositories = {
     SourceArtifact = ["hmpps-delius-spg-shared-terraform", var.branch_name]
   }
   stages = [
     {
-      name = "Build"
+      name = "Build-ECR"
       actions = [
         {
           action_name      = "CRC"
-          codebuild_name   = local.stack_builder_name_plan
+          action_category  = "Build"
+          action_provider  = "CodeBuild"
+          action_type      = ""
+          codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildCrcArtifact"
           namespace        = "BuildCrcVariables"
@@ -42,38 +45,10 @@ module "spg-infrastructure-approve-pipeline" {
           )
         },
         {
-          action_name     = "CRC Approval"
-          action_category = "Approval"
-          provider = "Manual"
-        },
-        {
-          action_name      = "CRC"
-          codebuild_name   = local.stack_builder_name_apply
-          input_artifacts  = "SourceArtifact"
-          output_artifacts = "BuildCrcArtifact"
-          namespace        = "BuildCrcVariables"
-          action_env = jsonencode(
-          [
-            {
-              "name" : "sub_project",
-              "value" : var.sub_project_crc,
-              "type" : "PLAINTEXT"
-            },
-            {
-              "name" : "environment_name",
-              "value" : var.environment_name,
-              "type" : "PLAINTEXT"
-            },
-            {
-              "name" : "image_version",
-              "value" : var.image_version,
-              "type" : "PLAINTEXT"
-            }
-          ]
-          )
-        },
-        {
           action_name      = "MPX"
+          action_category  = "Build"
+          action_provider  = "CodeBuild"
+          action_type      = ""
           codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildMpxArtifact"
@@ -100,6 +75,9 @@ module "spg-infrastructure-approve-pipeline" {
         },
         {
           action_name      = "ISO"
+          action_category  = "Build"
+          action_provider  = "CodeBuild"
+          action_type      = ""
           codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildIsoArtifact"
@@ -119,6 +97,64 @@ module "spg-infrastructure-approve-pipeline" {
               {
                 "name" : "image_version",
                 "value" : var.image_version,
+                "type" : "PLAINTEXT"
+              }
+            ]
+          )
+        }
+      ]
+    },
+    {
+      name = "Build-Terraform-ELK-Service"
+      actions = [
+        {
+          action_name      = "Elk-Service"
+          action_category  = "Build"
+          action_provider  = "CodeBuild"
+          action_type      = ""
+          codebuild_name   = local.stack_builder_name
+          input_artifacts  = "SourceArtifact"
+          output_artifacts = "BuildElkServiceArtifacts"
+          namespace        = "BuildElkServiceVariable"
+          action_env = jsonencode(
+            [
+              {
+                "name" : "sub_project",
+                "value" : var.sub_project_elk_service,
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "environment_name",
+                "value" : var.environment_name,
+                "type" : "PLAINTEXT"
+              }
+            ]
+          )
+        }
+      ]
+    },
+    {
+      name = "Build-Terraform-ELK-Domains"
+      actions = [
+        {
+          action_name      = "Elk-Domains"
+          action_category  = "Build"
+          action_provider  = "CodeBuild"
+          action_type      = ""
+          codebuild_name   = local.stack_builder_name
+          input_artifacts  = "SourceArtifact"
+          output_artifacts = "BuildElkDomainsArtifacts"
+          namespace        = "BuildElkDomainsVariable"
+          action_env = jsonencode(
+            [
+              {
+                "name" : "sub_project",
+                "value" : var.sub_project_elk_domains,
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "environment_name",
+                "value" : var.environment_name,
                 "type" : "PLAINTEXT"
               }
             ]

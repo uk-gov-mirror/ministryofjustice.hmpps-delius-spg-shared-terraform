@@ -1,3 +1,4 @@
+/*
 module "spg-infrastructure-release-pipeline" {
   source            = "git::https://github.com/ministryofjustice/hmpps-delius-spg-codepipeline.git//terraform/ci-components/codepipeline?ref=main"
   approval_required = true
@@ -11,6 +12,7 @@ module "spg-infrastructure-release-pipeline" {
   github_repositories = {
     SourceArtifact = ["hmpps-delius-spg-shared-terraform", var.branch_name]
   }
+
   stages = [
     {
       name = "Build"
@@ -272,18 +274,18 @@ module "spg-infrastructure-release-pipeline" {
           output_artifacts = "BuildCommonArtifacts"
           namespace        = "BuildCommonVariable"
           action_env = jsonencode(
-          [
-            {
-              "name" : "sub_project",
-              "value" : var.sub_project_common,
-              "type" : "PLAINTEXT"
-            },
-            {
-              "name" : "environment_name",
-              "value" : var.environment_name,
-              "type" : "PLAINTEXT"
-            }
-          ]
+            [
+              {
+                "name" : "sub_project",
+                "value" : var.sub_project_common,
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "environment_name",
+                "value" : var.environment_name,
+                "type" : "PLAINTEXT"
+              }
+            ]
           )
         },
         {
@@ -293,18 +295,18 @@ module "spg-infrastructure-release-pipeline" {
           output_artifacts = "BuildDynamoDbArtifacts"
           namespace        = "BuildDynamoDbVariable"
           action_env = jsonencode(
-          [
-            {
-              "name" : "sub_project",
-              "value" : var.sub_project_dynamodb_sequence_generator,
-              "type" : "PLAINTEXT"
-            },
-            {
-              "name" : "environment_name",
-              "value" : var.environment_name,
-              "type" : "PLAINTEXT"
-            }
-          ]
+            [
+              {
+                "name" : "sub_project",
+                "value" : var.sub_project_dynamodb_sequence_generator,
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "environment_name",
+                "value" : var.environment_name,
+                "type" : "PLAINTEXT"
+              }
+            ]
           )
         },
         {
@@ -314,18 +316,18 @@ module "spg-infrastructure-release-pipeline" {
           output_artifacts = "BuildRoute53Artifacts"
           namespace        = "BuildRoute53Variable"
           action_env = jsonencode(
-          [
-            {
-              "name" : "sub_project",
-              "value" : var.sub_project_psn_proxy_route_53,
-              "type" : "PLAINTEXT"
-            },
-            {
-              "name" : "environment_name",
-              "value" : var.environment_name,
-              "type" : "PLAINTEXT"
-            }
-          ]
+            [
+              {
+                "name" : "sub_project",
+                "value" : var.sub_project_psn_proxy_route_53,
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "environment_name",
+                "value" : var.environment_name,
+                "type" : "PLAINTEXT"
+              }
+            ]
           )
         }
       ]
@@ -357,4 +359,5 @@ module "spg-infrastructure-release-pipeline" {
       ]
     }
   ]
-}
+
+}*/
