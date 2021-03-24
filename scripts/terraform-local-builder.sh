@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
  #--entrypoint "scripts/${1}" \
+ #--entrypoint "/bin/bash" \
 
 docker run -it --rm \
     -v ${src_root_dir}:/home/tools/data \
     -v ~/.aws:/home/tools/.aws \
     -e AWS_PROFILE=hmpps-token \
-    -e TF_LOG=INFO \
+    -e TF_LOG=TRACE \
     -e HMPPS_BUILD_WORK_DIR=/home/tools/data \
     -e environment_name="${environment_name}" \
     -e TF_VAR_action_types="${action_types}" \
@@ -14,5 +15,5 @@ docker run -it --rm \
     -e sub_project="${sub_project}" \
     -e ci_components_flag=${ci_components_flag} \
     -e "TERM=xterm-256color" \
-    --entrypoint "/bin/bash" \
+    --entrypoint "scripts/${1}" \
     895523100917.dkr.ecr.eu-west-2.amazonaws.com/hmpps/terraform-builder-0-12:latest
