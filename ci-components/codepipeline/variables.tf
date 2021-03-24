@@ -77,3 +77,7 @@ variable "pipeline_name" {
 variable "image_version" {
   type = string
 }
+
+variable "action_types" {
+  type = list(string)
+}
