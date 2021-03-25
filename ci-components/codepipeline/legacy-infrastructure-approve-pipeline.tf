@@ -8,6 +8,7 @@ module "spg-infrastructure-pipeline" {
   tags              = local.tags
   cache_bucket      = local.cache_bucket
   codebuild_name    = local.legacy_infrastructure_develop_pipeline_name
+  action_types      = var.action_types
   github_repositories = {
     SourceArtifact = ["hmpps-delius-spg-shared-terraform", var.branch_name]
   }

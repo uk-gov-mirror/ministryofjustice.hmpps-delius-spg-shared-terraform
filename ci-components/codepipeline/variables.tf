@@ -79,5 +79,6 @@ variable "image_version" {
 }
 
 variable "action_types" {
-  type = list(string)
+  type    = list(string)
+  default = ["plan", "approve", "apply"]
 }
