@@ -168,6 +168,9 @@ module "spg-infrastructure-pipeline" {
       actions = [
         {
           action_name      = "IAM"
+          action_category  = "Build"
+          action_provider  = "CodeBuild"
+          action_type      = ""
           codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildIamArtifacts"
@@ -189,6 +192,9 @@ module "spg-infrastructure-pipeline" {
         },
         {
           action_name      = "Iam-Spg-App-Policies"
+          action_category  = "Build"
+          action_provider  = "CodeBuild"
+          action_type      = ""
           codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildIamAppPoliciesArtifacts"
@@ -210,6 +216,9 @@ module "spg-infrastructure-pipeline" {
         },
         {
           action_name      = "Kms-Certificates-Spg"
+          action_category  = "Build"
+          action_provider  = "CodeBuild"
+          action_type      = ""
           codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildKmsCertificatesArtifacts"
@@ -231,6 +240,9 @@ module "spg-infrastructure-pipeline" {
         },
         {
           action_name      = "Security-Groups-And-Rules"
+          action_category  = "Build"
+          action_provider  = "CodeBuild"
+          action_type      = ""
           codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildSecurityGroupsArtifacts"
@@ -257,6 +269,9 @@ module "spg-infrastructure-pipeline" {
       actions = [
         {
           action_name      = "Amazonmq"
+          action_category  = "Build"
+          action_provider  = "CodeBuild"
+          action_type      = ""
           codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildAmazonMqArtifacts"
@@ -278,6 +293,9 @@ module "spg-infrastructure-pipeline" {
         },
         {
           action_name      = "Common"
+          action_category  = "Build"
+          action_provider  = "CodeBuild"
+          action_type      = ""
           codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildCommonArtifacts"
@@ -299,6 +317,9 @@ module "spg-infrastructure-pipeline" {
         },
         {
           action_name      = "Dynamodb-Sequence-Generator"
+          action_category  = "Build"
+          action_provider  = "CodeBuild"
+          action_type      = ""
           codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildDynamoDbArtifacts"
@@ -320,6 +341,9 @@ module "spg-infrastructure-pipeline" {
         },
         {
           action_name      = "Psn-Proxy-Route-53"
+          action_category  = "Build"
+          action_provider  = "CodeBuild"
+          action_type      = ""
           codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildRoute53Artifacts"
@@ -346,6 +370,9 @@ module "spg-infrastructure-pipeline" {
       actions = [
         {
           action_name      = "Monitoring"
+          action_category  = "Build"
+          action_provider  = "CodeBuild"
+          action_type      = ""
           codebuild_name   = local.stack_builder_name
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildMonitoringArtifacts"
