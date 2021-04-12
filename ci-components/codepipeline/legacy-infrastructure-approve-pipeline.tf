@@ -176,18 +176,18 @@ module "spg-infrastructure-pipeline" {
           output_artifacts = "BuildIamArtifacts"
           namespace        = "BuildIamVariable"
           action_env = jsonencode(
-          [
-            {
-              "name" : "sub_project",
-              "value" : var.sub_project_iam,
-              "type" : "PLAINTEXT"
-            },
-            {
-              "name" : "environment_name",
-              "value" : "delius-core-dev",
-              "type" : "PLAINTEXT"
-            }
-          ]
+            [
+              {
+                "name" : "sub_project",
+                "value" : var.sub_project_iam,
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "environment_name",
+                "value" : "delius-core-dev",
+                "type" : "PLAINTEXT"
+              }
+            ]
           )
         },
         {
@@ -200,18 +200,18 @@ module "spg-infrastructure-pipeline" {
           output_artifacts = "BuildIamAppPoliciesArtifacts"
           namespace        = "BuildIamAppPoliciesVariable"
           action_env = jsonencode(
-          [
-            {
-              "name" : "sub_project",
-              "value" : var.sub_project_iam_spg_app_policies,
-              "type" : "PLAINTEXT"
-            },
-            {
-              "name" : "environment_name",
-              "value" : "delius-core-dev",
-              "type" : "PLAINTEXT"
-            }
-          ]
+            [
+              {
+                "name" : "sub_project",
+                "value" : var.sub_project_iam_spg_app_policies,
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "environment_name",
+                "value" : "delius-core-dev",
+                "type" : "PLAINTEXT"
+              }
+            ]
           )
         },
         {
@@ -224,18 +224,18 @@ module "spg-infrastructure-pipeline" {
           output_artifacts = "BuildKmsCertificatesArtifacts"
           namespace        = "BuildKmsCertificatesVariable"
           action_env = jsonencode(
-          [
-            {
-              "name" : "sub_project",
-              "value" : var.sub_project_kms_certificates_spg,
-              "type" : "PLAINTEXT"
-            },
-            {
-              "name" : "environment_name",
-              "value" : "delius-core-dev",
-              "type" : "PLAINTEXT"
-            }
-          ]
+            [
+              {
+                "name" : "sub_project",
+                "value" : var.sub_project_kms_certificates_spg,
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "environment_name",
+                "value" : "delius-core-dev",
+                "type" : "PLAINTEXT"
+              }
+            ]
           )
         },
         {
@@ -248,18 +248,18 @@ module "spg-infrastructure-pipeline" {
           output_artifacts = "BuildSecurityGroupsArtifacts"
           namespace        = "BuildSecurityGroupsVariable"
           action_env = jsonencode(
-          [
-            {
-              "name" : "sub_project",
-              "value" : var.sub_project_security_groups_and_rules,
-              "type" : "PLAINTEXT"
-            },
-            {
-              "name" : "environment_name",
-              "value" : "delius-core-dev",
-              "type" : "PLAINTEXT"
-            }
-          ]
+            [
+              {
+                "name" : "sub_project",
+                "value" : var.sub_project_security_groups_and_rules,
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "environment_name",
+                "value" : "delius-core-dev",
+                "type" : "PLAINTEXT"
+              }
+            ]
           )
         },
       ]
@@ -277,18 +277,18 @@ module "spg-infrastructure-pipeline" {
           output_artifacts = "BuildAmazonMqArtifacts"
           namespace        = "BuildAmazonMqVariable"
           action_env = jsonencode(
-          [
-            {
-              "name" : "sub_project",
-              "value" : var.sub_project_amazonmq,
-              "type" : "PLAINTEXT"
-            },
-            {
-              "name" : "environment_name",
-              "value" : "delius-core-dev",
-              "type" : "PLAINTEXT"
-            }
-          ]
+            [
+              {
+                "name" : "sub_project",
+                "value" : var.sub_project_amazonmq,
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "environment_name",
+                "value" : "delius-core-dev",
+                "type" : "PLAINTEXT"
+              }
+            ]
           )
         },
         {
@@ -301,18 +301,18 @@ module "spg-infrastructure-pipeline" {
           output_artifacts = "BuildCommonArtifacts"
           namespace        = "BuildCommonVariable"
           action_env = jsonencode(
-          [
-            {
-              "name" : "sub_project",
-              "value" : var.sub_project_common,
-              "type" : "PLAINTEXT"
-            },
-            {
-              "name" : "environment_name",
-              "value" : "delius-core-dev",
-              "type" : "PLAINTEXT"
-            }
-          ]
+            [
+              {
+                "name" : "sub_project",
+                "value" : var.sub_project_common,
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "environment_name",
+                "value" : "delius-core-dev",
+                "type" : "PLAINTEXT"
+              }
+            ]
           )
         },
         {
@@ -325,18 +325,18 @@ module "spg-infrastructure-pipeline" {
           output_artifacts = "BuildDynamoDbArtifacts"
           namespace        = "BuildDynamoDbVariable"
           action_env = jsonencode(
-          [
-            {
-              "name" : "sub_project",
-              "value" : var.sub_project_dynamodb_sequence_generator,
-              "type" : "PLAINTEXT"
-            },
-            {
-              "name" : "environment_name",
-              "value" : "delius-core-dev",
-              "type" : "PLAINTEXT"
-            }
-          ]
+            [
+              {
+                "name" : "sub_project",
+                "value" : var.sub_project_dynamodb_sequence_generator,
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "environment_name",
+                "value" : "delius-core-dev",
+                "type" : "PLAINTEXT"
+              }
+            ]
           )
         },
         {
@@ -349,18 +349,18 @@ module "spg-infrastructure-pipeline" {
           output_artifacts = "BuildRoute53Artifacts"
           namespace        = "BuildRoute53Variable"
           action_env = jsonencode(
-          [
-            {
-              "name" : "sub_project",
-              "value" : var.sub_project_psn_proxy_route_53,
-              "type" : "PLAINTEXT"
-            },
-            {
-              "name" : "environment_name",
-              "value" : "delius-core-dev",
-              "type" : "PLAINTEXT"
-            }
-          ]
+            [
+              {
+                "name" : "sub_project",
+                "value" : var.sub_project_psn_proxy_route_53,
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "environment_name",
+                "value" : "delius-core-dev",
+                "type" : "PLAINTEXT"
+              }
+            ]
           )
         }
       ]
@@ -378,18 +378,18 @@ module "spg-infrastructure-pipeline" {
           output_artifacts = "BuildMonitoringArtifacts"
           namespace        = "BuildMonitoringVariable"
           action_env = jsonencode(
-          [
-            {
-              "name" : "sub_project",
-              "value" : var.sub_project_monitoring,
-              "type" : "PLAINTEXT"
-            },
-            {
-              "name" : "environment_name",
-              "value" : "delius-core-dev",
-              "type" : "PLAINTEXT"
-            }
-          ]
+            [
+              {
+                "name" : "sub_project",
+                "value" : var.sub_project_monitoring,
+                "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "environment_name",
+                "value" : "delius-core-dev",
+                "type" : "PLAINTEXT"
+              }
+            ]
           )
         }
       ]

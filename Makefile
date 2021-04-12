@@ -18,7 +18,7 @@ eng-ci-plan: ## Run eng-ci-plan with ci_components_flag=true
 	scripts/local-stack-action.sh delius-core-dev $(subproject) plan true
 
 eng-ci-apply: ## Run eng-ci-apply with ci_components_flag=true
-	scripts/local-stack-action.sh delius-core-dev $(subproject) plan true
+	scripts/local-stack-action.sh delius-core-dev $(subproject) apply true
 
 eng-ci-destroy: ## Run eng-ci-destroy with ci_components_flag=true
 	scripts/local-stack-action.sh delius-core-sandpit $(subproject) destroy true
