@@ -2,7 +2,7 @@ module "spg-infrastructure-pipeline" {
   source            = "git::https://github.com/ministryofjustice/hmpps-delius-spg-codepipeline.git//terraform/ci-components/codepipeline?ref=feature/ALS-2862-codepipeline-plan-apply"
   approval_required = true
   artefacts_bucket  = local.artefacts_bucket
-  pipeline_name     = "spg_infrastructure"
+  pipeline_name     = local.legacy_infrastructure_develop_pipeline_name
   iam_role_arn      = local.iam_role_arn
   log_group         = local.log_group_name
   tags              = local.tags
